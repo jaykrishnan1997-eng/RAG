@@ -21,6 +21,8 @@
 13. vLLM : https://www.redhat.com/en/topics/ai/what-is-vllm
 14. Learn RAG From Scratch – Python AI Tutorial from a LangChain Engineer: https://www.youtube.com/watch?v=sVcwVQRHIc8
 15. Good simple explanation on entire RAG (also check other parts): https://medium.com/@j13mehul/rag-part-1-from-naive-to-advanced-cb40674a7738
+16. How to count tokens with Tiktoken: https://developers.openai.com/cookbook/examples/how_to_count_tokens_with_tiktoken
+17. 
 
 
 ### What is RAG:
@@ -73,3 +75,4 @@ your recall@k. [0]
 
 Once we get the index built from chunking process, we get top-k most releveant snippets based on our search query.
 
+Tiktoken, LangChain, cosine_similarity, bs4 soupstrainer, 
