@@ -22,8 +22,7 @@
 14. Learn RAG From Scratch – Python AI Tutorial from a LangChain Engineer: https://www.youtube.com/watch?v=sVcwVQRHIc8
 15. Good simple explanation on entire RAG (also check other parts): https://medium.com/@j13mehul/rag-part-1-from-naive-to-advanced-cb40674a7738
 16. How to count tokens with Tiktoken: https://developers.openai.com/cookbook/examples/how_to_count_tokens_with_tiktoken
-17. 
-
+17. RAG from scratch: video supliment: https://github.com/langchain-ai/rag-from-scratch
 
 ### What is RAG:
 1. Retrieval Augmented Generation is an architecture for optimizing the performance of an AI model by connecting it to external knowledge bases: databases, document collections etc.[2][3]
