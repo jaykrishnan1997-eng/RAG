@@ -218,3 +218,10 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Ignore file
+.venv
+.mypy_cache/
+.pytest_cache/
+# Dont go files
+data/raw
