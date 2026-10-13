@@ -1,6 +1,7 @@
 # RAG
 
-# NOTE: Goal is to do this probect without AI as much as possible
+# NOTE: Goal is to do this probect without AI as much as possible. Only current use is to explain the subject. Since AI wrote it, let AI explain the painfull english used in them.
+
 
 # Day 0
 
@@ -24,6 +25,13 @@
 16. How to count tokens with Tiktoken: https://developers.openai.com/cookbook/examples/how_to_count_tokens_with_tiktoken
 17. RAG from scratch: video supliment: https://github.com/langchain-ai/rag-from-scratch
 18. toml: https://toml.io/en/
+
+To scan the folder and find txt and python files
+19. https://www.geeksforgeeks.org/python/python-loop-through-folders-and-files-in-directory/
+
+
+
+
 
 ### What is RAG:
 1. Retrieval Augmented Generation is an architecture for optimizing the performance of an AI model by connecting it to external knowledge bases: databases, document collections etc.[2][3]

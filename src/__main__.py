@@ -7,24 +7,25 @@
 #   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/12 12:24:16 by jkrishna            #+#    #+#            #
-#   Updated: 2026/10/13 10:53:14 by jkrishna           ###   ########.fr      #
+#   Updated: 2026/10/13 12:47:27 by jkrishna           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
 import sys
 import fire
-from Base/parser import parse_args
+from .Base.parser import parse_args
+
 
 def main() -> None:
     # parsing
     args = parse_args()
 
-    # Text processing
-
-    # Chunking
+    # input data processing from vlllm
+    
+    # Chunking and cacheing
     # Embedding
     # Retrieval
-    # Generation
+    # Generation using Qwen
 
 
 if __name__ == "__main__":

@@ -7,7 +7,7 @@
 #   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/10 13:20:17 by jkrishna            #+#    #+#            #
-#   Updated: 2026/10/13 12:31:35 by jkrishna           ###   ########.fr      #
+#   Updated: 2026/10/13 12:44:56 by jkrishna           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -16,8 +16,8 @@ from pydantic import BaseModel, Field
 from typing import List
 
 
-class Path_dict():
-    Path = {
+def path_dict() -> dict[str, str]:
+    path = {
         "DATA_PATH": "data/raw/vllm-0.10.1",
         "ip_ans_code_path":
         "data/datasets/AnsweredQuestions/dataset_code_public.json",
@@ -33,6 +33,7 @@ class Path_dict():
         "OUTPUT_PATH": "data/output/search_results/UnansweredQuestions",
         "VECTOR_PATH": "data/vector"
     }
+    return path
 
 
 class MinimalSource(BaseModel):
