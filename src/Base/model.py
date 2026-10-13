@@ -7,10 +7,11 @@
 #   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/10 13:20:17 by jkrishna            #+#    #+#            #
-#   Updated: 2026/10/10 13:40:27 by jkrishna           ###   ########.fr      #
+#   Updated: 2026/10/13 08:40:48 by jkrishna           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
+import uuid
 from pydantic import BaseModel, Field
 from typing import List
 
@@ -54,3 +55,19 @@ class StudentSearchResults(BaseModel):
 class StudentSearchResultsAndAnswer(BaseModel):
     search_results: List[MinimalAnswer]
     k: int
+
+
+class Path_dict:
+    {
+        "ip_ans_code_path":
+        "data/datasets/AnsweredQuestions/dataset_code_public.json",
+        "ip_ans_docs_path":
+        "data/datasets/AnsweredQuestions/dataset_docs_public.json",
+        "ip_unans_code_path":
+        "data/datasets/UnansweredQuestions/dataset_code_public.json",
+        "ip_unans_docs_path":
+        "data/datasets/UnansweredQuestions/dataset_docs_public.json",
+        "op_path": "data/datasets/output",
+        "processed_path": "data/datasets/processed",
+        "vector_path": "data/datasets/vector"
+    }
