@@ -16,3 +16,11 @@ startied main function also did update the models yesterday
 Step1. set a class with all the paths
 Step2. started with a parser with the appropriate flag
 Step3. start with text processing: text file, markdown, python code chunking
+
+NOTE:
+* split documents into chunks,
+* Index them (BM25/TF-IDF, with not emeddings needed)
+* Retrieve the top-k chunks for query
+* Put those chunks into the prompt and let the LLM answer
+
+vllm is only data i need to use Qwen and hugging face like in call me maybe
