@@ -10,3 +10,9 @@ startied main function also did update the models yesterday
 
 1. first start with path location and parsing
 2. a source for different chunking stratergy w codes: https://jillanisofttech.medium.com/optimizing-chunking-strategies-for-retrieval-augmented-generation-rag-applications-with-python-c3ab5060d3e4
+
+@@ Day 3
+
+Step1. set a class with all the paths
+Step2. started with a parser with the appropriate flag
+Step3. start with text processing: text file, markdown, python code chunking

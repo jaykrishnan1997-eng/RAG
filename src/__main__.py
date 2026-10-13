@@ -7,21 +7,22 @@
 #   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/12 12:24:16 by jkrishna            #+#    #+#            #
-#   Updated: 2026/10/12 13:58:56 by jkrishna           ###   ########.fr      #
+#   Updated: 2026/10/13 09:37:55 by jkrishna           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
 import sys
-
+from CLI/parser import parse_args
 
 def main() -> None:
-    #parsing
-
-    #Text processing
-    #Chunking
-    #Embedding
-    #Retrieval
-    #Generation
+    # parsing
+    args = parse_args()
+    
+    # Text processing
+    # Chunking
+    # Embedding
+    # Retrieval
+    # Generation
 
 
 if __name__ == "__main__":

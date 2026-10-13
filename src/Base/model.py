@@ -7,7 +7,7 @@
 #   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/10 13:20:17 by jkrishna            #+#    #+#            #
-#   Updated: 2026/10/13 08:40:48 by jkrishna           ###   ########.fr      #
+#   Updated: 2026/10/13 09:19:40 by jkrishna           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -57,8 +57,8 @@ class StudentSearchResultsAndAnswer(BaseModel):
     k: int
 
 
-class Path_dict:
-    {
+class Path_dict():
+    Path = {
         "ip_ans_code_path":
         "data/datasets/AnsweredQuestions/dataset_code_public.json",
         "ip_ans_docs_path":
@@ -67,7 +67,9 @@ class Path_dict:
         "data/datasets/UnansweredQuestions/dataset_code_public.json",
         "ip_unans_docs_path":
         "data/datasets/UnansweredQuestions/dataset_docs_public.json",
-        "op_path": "data/datasets/output",
+        "student_search_results_path":
+        " data/output/search_results/UnansweredQuestions/dataset_docs_public.json",
+        "op_path": "data/output/search_results/UnansweredQuestions",
         "processed_path": "data/datasets/processed",
         "vector_path": "data/datasets/vector"
     }
