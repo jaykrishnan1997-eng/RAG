@@ -7,13 +7,18 @@
 #   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/12 12:24:16 by jkrishna            #+#    #+#            #
-#   Updated: 2026/10/13 12:47:27 by jkrishna           ###   ########.fr      #
+#   Updated: 2026/10/13 13:59:13 by jkrishna           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
 import sys
 import fire
-from .Base.parser import parse_args
+from Base.parser import parse_args
+from Engine.ipdata_processor import source_processor
+
+
+# def hello(name):
+#     return f'Hello {name}!'
 
 
 def main() -> None:
@@ -21,12 +26,13 @@ def main() -> None:
     args = parse_args()
 
     # input data processing from vlllm
-    
+    source_processor()
     # Chunking and cacheing
     # Embedding
     # Retrieval
-    # Generation using Qwen
-
+    # Generation using Qwen  
+  
+    # fire.Fire("hello")
 
 if __name__ == "__main__":
     try:

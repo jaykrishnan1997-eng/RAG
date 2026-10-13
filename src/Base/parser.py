@@ -7,12 +7,12 @@
 #   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/12 13:59:36 by jkrishna            #+#    #+#            #
-#   Updated: 2026/10/13 12:30:32 by jkrishna           ###   ########.fr      #
+#   Updated: 2026/10/13 13:34:40 by jkrishna           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
 import argparse
-from .model import Path_dict
+from .model import path_dict
 
 
 def parse_args() -> argparse.Namespace:
@@ -26,10 +26,10 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--k", default=5)
     parser.add_argument(
-        "--dataset_path", default=Path_dict.Path["ip_unans_docs_path"])
+        "--dataset_path", default=path_dict("ip_unans_docs_path"))
     parser.add_argument(
-        "--save_directory", default=Path_dict.Path["OUTPUT_PATH"])
+        "--save_directory", default=path_dict("OUTPUT_PATH"))
     parser.add_argument(
-        "--student_search_results_path", default=Path_dict.Path[
-            "STUDENT_SEARCH_RESULTS_PATH"])
+        "--student_search_results_path", default=path_dict(
+            "STUDENT_SEARCH_RESULTS_PATH"))
     return parser.parse_args()
