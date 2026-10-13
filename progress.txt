@@ -24,3 +24,6 @@ NOTE:
 * Put those chunks into the prompt and let the LLM (Qwen) answer
 
 vllm is only data i need to use Qwen and hugging face like in call me maybe
+os.walk act relative to the main file so make sure to give the relative path to the folder u want to traverse throughh:
+os.walk: https://www.geeksforgeeks.org/python/os-walk-python/
+nearly 2874 files in vllm that too json, cmake, py, sh, yaml, png, txt, etc
