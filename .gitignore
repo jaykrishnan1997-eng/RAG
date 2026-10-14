@@ -224,4 +224,4 @@ __marimo__/
 .mypy_cache/
 .pytest_cache/
 # Dont go files
-data/raw
+data/raw/vllm-0.10.1

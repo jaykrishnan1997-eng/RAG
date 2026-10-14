@@ -4,16 +4,16 @@
 #                                                          :::      ::::::::  #
 #   ipdata_processor.py                                  :+:      :+:    :+:  #
 #                                                      +:+ +:+         +:+    #
-#   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
+#   By: jay-k <jay-k@student.42.fr>                  +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/13 10:43:25 by jkrishna            #+#    #+#            #
-#   Updated: 2026/10/13 15:35:21 by jkrishna           ###   ########.fr      #
+#   Updated: 2026/10/14 18:19:41 by jay-k              ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
 import os
 
-from Base.model import path_dict
+from ..Base.model import path_dict
 
 
 def source_processor() -> None:
@@ -21,8 +21,9 @@ def source_processor() -> None:
      we do through every single file in raw folder
      and this is where the branching happens (like txt or py etc)"""
     for dirpath, dirnames, filenames in os.walk(
-        "../" + path_dict("DATA_PATH")
+        "./" + path_dict("DATA_PATH")
     ):
+
         for file in filenames:
             print(file)
 

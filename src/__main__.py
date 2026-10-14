@@ -4,17 +4,17 @@
 #                                                          :::      ::::::::  #
 #   __main__.py                                          :+:      :+:    :+:  #
 #                                                      +:+ +:+         +:+    #
-#   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
+#   By: jay-k <jay-k@student.42.fr>                  +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/12 12:24:16 by jkrishna            #+#    #+#            #
-#   Updated: 2026/10/13 13:59:13 by jkrishna           ###   ########.fr      #
+#   Updated: 2026/10/14 17:25:43 by jay-k              ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
 import sys
 import fire
-from Base.parser import parse_args
-from Engine.ipdata_processor import source_processor
+from .Base.parser import parse_args
+from .Engine.ipdata_processor import source_processor
 
 
 # def hello(name):
@@ -31,8 +31,8 @@ def main() -> None:
     # Embedding
     # Retrieval
     # Generation using Qwen  
-  
     # fire.Fire("hello")
+
 
 if __name__ == "__main__":
     try:
