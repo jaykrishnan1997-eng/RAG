@@ -4,35 +4,55 @@
 #                                                          :::      ::::::::  #
 #   ipdata_processor.py                                  :+:      :+:    :+:  #
 #                                                      +:+ +:+         +:+    #
-#   By: jay-k <jay-k@student.42.fr>                  +#+  +:+       +#+       #
+#   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/13 10:43:25 by jkrishna            #+#    #+#            #
-#   Updated: 2026/10/14 18:19:41 by jay-k              ###   ########.fr      #
+#   Updated: 2026/10/15 11:49:55 by jkrishna           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
 import os
 
+from typing import List
 from ..Base.model import path_dict
+from .chunking import python_file_processing
 
 
 def source_processor() -> None:
     """This is a inital point that divides the task,
      we do through every single file in raw folder
      and this is where the branching happens (like txt or py etc)"""
+    source_location: dict[str, List[int, int]] = {}
     for dirpath, dirnames, filenames in os.walk(
         "./" + path_dict("DATA_PATH")
     ):
-
+        # ingest needed files
         for file in filenames:
-            print(file)
+            if file.endswith(".py"):
+                file_path = os.path.join(dirpath, file)
+                source_location[file_path] = python_file_processing(file_path)
+
+            # if file.endswith(".txt"):
+            #     print()
+
+            # elif file.endswith(".md"):
+            #     print()
 
 
 
 
 
-    
-# https://www.geeksforgeeks.org/python/python
-# -loop-through-folders-and-files-in-directory/
+            # elif file.endswith(".yaml"):
+            #     print()
 
-# https://www.tutorialspoint.com/python/os_walk.htm
+            # elif file.endswith(".sh"):
+            #     print()
+
+            # elif file.endswith(".json"):
+            #     print()
+
+            # elif file.endswith(".jinja"):
+            #     print()
+            # else:
+            #     print(file)
+        breakpoint()

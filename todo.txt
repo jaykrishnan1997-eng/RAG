@@ -1,1 +1,2 @@
-use caching at the end to store created tokens instead of recreating from start: like hf and uv cache
+1. use caching at the end to store created tokens instead of recreating from start: like hf and uv cache
+2. try to change the index from int typpe to long type if necessary
