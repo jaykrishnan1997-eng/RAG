@@ -7,7 +7,7 @@
 #   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/12 12:24:16 by jkrishna            #+#    #+#            #
-#   Updated: 2026/10/15 11:34:02 by jkrishna           ###   ########.fr      #
+#   Updated: 2026/10/16 10:31:04 by jkrishna           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -27,7 +27,7 @@ def main() -> None:
     args = parse_args()
 
     # input data processing from vlllm
-    source_processor()
+    source_processor(args.max_chunk_size)
     # Chunking and cacheing
     # Embedding
     # Retrieval

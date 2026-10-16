@@ -7,7 +7,7 @@
 #   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/13 10:43:25 by jkrishna            #+#    #+#            #
-#   Updated: 2026/10/15 11:49:55 by jkrishna           ###   ########.fr      #
+#   Updated: 2026/10/16 12:45:54 by jkrishna           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -18,7 +18,7 @@ from ..Base.model import path_dict
 from .chunking import python_file_processing
 
 
-def source_processor() -> None:
+def source_processor(max_chunk_size: int) -> None:
     """This is a inital point that divides the task,
      we do through every single file in raw folder
      and this is where the branching happens (like txt or py etc)"""
@@ -27,11 +27,12 @@ def source_processor() -> None:
         "./" + path_dict("DATA_PATH")
     ):
         # ingest needed files
+        last_character_index: int = 0
         for file in filenames:
             if file.endswith(".py"):
                 file_path = os.path.join(dirpath, file)
-                source_location[file_path] = python_file_processing(file_path)
-
+                source_location[file_path] = python_file_processing(file_path, last_character_index, max_chunk_size)
+                last_character_index = source_location[file_path][1]
             # if file.endswith(".txt"):
             #     print()
 

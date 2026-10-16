@@ -32,3 +32,13 @@ nearly 2874 files in vllm that too json, cmake, py, sh, yaml, png, txt, etc
 
 distinction done, now implementing diffenernt chunking statergy as per requirement
 https://jillanisofttech.medium.com/optimizing-chunking-strategies-for-retrieval-augmented-generation-rag-applications-with-python-c3ab5060d3e4
+However only got time to filter out python files correctly using os.walk
+
+@@ Day 5
+
+Why not to choose langchain: https://github.com/orgs/community/discussions/182015
+Ok Now started chunking for python files (fixed size chunking)
+
+well well i had to use AI to know best stratergies for python, markdown and text file.
+AST-based recursive split-then-merge : python
+structure-aware Markdown chunker: text and md

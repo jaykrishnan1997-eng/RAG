@@ -1,6 +1,6 @@
 # RAG
 
-# NOTE: Goal is to do this probect without AI as much as possible. Only current use is to explain the subject. Since AI wrote it, let AI explain the painfull english used in them.
+# NOTE: Goal is to do this probect without AI as much as possible. Only current use is to explain the subject. Since AI wrote it, let AI explain the painfull english used in them. Also really important design choices.
 
 
 # Day 0
@@ -30,13 +30,20 @@ To scan the folder and find txt and python files
 19. https://www.geeksforgeeks.org/python/python-loop-through-folders-and-files-in-directory/
 
 
-Implementing different chunking statergies based on file types:
-20. https://jillanisofttech.medium.com/optimizing-chunking-strategies-for-retrieval-augmented-generation-rag-applications-with-python-c3ab5060d3e4
-
 To loop through files in the directory and find path:
-21. https://www.geeksforgeeks.org/python/os-walk-python/
-22. https://www.tutorialspoint.com/python/os_walk.htm
-23. https://stackoverflow.com/questions/16465399/need-the-path-for-particular-files-using-os-walk
+20. https://www.geeksforgeeks.org/python/os-walk-python/
+21. https://www.tutorialspoint.com/python/os_walk.htm
+22. https://stackoverflow.com/questions/16465399/need-the-path-for-particular-files-using-os-walk
+
+
+Implementing different chunking statergies based on file types:
+23. https://jillanisofttech.medium.com/optimizing-chunking-strategies-for-retrieval-augmented-generation-rag-applications-with-python-c3ab5060d3e4
+
+sentense transformers:
+24. https://www.sbert.net/
+natural language toolkit:
+25. https://www.nltk.org/
+26. https://guides.library.upenn.edu/penntdm/python/nltk
 
 
 ### What is RAG:
