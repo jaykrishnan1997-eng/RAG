@@ -45,6 +45,11 @@ natural language toolkit:
 25. https://www.nltk.org/
 26. https://guides.library.upenn.edu/penntdm/python/nltk
 
+Document based chunking using recursive mechanism:
+27. https://weaviate.io/blog/chunking-strategies-for-rag
+
+Hybrid retrival: 
+0. https://www.youtube.com/watch?v=r0Dciuq0knU
 
 ### What is RAG:
 1. Retrieval Augmented Generation is an architecture for optimizing the performance of an AI model by connecting it to external knowledge bases: databases, document collections etc.[2][3]

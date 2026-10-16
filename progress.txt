@@ -42,3 +42,11 @@ Ok Now started chunking for python files (fixed size chunking)
 well well i had to use AI to know best stratergies for python, markdown and text file.
 AST-based recursive split-then-merge : python
 structure-aware Markdown chunker: text and md
+
+python text and markdown seperators: https://oneuptime.com/blog/post/2026-01-30-rag-recursive-chunking/view
+https://supermemory.ai/blog/building-code-chunk-ast-aware-code-chunking/
+https://nlp.stanford.edu/IR-book/pdf/irbookonlinereading.pdf
+Langchain docs: https://docs.langchain.com/oss/python/integrations/splitters/code_splitter
+https://weaviate.io/blog/chunking-strategies-for-rag
+
+Hybrid retrival: https://www.youtube.com/watch?v=r0Dciuq0knU
