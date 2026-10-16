@@ -50,3 +50,4 @@ Langchain docs: https://docs.langchain.com/oss/python/integrations/splitters/cod
 https://weaviate.io/blog/chunking-strategies-for-rag
 
 Hybrid retrival: https://www.youtube.com/watch?v=r0Dciuq0knU
+recursive split then merge: https://supermemory.ai/blog/building-code-chunk-ast-aware-code-chunking/
