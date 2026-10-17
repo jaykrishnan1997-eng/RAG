@@ -51,3 +51,9 @@ https://weaviate.io/blog/chunking-strategies-for-rag
 
 Hybrid retrival: https://www.youtube.com/watch?v=r0Dciuq0knU
 recursive split then merge: https://supermemory.ai/blog/building-code-chunk-ast-aware-code-chunking/
+
+@@ Day 6
+
+structure-aware Markdown chunker:
+https://github.com/ghostfix-pm/rag-chunker
+https://pypi.org/project/markdown-chunker/

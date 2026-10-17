@@ -7,7 +7,7 @@
 #   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/13 10:43:25 by jkrishna            #+#    #+#            #
-#   Updated: 2026/10/16 14:56:57 by jkrishna           ###   ########.fr      #
+#   Updated: 2026/10/17 08:36:30 by jkrishna           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -29,11 +29,11 @@ def source_processor(max_chunk_size: int) -> None:
         # ingest needed files
         last_character_index: int = 0
         for file in filenames:
-            if file.endswith(".py"):
-                file_path = os.path.join(dirpath, file)
-                source_location[file_path] = python_file_processor(file_path, last_character_index, max_chunk_size)
-                last_character_index = source_location[file_path][1]
-            elif (file.endswith(".txt") or file.endswith(".md")):
+            # if file.endswith(".py"):
+            #     file_path = os.path.join(dirpath, file)
+            #     source_location[file_path] = python_file_processor(file_path, last_character_index, max_chunk_size)
+            #     last_character_index = source_location[file_path][1]
+            if (file.endswith(".txt") or file.endswith(".md")):
                 file_path = os.path.join(dirpath, file)
                 source_location[file_path] = md_txt_file_processor(file_path, last_character_index, max_chunk_size)
                 last_character_index = source_location[file_path][1]
