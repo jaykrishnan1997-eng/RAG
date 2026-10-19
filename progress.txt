@@ -57,3 +57,11 @@ recursive split then merge: https://supermemory.ai/blog/building-code-chunk-ast-
 structure-aware Markdown chunker:
 https://github.com/ghostfix-pm/rag-chunker
 https://pypi.org/project/markdown-chunker/
+
+microsoft markitdown package: convert pdf, mp4 etc to .md file
+https://github.com/microsoft/markitdown/tree/main
+
+@@ Day 7
+
+still at markdown chunker
+But starting with a test chunk file and adding features one at a time

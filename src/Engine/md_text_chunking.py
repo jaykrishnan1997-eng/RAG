@@ -7,7 +7,7 @@
 #   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/17 10:11:42 by jkrishna            #+#    #+#            #
-#   Updated: 2026/10/17 13:26:47 by jkrishna           ###   ########.fr      #
+#   Updated: 2026/10/19 08:40:50 by jkrishna           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -21,6 +21,9 @@ class MarkdownChunk:
     heading_path: list
     char_count: int = 0
 
+
+def push():
+    
 
 def md_txt_file_processor(
     file_path: str, last_character_index: int,
