@@ -7,7 +7,7 @@
 #   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/10 13:20:17 by jkrishna            #+#    #+#            #
-#   Updated: 2026/10/19 09:40:58 by jkrishna           ###   ########.fr      #
+#   Updated: 2026/10/19 11:26:04 by jkrishna           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -18,8 +18,7 @@ from typing import List
 
 def path_dict(path_abbr: str) -> str:
     path = {
-        # "DATA_PATH": "data/raw/vllm-0.10.1",
-        "DATA_PATH": "test/test.md",
+        "DATA_PATH": "data/raw/vllm-0.10.1",
         "ip_ans_code_path":
         "data/datasets/AnsweredQuestions/dataset_code_public.json",
         "ip_ans_docs_path":

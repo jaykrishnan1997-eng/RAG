@@ -7,7 +7,7 @@
 #   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/15 09:34:07 by jkrishna            #+#    #+#            #
-#   Updated: 2026/10/17 10:11:31 by jkrishna           ###   ########.fr      #
+#   Updated: 2026/10/19 11:36:16 by jkrishna           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -92,7 +92,6 @@ def md_txt_file_processor(
     chunks = python_chunking(ast.dump(tree, indent=4), max_tokens)
     for i, chunk in enumerate(chunks):
         print(f"Chunk {i+1}:\n{chunk}\n")
-        breakpoint()
     return [first_character_index, last_character_index]
 
 
@@ -156,7 +155,6 @@ def python_file_processor(
     chunks = python_chunking(ast.dump(tree, indent=4), max_tokens)
     for i, chunk in enumerate(chunks):
         print(f"Chunk {i+1}:\n{chunk}\n")
-        breakpoint()
     return [first_character_index, last_character_index]
 
 

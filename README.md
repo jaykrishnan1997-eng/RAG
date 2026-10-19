@@ -48,6 +48,9 @@ natural language toolkit:
 Document based chunking using recursive mechanism:
 27. https://weaviate.io/blog/chunking-strategies-for-rag
 
+Chunk size and Chunk Overlap:
+28. https://dev.to/tak089/what-is-chunk-size-and-chunk-overlap-1hlj
+
 Hybrid retrival: 
 0. https://www.youtube.com/watch?v=r0Dciuq0knU
 
