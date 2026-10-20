@@ -71,3 +71,6 @@ But starting with a test chunk file and adding features one at a time
 Fixed size chunker with overlapping used for text and md files
 currently running. need to see how the edge cases can be handled. now lets start with python files
 Structure aware markdown is a long shot if have time then will do.
+
+Ref: Split and merge: https://www.geeksforgeeks.org/nlp/nlp-splitting-and-merging-chunks/
+Ref: Understanding LangChain's RecursiveCharacterTextSplitter: https://dev.to/eteimz/understanding-langchains-recursivecharactertextsplitter-2846
