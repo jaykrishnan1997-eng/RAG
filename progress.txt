@@ -74,3 +74,4 @@ Structure aware markdown is a long shot if have time then will do.
 
 Ref: Split and merge: https://www.geeksforgeeks.org/nlp/nlp-splitting-and-merging-chunks/
 Ref: Understanding LangChain's RecursiveCharacterTextSplitter: https://dev.to/eteimz/understanding-langchains-recursivecharactertextsplitter-2846
+Ref: AST in Python: https://earthly.dev/blog/python-ast/
