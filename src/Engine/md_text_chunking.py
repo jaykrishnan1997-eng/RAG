@@ -7,25 +7,11 @@
 #   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/17 10:11:42 by jkrishna            #+#    #+#            #
-#   Updated: 2026/10/20 13:05:12 by jkrishna           ###   ########.fr      #
+#   Updated: 2026/10/20 13:58:14 by jkrishna           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
-
-class MarkdownChunk:
-    def __init__(
-        self,
-        text: str,
-        file_path: list,
-        char_count: int,
-        start_index: int,
-        end_index: int,
-    ):
-        self.text: str = text
-        self.file_path: list = file_path
-        self.char_count: int = char_count
-        self.start_index: int = start_index
-        self.end_index: int = end_index
+from ..Base.model import MarkdownChunk
 
 
 def push(code_line, file_path, start_index, end_index):
@@ -59,7 +45,7 @@ def split(
     return markdown_list
 
 
-def md_processor(
+def md_txt_processor(
     file_path: str,
     max_char: int,
 ) -> list[int, int]:
@@ -96,47 +82,42 @@ def md_processor(
             start_index += end
             buffer = buffer[end:]
 
-        for obj in markdown_list:
-            print(f"[{obj.text}]: {obj.start_index}, {obj.end_index} \n\n")
+    # for obj in markdown_list:
+    #     print(f"[{obj.text}]: {obj.start_index}, {obj.end_index} \n\n")
 
-
-
-
-        # for line in content.splitlines():
-
-        #     if left_over != "":
-        #         code_lines = left_over
-        #         start_index = start_index - len(left_over)
-        #     elif "---" in line:
-        #         breaking_point = line.index('---')
-        #         code_lines = line[:breaking_point]
-        #         left_over = line[breaking_point:]
-        #         buffer = ""
-        #     else:
-        #         code_lines = line[:max_char]
-        #         buffer = line[(max_char - overlap):]
-
-        #     print(".")
-        #     while buffer != "" or markdown_list == []:
-        #         end_index = start_index + len(code_lines)
-        #         markdown_list.append(
-        #             push(code_lines, file_path, start_index, end_index))
-        #         start_index = end_index - overlap
-        #         code_lines = buffer[:max_char]
-        #         buffer = buffer[(max_char - overlap):]
-
-        #         if buffer == "" and code_lines != "":
-        #             end_index = start_index + len(code_lines)
-        #             markdown_list.append(
-        #                 push(code_lines, file_path, start_index, end_index))
+    return markdown_list
 
 
 
 
 
+    # for line in content.splitlines():
 
+    #     if left_over != "":
+    #         code_lines = left_over
+    #         start_index = start_index - len(left_over)
+    #     elif "---" in line:
+    #         breaking_point = line.index('---')
+    #         code_lines = line[:breaking_point]
+    #         left_over = line[breaking_point:]
+    #         buffer = ""
+    #     else:
+    #         code_lines = line[:max_char]
+    #         buffer = line[(max_char - overlap):]
 
+    #     print(".")
+    #     while buffer != "" or markdown_list == []:
+    #         end_index = start_index + len(code_lines)
+    #         markdown_list.append(
+    #             push(code_lines, file_path, start_index, end_index))
+    #         start_index = end_index - overlap
+    #         code_lines = buffer[:max_char]
+    #         buffer = buffer[(max_char - overlap):]
 
+    #         if buffer == "" and code_lines != "":
+    #             end_index = start_index + len(code_lines)
+    #             markdown_list.append(
+    #                 push(code_lines, file_path, start_index, end_index))
 
 
 
@@ -154,37 +135,45 @@ def md_processor(
 
 
 
-        # for line in content.splitlines():
 
-        #     if left_over != "":
-        #         code_lines = left_over
-        #         start_index = start_index - len(left_over)
-        #     elif "---" in line:
-        #         breaking_point = line.index('---')
-        #         code_lines = line[:breaking_point]
-        #         left_over = line[breaking_point:]
-        #         buffer = ""
-        #     else:
-        #         code_lines = line[:max_char]
-        #         buffer = line[(max_char - overlap):]
 
-        #     print(".")
-        #     while buffer != "" or markdown_list == []:
-        #         end_index = start_index + len(code_lines)
-        #         markdown_list.append(
-        #             push(code_lines, file_path, start_index, end_index))
-        #         start_index = end_index - overlap
-        #         code_lines = buffer[:max_char]
-        #         buffer = buffer[(max_char - overlap):]
 
-        #         if buffer == "" and code_lines != "":
-        #             end_index = start_index + len(code_lines)
-        #             markdown_list.append(
-        #                 push(code_lines, file_path, start_index, end_index))
 
-        # for obj in markdown_list:
-        #     print(f"{obj.text}: {obj.start_index}, {obj.end_index}")
-        #     print(f"{obj.file_path}")
+
+
+
+
+    # for line in content.splitlines():
+
+    #     if left_over != "":
+    #         code_lines = left_over
+    #         start_index = start_index - len(left_over)
+    #     elif "---" in line:
+    #         breaking_point = line.index('---')
+    #         code_lines = line[:breaking_point]
+    #         left_over = line[breaking_point:]
+    #         buffer = ""
+    #     else:
+    #         code_lines = line[:max_char]
+    #         buffer = line[(max_char - overlap):]
+
+    #     print(".")
+    #     while buffer != "" or markdown_list == []:
+    #         end_index = start_index + len(code_lines)
+    #         markdown_list.append(
+    #             push(code_lines, file_path, start_index, end_index))
+    #         start_index = end_index - overlap
+    #         code_lines = buffer[:max_char]
+    #         buffer = buffer[(max_char - overlap):]
+
+    #         if buffer == "" and code_lines != "":
+    #             end_index = start_index + len(code_lines)
+    #             markdown_list.append(
+    #                 push(code_lines, file_path, start_index, end_index))
+
+    # for obj in markdown_list:
+    #     print(f"{obj.text}: {obj.start_index}, {obj.end_index}")
+    #     print(f"{obj.file_path}")
 
 
     #    for line in content.splitlines():

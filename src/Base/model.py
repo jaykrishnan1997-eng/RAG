@@ -7,7 +7,7 @@
 #   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/10 13:20:17 by jkrishna            #+#    #+#            #
-#   Updated: 2026/10/19 11:26:04 by jkrishna           ###   ########.fr      #
+#   Updated: 2026/10/20 13:39:47 by jkrishna           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -75,3 +75,19 @@ class StudentSearchResults(BaseModel):
 class StudentSearchResultsAndAnswer(BaseModel):
     search_results: List[MinimalAnswer]
     k: int
+
+
+class MarkdownChunk:
+    def __init__(
+        self,
+        text: str,
+        file_path: list,
+        char_count: int,
+        start_index: int,
+        end_index: int,
+    ):
+        self.text: str = text
+        self.file_path: list = file_path
+        self.char_count: int = char_count
+        self.start_index: int = start_index
+        self.end_index: int = end_index
