@@ -1,0 +1,2 @@
+What if text files are empty and what if the file is corupted
+Does any breaking case exist for the md_text chunking
