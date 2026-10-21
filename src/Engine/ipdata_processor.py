@@ -7,7 +7,7 @@
 #   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/13 10:43:25 by jkrishna            #+#    #+#            #
-#   Updated: 2026/10/21 10:18:28 by jkrishna           ###   ########.fr      #
+#   Updated: 2026/10/21 10:34:47 by jkrishna           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -40,8 +40,8 @@ def source_processor(max_chunk_size: int) -> None:
                 md_txt_processor(markdown_list,
                     file_path, max_chunk_size)
 
-    for obj in markdown_list:
-        print(obj.file_path)
+    for i, obj in enumerate(markdown_list):
+        print(f"[{i}]: {obj.file_path}")
         print(obj.char_count, obj.start_index, obj.end_index)
 
 

@@ -7,7 +7,7 @@
 #   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/17 10:11:42 by jkrishna            #+#    #+#            #
-#   Updated: 2026/10/21 10:16:44 by jkrishna           ###   ########.fr      #
+#   Updated: 2026/10/21 10:33:24 by jkrishna           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -62,9 +62,13 @@ def md_txt_processor(
 
         content = file_object.read()
         buffer = content
+        if ".md" in file_path:
+            seperator = "\n\n---\n\n"
+        else:
+            seperator = "\n\n"
         while buffer != "":
-            if "\n\n---\n\n" in buffer:
-                end = buffer.index('\n\n---\n\n') + len('\n\n---\n\n')
+            if seperator in buffer:
+                end = buffer.index(seperator) + len(seperator)
             else:
                 end = len(buffer)
             code_lines = buffer[:end]
