@@ -7,7 +7,7 @@
 #   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/17 10:11:42 by jkrishna            #+#    #+#            #
-#   Updated: 2026/10/21 10:33:24 by jkrishna           ###   ########.fr      #
+#   Updated: 2026/10/21 10:39:40 by jkrishna           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -57,12 +57,13 @@ def md_txt_processor(
     end: int
     start_index: int = 0
     end_index: int = 0
+    seperator: str
 
     with open(file_path, 'r', encoding='utf-8') as file_object:
 
         content = file_object.read()
         buffer = content
-        if ".md" in file_path:
+        if file_path.endswith(".md"):
             seperator = "\n\n---\n\n"
         else:
             seperator = "\n\n"
