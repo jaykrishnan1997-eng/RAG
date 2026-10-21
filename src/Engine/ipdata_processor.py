@@ -7,7 +7,7 @@
 #   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/13 10:43:25 by jkrishna            #+#    #+#            #
-#   Updated: 2026/10/20 14:05:56 by jkrishna           ###   ########.fr      #
+#   Updated: 2026/10/21 10:18:28 by jkrishna           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -37,25 +37,32 @@ def source_processor(max_chunk_size: int) -> None:
             #     last_character_index = source_location[file_path][1]
             if (file.endswith(".txt") or file.endswith(".md")):
                 file_path = os.path.join(dirpath, file)
-                markdown_list.append(md_txt_processor(
-                    file_path, max_chunk_size))
+                md_txt_processor(markdown_list,
+                    file_path, max_chunk_size)
 
     for obj in markdown_list:
-        print(obj[0].file_path)
+        print(obj.file_path)
+        print(obj.char_count, obj.start_index, obj.end_index)
 
 
 
+    # elif file.endswith(".yaml"):
+    #     print()
 
-            # elif file.endswith(".yaml"):
-            #     print()
+    # elif file.endswith(".sh"):
+    #     print()
 
-            # elif file.endswith(".sh"):
-            #     print()
+    # elif file.endswith(".json"):
+    #     print()
 
-            # elif file.endswith(".json"):
-            #     print()
+    # elif file.endswith(".jinja"):
+    #     print()
+    # else:
+    #     print(file)
 
-            # elif file.endswith(".jinja"):
-            #     print()
-            # else:
-            #     print(file)
+
+    # # for obj in markdown_list:
+    # print(markdown_list[2].char_count, markdown_list[2].start_index, markdown_list[2].end_index)
+    # print(markdown_list[2].text)
+    # print(markdown_list[2].file_path)
+    # print(len(markdown_list[2].text))

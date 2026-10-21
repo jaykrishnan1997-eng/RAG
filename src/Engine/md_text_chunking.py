@@ -7,7 +7,7 @@
 #   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/17 10:11:42 by jkrishna            #+#    #+#            #
-#   Updated: 2026/10/20 14:22:40 by jkrishna           ###   ########.fr      #
+#   Updated: 2026/10/21 10:16:44 by jkrishna           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -20,7 +20,7 @@ def push(code_line, file_path, start_index, end_index):
         MarkdownChunk(
             code_line,
             file_path,
-            end_index - start_index + 1,
+            len(code_line),
             start_index,
             end_index))
 
@@ -46,6 +46,7 @@ def split(
 
 
 def md_txt_processor(
+    markdown_list,
     file_path: str,
     max_char: int,
 ) -> list[int, int]:
@@ -56,7 +57,6 @@ def md_txt_processor(
     end: int
     start_index: int = 0
     end_index: int = 0
-    markdown_list: list[MarkdownChunk] = []
 
     with open(file_path, 'r', encoding='utf-8') as file_object:
 
