@@ -81,3 +81,5 @@ Ref: AST in Python: https://earthly.dev/blog/python-ast/
 Ref: Splitiing recursively: Text splitter: https://docs.langchain.com/oss/python/integrations/splitters/recursive_text_splitter
 Pyhton parsing with AST standard module
 Ref: https://www.youtube.com/watch?v=l67JN5mQnKI
+
+Future Ref:improve RAG: https://www.youtube.com/watch?v=smGbeghV1JE
