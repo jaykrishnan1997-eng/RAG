@@ -7,14 +7,14 @@
 #   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/13 10:43:25 by jkrishna            #+#    #+#            #
-#   Updated: 2026/10/21 10:47:13 by jkrishna           ###   ########.fr      #
+#   Updated: 2026/10/21 11:22:42 by jkrishna           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
 import os
 
 from typing import List
-from ..Base.model import path_dict, MarkdownChunk
+from ..Base.model import path_dict, ChunkNode
 # from .chunking import python_file_processor, md_txt_file_processor
 from .md_text_chunking import md_txt_processor
 from .python_chunking import python_processor
@@ -24,7 +24,7 @@ def source_processor(max_chunk_size: int) -> None:
      we do through every single file in raw folder
      and this is where the branching happens (like txt or py etc)"""
     # source_location: dict[str, List[int, int]] = {}
-    markdown_list: list[MarkdownChunk] = []
+    chunk_data_list: list[ChunkNode] = []
 
     for dirpath, dirnames, filenames in os.walk(
         "./" + path_dict("DATA_PATH")
@@ -37,14 +37,14 @@ def source_processor(max_chunk_size: int) -> None:
             #     last_character_index = source_location[file_path][1]
             if (file.endswith(".txt") or file.endswith(".md")):
                 file_path = os.path.join(dirpath, file)
-                md_txt_processor(markdown_list,
+                md_txt_processor(chunk_data_list,
                     file_path, max_chunk_size)
             elif (file.endswith(".py")):
                 file_path = os.path.join(dirpath, file)
-                python_processor(markdown_list,
+                python_processor(chunk_data_list,
                     file_path, max_chunk_size)
 
-    for i, obj in enumerate(markdown_list):
+    for i, obj in enumerate(chunk_data_list):
         print(f"[{i}]: {obj.file_path}")
         print(obj.char_count, obj.start_index, obj.end_index)
 
@@ -65,8 +65,8 @@ def source_processor(max_chunk_size: int) -> None:
     #     print(file)
 
 
-    # # for obj in markdown_list:
-    # print(markdown_list[2].char_count, markdown_list[2].start_index, markdown_list[2].end_index)
-    # print(markdown_list[2].text)
-    # print(markdown_list[2].file_path)
-    # print(len(markdown_list[2].text))
+    # # for obj in chunk_data_list:
+    # print(chunk_data_list[2].char_count, chunk_data_list[2].start_index, chunk_data_list[2].end_index)
+    # print(chunk_data_list[2].text)
+    # print(chunk_data_list[2].file_path)
+    # print(len(chunk_data_list[2].text))

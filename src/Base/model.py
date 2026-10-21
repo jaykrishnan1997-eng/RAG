@@ -7,7 +7,7 @@
 #   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/10 13:20:17 by jkrishna            #+#    #+#            #
-#   Updated: 2026/10/20 13:39:47 by jkrishna           ###   ########.fr      #
+#   Updated: 2026/10/21 11:22:42 by jkrishna           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -77,7 +77,7 @@ class StudentSearchResultsAndAnswer(BaseModel):
     k: int
 
 
-class MarkdownChunk:
+class ChunkNode:
     def __init__(
         self,
         text: str,

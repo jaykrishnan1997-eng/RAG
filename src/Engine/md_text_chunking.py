@@ -7,17 +7,17 @@
 #   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/17 10:11:42 by jkrishna            #+#    #+#            #
-#   Updated: 2026/10/21 10:39:40 by jkrishna           ###   ########.fr      #
+#   Updated: 2026/10/21 11:22:42 by jkrishna           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
-from ..Base.model import MarkdownChunk
+from ..Base.model import ChunkNode
 
 
 def push(code_line, file_path, start_index, end_index):
 
     return (
-        MarkdownChunk(
+        ChunkNode(
             code_line,
             file_path,
             len(code_line),
@@ -26,7 +26,7 @@ def push(code_line, file_path, start_index, end_index):
 
 
 def split(
-    markdown_list, code_lines,
+    chunk_data_list, code_lines,
     file_path, max_char,
     start_index, actual_end_index
 ):
@@ -39,14 +39,14 @@ def split(
         lines = code_lines[:max_char]
         code_lines = code_lines[(max_char - overlap):]
         end_index = start_index + max_char
-        markdown_list.append(
+        chunk_data_list.append(
                     push(lines, file_path, start_index, end_index))
         start_index += (max_char - overlap)
-    return markdown_list
+    return chunk_data_list
 
 
 def md_txt_processor(
-    markdown_list,
+    chunk_data_list,
     file_path: str,
     max_char: int,
 ) -> list[int, int]:
@@ -75,22 +75,22 @@ def md_txt_processor(
             code_lines = buffer[:end]
             end_index = start_index + end - 1
             if (end_index - start_index + 1) <= max_char:
-                markdown_list.append(
+                chunk_data_list.append(
                     push(
                         code_lines, file_path,
                         start_index, end_index
                     ))
             else:
                 split(
-                    markdown_list, code_lines,
+                    chunk_data_list, code_lines,
                     file_path, max_char, start_index, end_index)
             start_index += end
             buffer = buffer[end:]
 
-    # for obj in markdown_list:
+    # for obj in chunk_data_list:
     #     print(f"[{obj.text}]: {obj.start_index}, {obj.end_index} \n\n")
 
-    return markdown_list
+    return chunk_data_list
 
 
 
@@ -111,9 +111,9 @@ def md_txt_processor(
     #         buffer = line[(max_char - overlap):]
 
     #     print(".")
-    #     while buffer != "" or markdown_list == []:
+    #     while buffer != "" or chunk_data_list == []:
     #         end_index = start_index + len(code_lines)
-    #         markdown_list.append(
+    #         chunk_data_list.append(
     #             push(code_lines, file_path, start_index, end_index))
     #         start_index = end_index - overlap
     #         code_lines = buffer[:max_char]
@@ -121,7 +121,7 @@ def md_txt_processor(
 
     #         if buffer == "" and code_lines != "":
     #             end_index = start_index + len(code_lines)
-    #             markdown_list.append(
+    #             chunk_data_list.append(
     #                 push(code_lines, file_path, start_index, end_index))
 
 
@@ -163,9 +163,9 @@ def md_txt_processor(
     #         buffer = line[(max_char - overlap):]
 
     #     print(".")
-    #     while buffer != "" or markdown_list == []:
+    #     while buffer != "" or chunk_data_list == []:
     #         end_index = start_index + len(code_lines)
-    #         markdown_list.append(
+    #         chunk_data_list.append(
     #             push(code_lines, file_path, start_index, end_index))
     #         start_index = end_index - overlap
     #         code_lines = buffer[:max_char]
@@ -173,10 +173,10 @@ def md_txt_processor(
 
     #         if buffer == "" and code_lines != "":
     #             end_index = start_index + len(code_lines)
-    #             markdown_list.append(
+    #             chunk_data_list.append(
     #                 push(code_lines, file_path, start_index, end_index))
 
-    # for obj in markdown_list:
+    # for obj in chunk_data_list:
     #     print(f"{obj.text}: {obj.start_index}, {obj.end_index}")
     #     print(f"{obj.file_path}")
 
@@ -196,9 +196,9 @@ def md_txt_processor(
     #             buffer = line[(max_char - overlap):]
 
     #         print(".")
-    #         while buffer != "" or markdown_list == []:
+    #         while buffer != "" or chunk_data_list == []:
     #             end_index = start_index + len(code_lines)
-    #             markdown_list.append(
+    #             chunk_data_list.append(
     #                 push(code_lines, file_path, start_index, end_index))
     #             start_index = end_index - overlap
     #             code_lines = buffer[:max_char]
@@ -206,7 +206,7 @@ def md_txt_processor(
 
     #             if buffer == "" and code_lines != "":
     #                 end_index = start_index + len(code_lines)
-    #                 markdown_list.append(
+    #                 chunk_data_list.append(
     #                     push(code_lines, file_path, start_index, end_index))
 
 

@@ -2,12 +2,12 @@
 # ########################################################################### #
 #   shebang: 1                                                                #
 #                                                          :::      ::::::::  #
-#   chunking.py                                          :+:      :+:    :+:  #
+#   python_chunking.py                                   :+:      :+:    :+:  #
 #                                                      +:+ +:+         +:+    #
 #   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/15 09:34:07 by jkrishna            #+#    #+#            #
-#   Updated: 2026/10/20 14:23:11 by jkrishna           ###   ########.fr      #
+#   Updated: 2026/10/21 11:21:53 by jkrishna           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -138,7 +138,8 @@ def python_chunking(
     return chunks
 
 
-def python_file_processor(
+def python_processor(
+    chunk_data_list,
     file_path: str, last_character_index: int,
     max_tokens: int,
 ) -> list[int, int]:
