@@ -7,7 +7,7 @@
 #   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/17 10:11:42 by jkrishna            #+#    #+#            #
-#   Updated: 2026/10/21 11:22:42 by jkrishna           ###   ########.fr      #
+#   Updated: 2026/10/23 14:13:52 by jkrishna           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -62,227 +62,32 @@ def md_txt_processor(
     with open(file_path, 'r', encoding='utf-8') as file_object:
 
         content = file_object.read()
-        buffer = content
-        if file_path.endswith(".md"):
-            seperator = "\n\n---\n\n"
+    buffer = content
+    if file_path.endswith(".md"):
+        seperator = "\n\n---\n\n"
+    else:
+        seperator = "\n\n"
+    while buffer != "":
+        if seperator in buffer:
+            end = buffer.index(seperator) + len(seperator)
         else:
-            seperator = "\n\n"
-        while buffer != "":
-            if seperator in buffer:
-                end = buffer.index(seperator) + len(seperator)
-            else:
-                end = len(buffer)
-            code_lines = buffer[:end]
-            end_index = start_index + end - 1
-            if (end_index - start_index + 1) <= max_char:
-                chunk_data_list.append(
-                    push(
-                        code_lines, file_path,
-                        start_index, end_index
-                    ))
-            else:
-                split(
-                    chunk_data_list, code_lines,
-                    file_path, max_char, start_index, end_index)
-            start_index += end
-            buffer = buffer[end:]
+            end = len(buffer)
+        code_lines = buffer[:end]
+        end_index = start_index + end - 1
+        if (end_index - start_index + 1) <= max_char:
+            chunk_data_list.append(
+                push(
+                    code_lines, file_path,
+                    start_index, end_index
+                ))
+        else:
+            split(
+                chunk_data_list, code_lines,
+                file_path, max_char, start_index, end_index)
+        start_index += end
+        buffer = buffer[end:]
 
     # for obj in chunk_data_list:
     #     print(f"[{obj.text}]: {obj.start_index}, {obj.end_index} \n\n")
 
     return chunk_data_list
-
-
-
-
-
-    # for line in content.splitlines():
-
-    #     if left_over != "":
-    #         code_lines = left_over
-    #         start_index = start_index - len(left_over)
-    #     elif "---" in line:
-    #         breaking_point = line.index('---')
-    #         code_lines = line[:breaking_point]
-    #         left_over = line[breaking_point:]
-    #         buffer = ""
-    #     else:
-    #         code_lines = line[:max_char]
-    #         buffer = line[(max_char - overlap):]
-
-    #     print(".")
-    #     while buffer != "" or chunk_data_list == []:
-    #         end_index = start_index + len(code_lines)
-    #         chunk_data_list.append(
-    #             push(code_lines, file_path, start_index, end_index))
-    #         start_index = end_index - overlap
-    #         code_lines = buffer[:max_char]
-    #         buffer = buffer[(max_char - overlap):]
-
-    #         if buffer == "" and code_lines != "":
-    #             end_index = start_index + len(code_lines)
-    #             chunk_data_list.append(
-    #                 push(code_lines, file_path, start_index, end_index))
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    # for line in content.splitlines():
-
-    #     if left_over != "":
-    #         code_lines = left_over
-    #         start_index = start_index - len(left_over)
-    #     elif "---" in line:
-    #         breaking_point = line.index('---')
-    #         code_lines = line[:breaking_point]
-    #         left_over = line[breaking_point:]
-    #         buffer = ""
-    #     else:
-    #         code_lines = line[:max_char]
-    #         buffer = line[(max_char - overlap):]
-
-    #     print(".")
-    #     while buffer != "" or chunk_data_list == []:
-    #         end_index = start_index + len(code_lines)
-    #         chunk_data_list.append(
-    #             push(code_lines, file_path, start_index, end_index))
-    #         start_index = end_index - overlap
-    #         code_lines = buffer[:max_char]
-    #         buffer = buffer[(max_char - overlap):]
-
-    #         if buffer == "" and code_lines != "":
-    #             end_index = start_index + len(code_lines)
-    #             chunk_data_list.append(
-    #                 push(code_lines, file_path, start_index, end_index))
-
-    # for obj in chunk_data_list:
-    #     print(f"{obj.text}: {obj.start_index}, {obj.end_index}")
-    #     print(f"{obj.file_path}")
-
-
-    #    for line in content.splitlines():
-
-    #         if left_over != "":
-    #             code_lines = left_over
-    #             start_index = start_index - len(left_over)
-    #         elif "---" in line:
-    #             breaking_point = line.index('---')
-    #             code_lines = line[:breaking_point]
-    #             left_over = line[breaking_point:]
-    #             buffer = ""
-    #         else:
-    #             code_lines = line[:max_char]
-    #             buffer = line[(max_char - overlap):]
-
-    #         print(".")
-    #         while buffer != "" or chunk_data_list == []:
-    #             end_index = start_index + len(code_lines)
-    #             chunk_data_list.append(
-    #                 push(code_lines, file_path, start_index, end_index))
-    #             start_index = end_index - overlap
-    #             code_lines = buffer[:max_char]
-    #             buffer = buffer[(max_char - overlap):]
-
-    #             if buffer == "" and code_lines != "":
-    #                 end_index = start_index + len(code_lines)
-    #                 chunk_data_list.append(
-    #                     push(code_lines, file_path, start_index, end_index))
-
-
-
-
-
-
-
-
-
-
-
-
-
-            # if (line.strip().startswith("#") and code_block == []):
-            #     code_lines = line[:max_char]
-
-            # elif (line.strip().startswith("#") and code_block != []):
-            #     code_block = "\n".join(code_lines)
-            #     code_lines = line[:max_char]
-
-            # else:
-            #     code_lines = line[:max_char]
-
-
-
-
-
-
-# def md_txt_chunking(
-#     text: str, max_tokens: int, model_name='all-MiniLM-L6-v2'
-# ):
-#     """AST based recursive split and merge chunking statergy
-#      specific to python files"""
-#     chunks = []
-#     current_chunk = []
-#     md_seperators = [
-#         "\n##",     # H2 headers (major sections)
-#         "\n###",    # H3 headers (subsections)
-#         "\n####",   # H4 headers
-#         "\n\n",     # Paragraphs
-#         "\n",       # Lines
-#         ". ",       # Sentences
-#         " ",        # Words
-#         ""          # Characters
-#     ]
-#     txt_seperators = [
-#         "\n\n",     # Blank lines(logical blocks)
-#         "\n",       # Lines
-#         ". ",       # Words
-#         " ",        # Words
-#         ""          # Characters
-#     ]
-#     current_tok_len = 0
-#     current_embedding = None
-
-#     model = SentenceTransformer(model_name)
-#     sentences = nltk.sent_tokenize(text)
-#     embeddings = model.encode(sentences, convert_to_tensor=True)
-
-#     for i, sentence in enumerate(sentences):
-#         sentence_tok_len = len(sentence.split())
-#         if current_tok_len + sentence_tok_len <= max_tokens:
-#             current_tok_len += sentence_tok_len
-#             current_chunk.append(sentence)
-#             if current_embedding is None:
-#                 current_embedding = embeddings[i]
-#             else:
-#                 current_embedding = util.pytorch_cos_sim(
-#                     current_embedding, embeddings[i]).mean()
-#         else:
-#             chunks.append(' '.join(current_chunk))
-#             current_chunk = [sentence]
-#             current_tok_len = sentence_tok_len
-#             current_embedding = embeddings[i]
-#     if current_chunk:
-#         chunks.append(' '.join(current_chunk))
-#     return chunks
-

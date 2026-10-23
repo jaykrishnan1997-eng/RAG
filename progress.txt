@@ -83,3 +83,31 @@ Pyhton parsing with AST standard module
 Ref: https://www.youtube.com/watch?v=l67JN5mQnKI
 
 Future Ref:improve RAG: https://www.youtube.com/watch?v=smGbeghV1JE
+
+@@ Day 10(Oct 23)
+
+https://supermemory.ai/blog/building-code-chunk-ast-aware-code-chunking/
+https://greentreesnakes.readthedocs.io/
+https://docs.python.org/3/library/ast.html
+
+plan for today: 
+1. the same functions as for md and text but have a heirarchy of seperators
+2. A dictionary to store the location info within the ast file 
+3. The seperator and seperation happens in a recursive function that accepts code line and the current seperator
+4. in case some fuctions can be merged, merge integrations
+# If possible make sure empty nodes are ignored in md text and python nodes
+
+note: using AST only to seperate the code structure only remaining all has to be
+from the original python file itself
+
+useful parts of AST: https://medium.com/@wshanshan/intro-to-python-ast-module-bbd22cd505f7
+http://www.dalkescientific.com/writings/diary/archive/2010/02/22/instrumenting_the_ast.html
+realy realy important: https://docs.python.org/3/library/ast.html#ast.Module
+
+
+Official docs — https://docs.python.org/3/library/ast.html
+pybit.es — https://pybit.es/articles/ast-intro/
+DeepSource — https://deepsource.com/blog/python-asts-by-building-your-own-linter
+Real Python — https://realpython.com/ref/stdlib/ast/
+
+More time has been spend for chunking stratergy
