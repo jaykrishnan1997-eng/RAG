@@ -7,7 +7,7 @@
 #   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/15 09:34:07 by jkrishna            #+#    #+#            #
-#   Updated: 2026/10/23 13:55:02 by jkrishna           ###   ########.fr      #
+#   Updated: 2026/10/24 11:42:11 by jkrishna           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -24,6 +24,49 @@ def push(code_line, file_path, start_index, end_index):
             len(code_line),
             start_index,
             end_index))
+
+
+def recursive_splitter(tree):
+    node_list = tree.body
+    
+    print(node_list)
+    print(ast.unparse(node_list[1]))
+    print(node_list[1].lineno)
+    print(node_list[1].end_lineno)
+
+
+def python_processor(
+    chunk_data_list,
+    file_path: str,
+    max_char: int,
+) -> list[int, int]:
+    """Given a python file, seperate them in heirarchy tree
+    and then access it for chunking. Input: filepath, Output:
+    list of first_character_index and last_character_index."""
+
+    with open(file_path, 'r', encoding='utf-8') as file_object:
+        content = file_object.read()
+
+    if len(content) <= max_char:
+        chunk_data_list.append(push, file_path, 0, len(content))
+
+    else:
+        tree = ast.parse(content)
+        recursive_splitter(tree)
+    return (chunk_data_list)
+
+    # for obj in chunk_data_list:
+    #     print(f"[{obj.text}]: {obj.start_index}, {obj.end_index} \n\n")
+
+
+
+
+
+
+
+
+
+
 
 
 def split(
@@ -44,60 +87,6 @@ def split(
                     push(lines, file_path, start_index, end_index))
         start_index += (max_char - overlap)
     return chunk_data_list
-
-
-def python_processor(
-    chunk_data_list,
-    file_path: str,
-    max_char: int,
-) -> list[int, int]:
-    """Given a python file, seperate them in heirarchy tree
-    and then access it for chunking. Input: filepath, Output:
-    list of first_character_index and last_character_index."""
-    temp_dict = {}
-    code_lines: str = ""
-    end: int
-    start_index: int = 0
-    end_index: int = 0
-    seperator = [", body="]
-
-    with open(file_path, 'r', encoding='utf-8') as file_object:
-        content = file_object.read()
-
-    tree = ast.parse(content)
-    ast_content = ast.dump(tree)
-
-    buffer = ast_content
-    while buffer != "":
-        code_lines = buffer[:end]
-        end_index = start_index + end - 1
-        if (end_index - start_index + 1) <= max_char:
-            chunk_data_list.append(
-                push(
-                    code_lines, file_path,
-                    start_index, end_index
-                ))
-        else:
-            split(
-                chunk_data_list, code_lines,
-                file_path, max_char, start_index, end_index)
-        start_index += end
-        buffer = buffer[end:]
-
-    # for obj in chunk_data_list:
-    #     print(f"[{obj.text}]: {obj.start_index}, {obj.end_index} \n\n")
-
-    return chunk_data_list
-
-
-
-
-
-
-
-
-
-
 
 
 
