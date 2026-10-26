@@ -7,22 +7,11 @@
 #   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/17 10:11:42 by jkrishna            #+#    #+#            #
-#   Updated: 2026/10/24 13:41:30 by jkrishna           ###   ########.fr      #
+#   Updated: 2026/10/26 08:48:39 by jkrishna           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
-from ..Base.model import ChunkNode
-
-
-def push(code_line, file_path, start_index, end_index):
-
-    return (
-        ChunkNode(
-            code_line,
-            file_path,
-            len(code_line),
-            start_index,
-            end_index))
+from ..Base.model import ChunkNode, push
 
 
 def split(

@@ -7,7 +7,7 @@
 #   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/10 13:20:17 by jkrishna            #+#    #+#            #
-#   Updated: 2026/10/21 11:22:42 by jkrishna           ###   ########.fr      #
+#   Updated: 2026/10/26 12:09:14 by jkrishna           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -34,6 +34,33 @@ def path_dict(path_abbr: str) -> str:
         "VECTOR_PATH": "data/vector"
     }
     return path[path_abbr]
+
+
+class ChunkNode:
+    def __init__(
+        self,
+        text: str,
+        file_path: list,
+        char_count: int,
+        start_index: int,
+        end_index: int,
+    ):
+        self.text: str = text
+        self.file_path: list = file_path
+        self.char_count: int = char_count
+        self.start_index: int = start_index
+        self.end_index: int = end_index
+
+
+def push(code_line, file_path, start_index, end_index):
+
+    return (
+        ChunkNode(
+            code_line,
+            file_path,
+            len(code_line),
+            start_index,
+            end_index))
 
 
 class MinimalSource(BaseModel):
@@ -77,17 +104,4 @@ class StudentSearchResultsAndAnswer(BaseModel):
     k: int
 
 
-class ChunkNode:
-    def __init__(
-        self,
-        text: str,
-        file_path: list,
-        char_count: int,
-        start_index: int,
-        end_index: int,
-    ):
-        self.text: str = text
-        self.file_path: list = file_path
-        self.char_count: int = char_count
-        self.start_index: int = start_index
-        self.end_index: int = end_index
+

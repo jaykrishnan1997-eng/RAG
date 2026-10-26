@@ -7,32 +7,51 @@
 #   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/15 09:34:07 by jkrishna            #+#    #+#            #
-#   Updated: 2026/10/24 11:42:11 by jkrishna           ###   ########.fr      #
+#   Updated: 2026/10/26 12:40:50 by jkrishna           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
 import ast
-from ..Base.model import ChunkNode
+from ..Base.model import ChunkNode, push
 
 
-def push(code_line, file_path, start_index, end_index):
+def line_char_dict(content_line):
+    # dictionary of line_number: [start_char_index, end_char_index]
+    line_dict = {}
+    line_start_char = 0
+    # content_copy = content
+    for i, line in enumerate(content_line):
+        line_dict[i + 1] = [line_start_char, (line_start_char + len(line) - 1)]
+        line_start_char += len(line)
+    return line_dict
 
-    return (
-        ChunkNode(
-            code_line,
-            file_path,
-            len(code_line),
-            start_index,
-            end_index))
 
-
-def recursive_splitter(tree):
+def recursive_splitter(tree, temp_list, file_path, max_char, line_dict):
     node_list = tree.body
-    
-    print(node_list)
-    print(ast.unparse(node_list[1]))
-    print(node_list[1].lineno)
-    print(node_list[1].end_lineno)
+    for node in node_list:
+        code_line = ast.unparse(node)
+        if len(code_line) <= max_char:
+            temp_list.append(push(code_line,
+                file_path, line_dict[node.lineno][0],
+                line_dict[node.end_lineno][1]))
+        else:
+            temp_list.append(recursive_splitter(
+                node, temp_list, file_path, max_char))
+    return (temp_list)
+
+    # if len()
+    # print(node_list)
+    # print(ast.unparse(node_list[1]))
+    # print(node_list[1].lineno)
+    # print(node_list[1].end_lineno)
+
+
+
+def merger(chunk_list, max_char):
+    merged_list = []
+    temp_list = []
+    for element in chunk_list:
+        if element[]
 
 
 def python_processor(
@@ -44,29 +63,23 @@ def python_processor(
     and then access it for chunking. Input: filepath, Output:
     list of first_character_index and last_character_index."""
 
+    content_lines = []
+    with open(file_path, 'r', encoding='utf-8') as file_object:
+        content_lines = file_object.readlines()
     with open(file_path, 'r', encoding='utf-8') as file_object:
         content = file_object.read()
 
     if len(content) <= max_char:
-        chunk_data_list.append(push, file_path, 0, len(content))
+        chunk_data_list = push(content, file_path, 0, len(content))
+        return (chunk_data_list)
 
-    else:
-        tree = ast.parse(content)
-        recursive_splitter(tree)
-    return (chunk_data_list)
+    tree = ast.parse(content)
+    line_dict = line_char_dict(content_lines)
+    chunk_data_list = recursive_splitter(
+        tree, [], file_path, max_char, line_dict)
 
-    # for obj in chunk_data_list:
-    #     print(f"[{obj.text}]: {obj.start_index}, {obj.end_index} \n\n")
-
-
-
-
-
-
-
-
-
-
+    for obj in chunk_data_list:
+        print(f"[{obj.text}]: {obj.start_index}, {obj.end_index} \n\n")
 
 
 def split(
