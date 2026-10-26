@@ -7,7 +7,7 @@
 #   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/15 09:34:07 by jkrishna            #+#    #+#            #
-#   Updated: 2026/10/26 14:56:30 by jkrishna           ###   ########.fr      #
+#   Updated: 2026/10/26 15:45:06 by jkrishna           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -35,8 +35,9 @@ def recursive_splitter(tree, temp_list, file_path, max_char, line_dict):
                 file_path, line_dict[node.lineno][0],
                 line_dict[node.end_lineno][1]))
         else:
-            temp_list.append(recursive_splitter(
-                node, temp_list, file_path, max_char))
+            for node in recursive_splitter(
+                node, temp_list, file_path, max_char, line_dict):
+                temp_list.append(node)   
     return (temp_list)
 
 
@@ -60,6 +61,7 @@ def merger(chunk_list, max_char):
     total_char_count = 0
 
     for element in chunk_list:
+
         if (total_char_count + element.char_count) < max_char:
             total_char_count += element.char_count
             temp_list.append(element)
@@ -67,6 +69,7 @@ def merger(chunk_list, max_char):
             python_flush(temp_list, merged_list)
             temp_list = [element]
             total_char_count = element.char_count
+
     if temp_list != []:
         python_flush(temp_list, merged_list)
     return (merged_list)
@@ -90,12 +93,11 @@ def python_processor(
     if len(content) <= max_char:
         chunk_data_list = push(content, file_path, 0, len(content))
         return (chunk_data_list)
-
+    print(file_path)
     tree = ast.parse(content, type_comments=True)
     line_dict = line_char_dict(content_lines)
     broken_chunk_data_list = recursive_splitter(
         tree, [], file_path, max_char, line_dict)
-
     chunk_data_list = merger(broken_chunk_data_list, max_char)
     for obj in chunk_data_list:
         print(f"[{obj.text}]: {obj.start_index}, {obj.end_index}, chunk_size = {obj.char_count} \n\n")

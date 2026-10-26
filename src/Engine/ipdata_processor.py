@@ -7,7 +7,7 @@
 #   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/13 10:43:25 by jkrishna            #+#    #+#            #
-#   Updated: 2026/10/26 12:11:02 by jkrishna           ###   ########.fr      #
+#   Updated: 2026/10/26 15:08:31 by jkrishna           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -44,9 +44,9 @@ def source_processor(max_chunk_size: int) -> None:
                 python_processor(chunk_data_list,
                     file_path, max_chunk_size)
 
-    # for i, obj in enumerate(chunk_data_list):
-    #     print(f"[{i}]: {obj.file_path}")
-    #     print(obj.char_count, obj.start_index, obj.end_index)
+    for i, obj in enumerate(chunk_data_list):
+        print(f"[{i}]: {obj.file_path}")
+        print(obj.char_count, obj.start_index, obj.end_index)
 
 
 
