@@ -7,7 +7,7 @@
 #   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/10 13:20:17 by jkrishna            #+#    #+#            #
-#   Updated: 2026/10/26 12:09:14 by jkrishna           ###   ########.fr      #
+#   Updated: 2026/10/26 14:49:19 by jkrishna           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -58,7 +58,7 @@ def push(code_line, file_path, start_index, end_index):
         ChunkNode(
             code_line,
             file_path,
-            len(code_line),
+            (end_index - start_index + 1),
             start_index,
             end_index))
 
