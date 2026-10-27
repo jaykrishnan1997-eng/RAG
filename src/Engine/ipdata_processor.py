@@ -7,7 +7,7 @@
 #   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/13 10:43:25 by jkrishna            #+#    #+#            #
-#   Updated: 2026/10/27 13:26:05 by jkrishna           ###   ########.fr      #
+#   Updated: 2026/10/27 14:00:05 by jkrishna           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -38,7 +38,7 @@ def source_processor(max_chunk_size: int) -> None:
                 md_txt_processor(chunk_data_list,
                     file_path, max_chunk_size)
                 processed_files.append(file_path)
-            elif (file.endswith(".py")):
+            if (file.endswith(".py")):
                 file_path = os.path.join(dirpath, file)
                 python_processor(chunk_data_list,
                     file_path, max_chunk_size)
@@ -47,10 +47,10 @@ def source_processor(max_chunk_size: int) -> None:
     with open("output.txt", "w") as f:
 
         for i, obj in enumerate(chunk_data_list):
-            # f.write(f" \n\n ================================== \n\n [{i}]: {obj.file_path} \n {obj.text}, {obj.char_count}, {obj.start_index}, {obj.end_index}")
-            # if obj.char_count > max_chunk_size:
-            #     print("########invalid_chunk######")
-            #     break
+            f.write(f" \n\n ================================== \n\n [{i}]: {obj.file_path} \n {obj.text}, {obj.char_count}, {obj.start_index}, {obj.end_index}")
+            if obj.char_count > max_chunk_size:
+                print("########invalid_chunk######")
+                break
             if obj.file_path not in temp_list:
                 temp_list.append(obj.file_path)
 

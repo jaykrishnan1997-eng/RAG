@@ -7,7 +7,7 @@
 #   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/15 09:34:07 by jkrishna            #+#    #+#            #
-#   Updated: 2026/10/27 11:25:49 by jkrishna           ###   ########.fr      #
+#   Updated: 2026/10/27 14:36:04 by jkrishna           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -48,7 +48,8 @@ def python_flush(temp_list, merged_list):
 
     for unit in temp_list:
         if new_text != "":
-            new_text += "\n" + unit.text
+            # new_text += "\n" + unit.text
+            new_text += unit.text
         else:
             new_text = unit.text
     merged_list.append(push(
@@ -65,15 +66,18 @@ def merger(chunk_list, max_char):
 
     for element in chunk_list:
 
-        if (total_char_count + element.char_count) < max_char:
-            total_char_count += element.char_count
+        # overflow catpure
+        if (total_char_count + len(element.text)) < max_char:
+            total_char_count += len(element.text)
             temp_list.append(element)
-        elif (temp_list == [] and element.char_count > max_char):
+        elif (len(element.text) > max_char):
             split(temp_list, element.text, element.file_path, max_char, element.start_index, element.end_index)
+            python_flush(temp_list, merged_list)
+            total_char_count = 0
         else:
             python_flush(temp_list, merged_list)
             temp_list = [element]
-            total_char_count = element.char_count
+            total_char_count = len(element.text)
 
     if temp_list != []:
         python_flush(temp_list, merged_list)
@@ -96,7 +100,7 @@ def python_processor(
         content = file_object.read()
 
     if len(content) <= max_char:
-        chunk_data_list = push(content, file_path, 0, len(content))
+        chunk_data_list.append(push(content, file_path, 0, len(content) - 1))
         return (chunk_data_list)
 
     tree = ast.parse(content, type_comments=True)
@@ -107,7 +111,13 @@ def python_processor(
     except Exception as e:
         print(f"{e}")
         sys.exit(1)
-    chunk_data_list = merger(broken_chunk_data_list, max_char)
+
+    for unit in merger(broken_chunk_data_list, max_char):
+        if isinstance(unit, ChunkNode):
+            chunk_data_list.append(unit)
+        else:
+            for sub_unit in unit:
+                chunk_data_list.append(sub_unit)
     # for obj in chunk_data_list:
     #     print(f"[{obj.text}]: {obj.start_index}, {obj.end_index}, chunk_size = {obj.char_count} \n\n")
-
+    return chunk_data_list
