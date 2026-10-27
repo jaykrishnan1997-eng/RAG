@@ -111,3 +111,13 @@ DeepSource — https://deepsource.com/blog/python-asts-by-building-your-own-lint
 Real Python — https://realpython.com/ref/stdlib/ast/
 
 More time has been spend for chunking stratergy
+
+## Day 12 (Oct 27)
+
+I did use AI to fix the bug in reccursive function. I tried spending a lot of time before using AI.
+issues was with attributes types and how to identify them.
+
+And remaining most issues was solved today, both chunkers work. Only confusuion is what should be stored as chunk size: 
+length of the text or the length between character index. Well i am going to 
+stick with length of text itself not difference of end and start char index.
+
