@@ -7,12 +7,14 @@
 #   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/15 09:34:07 by jkrishna            #+#    #+#            #
-#   Updated: 2026/10/26 15:45:06 by jkrishna           ###   ########.fr      #
+#   Updated: 2026/10/27 11:25:49 by jkrishna           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
 import ast
+import sys
 from ..Base.model import ChunkNode, push
+from .md_text_chunking import split
 
 
 def line_char_dict(content_line):
@@ -27,29 +29,30 @@ def line_char_dict(content_line):
 
 
 def recursive_splitter(tree, temp_list, file_path, max_char, line_dict):
-    node_list = tree.body
+    node_list = tree.body if hasattr(tree, 'body') else [tree]
     for node in node_list:
         code_line = ast.unparse(node)
-        if len(code_line) <= max_char:
+        if len(code_line) > max_char and hasattr(node, 'body'):
+            sub_tree = ast.Module(body=node.body, type_ignore=[])
+            recursive_splitter(sub_tree, temp_list, file_path, max_char, line_dict)
+        else:
+            # Leaf node that's too long - emit as-it-is
             temp_list.append(push(code_line,
                 file_path, line_dict[node.lineno][0],
                 line_dict[node.end_lineno][1]))
-        else:
-            for node in recursive_splitter(
-                node, temp_list, file_path, max_char, line_dict):
-                temp_list.append(node)   
     return (temp_list)
 
 
 def python_flush(temp_list, merged_list):
     new_text = ""
+
     for unit in temp_list:
         if new_text != "":
             new_text += "\n" + unit.text
         else:
             new_text = unit.text
     merged_list.append(push(
-        new_text, unit.file_path,
+        new_text, temp_list[0].file_path,
         temp_list[0].start_index, temp_list[-1].end_index))
     temp_list = []
     return merged_list
@@ -65,6 +68,8 @@ def merger(chunk_list, max_char):
         if (total_char_count + element.char_count) < max_char:
             total_char_count += element.char_count
             temp_list.append(element)
+        elif (temp_list == [] and element.char_count > max_char):
+            split(temp_list, element.text, element.file_path, max_char, element.start_index, element.end_index)
         else:
             python_flush(temp_list, merged_list)
             temp_list = [element]
@@ -93,68 +98,16 @@ def python_processor(
     if len(content) <= max_char:
         chunk_data_list = push(content, file_path, 0, len(content))
         return (chunk_data_list)
-    print(file_path)
+
     tree = ast.parse(content, type_comments=True)
     line_dict = line_char_dict(content_lines)
-    broken_chunk_data_list = recursive_splitter(
-        tree, [], file_path, max_char, line_dict)
+    try:
+        broken_chunk_data_list = recursive_splitter(
+            tree, [], file_path, max_char, line_dict)
+    except Exception as e:
+        print(f"{e}")
+        sys.exit(1)
     chunk_data_list = merger(broken_chunk_data_list, max_char)
-    for obj in chunk_data_list:
-        print(f"[{obj.text}]: {obj.start_index}, {obj.end_index}, chunk_size = {obj.char_count} \n\n")
-
-
-def split(
-    chunk_data_list, code_lines,
-    file_path, max_char,
-    start_index, actual_end_index
-):
-    """Given a big chunk inside the markdown files,
-    this function breaks it into smaller chunks"""
-    overlap: int = int(0.15 * max_char)
-
-    while code_lines != "":
-
-        lines = code_lines[:max_char]
-        code_lines = code_lines[(max_char - overlap):]
-        end_index = start_index + max_char
-        chunk_data_list.append(
-                    push(lines, file_path, start_index, end_index))
-        start_index += (max_char - overlap)
-    return chunk_data_list
-
-
-
-
-
-
-
-
-
-# # from sentence_transformers import SentenceTransformer
-
-# # # 1. Load a model that supports both text and images
-# # model = SentenceTransformer("Qwen/Qwen3-VL-Embedding-2B")
-
-# # # 2. Encode images from URLs
-# # img_embeddings = model.encode([
-# #     "https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/transformers/tasks/car.jpg",
-# #     "https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/bee.jpg",
-# # ])
-
-# # # 3. Encode text queries (one matching + one hard negative per image)
-# # text_embeddings = model.encode([
-# #     "A green car parked in front of a yellow building",
-# #     "A red car driving on a highway",
-# #     "A bee on a pink flower",
-# #     "A wasp on a wooden table",
-# # ])
-
-# # # 4. Compute cross-modal similarities
-# # similarities = model.similarity(text_embeddings, img_embeddings)
-# # print(similarities)
-# # # tensor([[0.5115, 0.1078],
-# # #         [0.1999, 0.1108],
-# # #         [0.1255, 0.6749],
-# # #         [0.1283, 0.2704]])
-
+    # for obj in chunk_data_list:
+    #     print(f"[{obj.text}]: {obj.start_index}, {obj.end_index}, chunk_size = {obj.char_count} \n\n")
 

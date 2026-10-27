@@ -7,7 +7,7 @@
 #   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/13 10:43:25 by jkrishna            #+#    #+#            #
-#   Updated: 2026/10/26 15:08:31 by jkrishna           ###   ########.fr      #
+#   Updated: 2026/10/27 11:33:08 by jkrishna           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -44,10 +44,10 @@ def source_processor(max_chunk_size: int) -> None:
                 python_processor(chunk_data_list,
                     file_path, max_chunk_size)
 
-    for i, obj in enumerate(chunk_data_list):
-        print(f"[{i}]: {obj.file_path}")
-        print(obj.char_count, obj.start_index, obj.end_index)
+    with open("output.txt", "w") as f:
 
+        for i, obj in enumerate(chunk_data_list):
+            f.write(f" \n\n ================================== \n\n [{i}]: {obj.file_path} \n {obj.text}, {obj.char_count}, {obj.start_index}, {obj.end_index}")
 
 
     # elif file.endswith(".yaml"):
