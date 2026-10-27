@@ -7,7 +7,7 @@
 #   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/13 10:43:25 by jkrishna            #+#    #+#            #
-#   Updated: 2026/10/27 11:47:27 by jkrishna           ###   ########.fr      #
+#   Updated: 2026/10/27 13:26:05 by jkrishna           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -25,33 +25,48 @@ def source_processor(max_chunk_size: int) -> None:
      and this is where the branching happens (like txt or py etc)"""
     # source_location: dict[str, List[int, int]] = {}
     chunk_data_list: list[ChunkNode] = []
-
+    processed_files: list[str] = []
+    temp_list = []
     for dirpath, dirnames, filenames in os.walk(
         "./" + path_dict("DATA_PATH")
     ):
         # ingest needed files
         for file in filenames:
-            # if file.endswith(".py"):
-            #     file_path = os.path.join(dirpath, file)
-            #     source_location[file_path] = python_file_processor(file_path, last_character_index, max_chunk_size)
-            #     last_character_index = source_location[file_path][1]
+
             if (file.endswith(".txt") or file.endswith(".md")):
                 file_path = os.path.join(dirpath, file)
                 md_txt_processor(chunk_data_list,
                     file_path, max_chunk_size)
+                processed_files.append(file_path)
             elif (file.endswith(".py")):
                 file_path = os.path.join(dirpath, file)
                 python_processor(chunk_data_list,
                     file_path, max_chunk_size)
+                processed_files.append(file_path)
 
     with open("output.txt", "w") as f:
 
         for i, obj in enumerate(chunk_data_list):
-            f.write(f" \n\n ================================== \n\n [{i}]: {obj.file_path} \n {obj.text}, {obj.char_count}, {obj.start_index}, {obj.end_index}")
-            if obj.char_count > max_chunk_size:
-                print("########invalid_chunk######")
-                break
+            # f.write(f" \n\n ================================== \n\n [{i}]: {obj.file_path} \n {obj.text}, {obj.char_count}, {obj.start_index}, {obj.end_index}")
+            # if obj.char_count > max_chunk_size:
+            #     print("########invalid_chunk######")
+            #     break
+            if obj.file_path not in temp_list:
+                temp_list.append(obj.file_path)
 
+    with open("filenames.txt", "w") as fn:
+
+        for name in processed_files:
+            fn.write(name + "\n")
+    print(f" length of processed files: {len(temp_list)}")
+    print(f" length of total files: {len(processed_files)}")
+
+
+
+
+
+
+    
     # elif file.endswith(".yaml"):
     #     print()
 
