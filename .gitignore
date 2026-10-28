@@ -226,3 +226,4 @@ __marimo__/
 # Dont go files
 data/raw/vllm-0.10.1
 output.txt
+filenames.txt

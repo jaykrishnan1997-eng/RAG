@@ -7,7 +7,7 @@
 #   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/13 10:43:25 by jkrishna            #+#    #+#            #
-#   Updated: 2026/10/27 14:00:05 by jkrishna           ###   ########.fr      #
+#   Updated: 2026/10/28 09:22:30 by jkrishna           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -60,7 +60,9 @@ def source_processor(max_chunk_size: int) -> None:
             fn.write(name + "\n")
     print(f" length of processed files: {len(temp_list)}")
     print(f" length of total files: {len(processed_files)}")
-
+    for file in processed_files:
+        if file not in temp_list:
+            print(file)
 
 
 

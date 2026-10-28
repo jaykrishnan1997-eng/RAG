@@ -7,7 +7,7 @@
 #   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/15 09:34:07 by jkrishna            #+#    #+#            #
-#   Updated: 2026/10/28 09:11:14 by jkrishna           ###   ########.fr      #
+#   Updated: 2026/10/28 09:48:48 by jkrishna           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -89,7 +89,7 @@ def merger(chunk_list, max_char):
     merged_list = []
     temp_list = []
     total_char_count = 0
-
+    # breakpoint()
     while i < len(chunk_list):
 
         while (total_char_count + len(chunk_list[i].text)) < max_char:
@@ -101,7 +101,10 @@ def merger(chunk_list, max_char):
                 python_flush(temp_list, merged_list)
                 temp_list = []
                 total_char_count = 0
+
             if i >= len(chunk_list):
+                if temp_list != []:
+                    python_flush(temp_list, merged_list)
                 break
 
         if (i < len(chunk_list)) and (len(chunk_list[i].text) >= max_char):
@@ -134,6 +137,7 @@ def python_processor(
         chunk_data_list.append(push(content, file_path, 0, len(content) - 1))
         return (chunk_data_list)
 
+    # breakpoint()
     tree = ast.parse(content, type_comments=True)
     line_dict = line_char_dict(content_lines)
     try:
@@ -142,13 +146,15 @@ def python_processor(
     except Exception as e:
         print(f"{e}")
         sys.exit(1)
-
+    # print(broken_chunk_data_list)
     for unit in merger(broken_chunk_data_list, max_char):
+
         if isinstance(unit, ChunkNode):
             chunk_data_list.append(unit)
         else:
             for sub_unit in unit:
                 chunk_data_list.append(sub_unit)
+
     # for obj in chunk_data_list:
     #     print(f"[{obj.text}]: {obj.start_index}, {obj.end_index}, chunk_size = {obj.char_count} \n\n")
     return chunk_data_list
