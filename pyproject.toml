@@ -8,6 +8,7 @@ requires-python = ">3.12"
 dependencies = [
     "pydantic>=2.11.0",
     "fire",
+    "tiktoken",
     "sentence-transformers",
     "nltk"
 ]

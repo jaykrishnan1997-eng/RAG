@@ -7,7 +7,7 @@
 #   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/13 10:43:25 by jkrishna            #+#    #+#            #
-#   Updated: 2026/10/28 09:22:30 by jkrishna           ###   ########.fr      #
+#   Updated: 2026/10/28 11:14:15 by jkrishna           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -18,6 +18,7 @@ from ..Base.model import path_dict, ChunkNode
 # from .chunking import python_file_processor, md_txt_file_processor
 from .md_text_chunking import md_txt_processor
 from .python_chunking import python_processor
+from .tokenizer import tokenization
 
 def source_processor(max_chunk_size: int) -> None:
     """This is a inital point that divides the task,
@@ -63,29 +64,5 @@ def source_processor(max_chunk_size: int) -> None:
     for file in processed_files:
         if file not in temp_list:
             print(file)
+    tokenization(chunk_data_list)
 
-
-
-
-
-    
-    # elif file.endswith(".yaml"):
-    #     print()
-
-    # elif file.endswith(".sh"):
-    #     print()
-
-    # elif file.endswith(".json"):
-    #     print()
-
-    # elif file.endswith(".jinja"):
-    #     print()
-    # else:
-    #     print(file)
-
-
-    # # for obj in chunk_data_list:
-    # print(chunk_data_list[2].char_count, chunk_data_list[2].start_index, chunk_data_list[2].end_index)
-    # print(chunk_data_list[2].text)
-    # print(chunk_data_list[2].file_path)
-    # print(len(chunk_data_list[2].text))

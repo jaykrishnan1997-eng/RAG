@@ -121,3 +121,12 @@ And remaining most issues was solved today, both chunkers work. Only confusuion 
 length of the text or the length between character index. Well i am going to 
 stick with length of text itself not difference of end and start char index.
 
+## Day 13 (Oct 28)
+
+note: Chunking works, need to validate though!!!
+Steps: tokenize the chunk, using BM25/TF-IDF index, save in data/processed
+
+
+Ref: Tokenizer: https://medium.com/@mayanksultania/transformers-101-tokens-attention-and-beyond-b080a900ca6c
+a tokenization function was made that can tokenize each chunk and stored it in "processed" file in the root. 
+Q. How to store it in a format that can help with retrieval
