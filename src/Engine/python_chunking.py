@@ -7,7 +7,7 @@
 #   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/15 09:34:07 by jkrishna            #+#    #+#            #
-#   Updated: 2026/10/27 14:36:04 by jkrishna           ###   ########.fr      #
+#   Updated: 2026/10/28 09:11:14 by jkrishna           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -59,28 +59,59 @@ def python_flush(temp_list, merged_list):
     return merged_list
 
 
+# def merger(chunk_list, max_char):
+#     merged_list = []
+#     temp_list = []
+#     total_char_count = 0
+
+#     for element in chunk_list:
+
+#         # overflow catpure
+#         if (total_char_count + len(element.text)) < max_char:
+#             total_char_count += len(element.text)
+#             temp_list.append(element)
+#         elif (len(element.text) > max_char):
+#             split(temp_list, element.text, element.file_path, max_char, element.start_index, element.end_index)
+#             python_flush(temp_list, merged_list)
+#             total_char_count = 0
+#         else:
+#             python_flush(temp_list, merged_list)
+#             temp_list = [element]
+#             total_char_count = len(element.text)
+
+#     if temp_list != []:
+#         python_flush(temp_list, merged_list)
+#     return (merged_list)
+
+
 def merger(chunk_list, max_char):
+    i = 0
     merged_list = []
     temp_list = []
     total_char_count = 0
 
-    for element in chunk_list:
+    while i < len(chunk_list):
 
-        # overflow catpure
-        if (total_char_count + len(element.text)) < max_char:
-            total_char_count += len(element.text)
-            temp_list.append(element)
-        elif (len(element.text) > max_char):
-            split(temp_list, element.text, element.file_path, max_char, element.start_index, element.end_index)
-            python_flush(temp_list, merged_list)
+        while (total_char_count + len(chunk_list[i].text)) < max_char:
+            total_char_count += len(chunk_list[i].text)
+            temp_list.append(chunk_list[i])
+            i += 1
+
+            if (i < len(chunk_list)) and ((total_char_count + len(chunk_list[i].text)) >= max_char):
+                python_flush(temp_list, merged_list)
+                temp_list = []
+                total_char_count = 0
+            if i >= len(chunk_list):
+                break
+
+        if (i < len(chunk_list)) and (len(chunk_list[i].text) >= max_char):
+            split(temp_list, chunk_list[i].text, chunk_list[i].file_path, max_char, chunk_list[i].start_index, chunk_list[i].end_index)
+            for unit in temp_list:
+                merged_list.append(unit)
+            temp_list = []
             total_char_count = 0
-        else:
-            python_flush(temp_list, merged_list)
-            temp_list = [element]
-            total_char_count = len(element.text)
+            i += 1
 
-    if temp_list != []:
-        python_flush(temp_list, merged_list)
     return (merged_list)
 
 

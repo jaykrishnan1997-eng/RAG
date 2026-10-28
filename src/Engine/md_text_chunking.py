@@ -7,7 +7,7 @@
 #   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/17 10:11:42 by jkrishna            #+#    #+#            #
-#   Updated: 2026/10/26 08:48:39 by jkrishna           ###   ########.fr      #
+#   Updated: 2026/10/28 09:11:25 by jkrishna           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -22,7 +22,7 @@ def split(
     """Given a big chunk inside the markdown files,
     this function breaks it into smaller chunks"""
     overlap: int = int(0.15 * max_char)
-
+    # breakpoint()
     while code_lines != "":
 
         lines = code_lines[:max_char]
