@@ -7,7 +7,7 @@
 #   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/10 13:20:17 by jkrishna            #+#    #+#            #
-#   Updated: 2026/10/27 14:12:22 by jkrishna           ###   ########.fr      #
+#   Updated: 2026/10/30 14:36:37 by jkrishna           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -63,9 +63,38 @@ def push(code_line, file_path, start_index, end_index):
 
 
 class MinimalSource(BaseModel):
+
     file_path: str
     first_character_index: int
     last_character_index: int
+
+
+class Tokenized_data:
+    def __init__(
+        self,
+        token_list,
+        file_path,
+        start_index,
+        end_index
+    ):
+        self.tokens = token_list
+        self.source = MinimalSource(
+            file_path = file_path,
+            first_character_index = start_index,
+            last_character_index = end_index,
+        )
+
+
+# class MinimalSource(BaseModel):
+#     def __init__(
+#         self,
+#         file_path,
+#         start_index,
+#         end_index
+#     ):
+#         self.file_path: str = file_path
+#         self.first_character_index: int = start_index
+#         self.last_character_index: int = end_index
 
 
 class UnansweredQuestion(BaseModel):
@@ -101,4 +130,3 @@ class StudentSearchResults(BaseModel):
 class StudentSearchResultsAndAnswer(BaseModel):
     search_results: List[MinimalAnswer]
     k: int
-

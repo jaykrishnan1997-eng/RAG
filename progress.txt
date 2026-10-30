@@ -130,3 +130,9 @@ Steps: tokenize the chunk, using BM25/TF-IDF index, save in data/processed
 Ref: Tokenizer: https://medium.com/@mayanksultania/transformers-101-tokens-attention-and-beyond-b080a900ca6c
 a tokenization function was made that can tokenize each chunk and stored it in "processed" file in the root. 
 Q. How to store it in a format that can help with retrieval
+
+## Day 14 (Oct 30)
+
+I had some confusuion on why we have answeredqstns, unanswered qstns etc. Also was there a best format for tokenization. I asked claude to exlpain this.
+Note: the subject is absolutely bare minimum, with no explaination whatsoever.
+
