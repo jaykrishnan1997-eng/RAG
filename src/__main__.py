@@ -7,19 +7,15 @@
 #   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/12 12:24:16 by jkrishna            #+#    #+#            #
-#   Updated: 2026/10/19 11:20:55 by jkrishna           ###   ########.fr      #
+#   Updated: 2026/10/31 11:48:19 by jkrishna           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
 import sys
 import fire
 import traceback
-from .Base.parser import parse_args
+from .Base.parser import parse_args, input_datatset_loader
 from .Engine.ipdata_processor import source_processor
-
-
-# def hello(name):
-#     return f'Hello {name}!'
 
 
 def main() -> None:
@@ -27,8 +23,11 @@ def main() -> None:
     args = parse_args()
 
     # input data processing from vlllm
-    source_processor(args.max_chunk_size)
     # Chunking and cacheing
+    source_processor(args.max_chunk_size)
+    # validating and accesing the input json file
+    rag_questions = input_datatset_loader(args.ip_unans_docs_path)
+    print(rag_questions)
     # Embedding
     # Retrieval
     # Generation using Qwen  

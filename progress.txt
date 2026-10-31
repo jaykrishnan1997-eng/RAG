@@ -136,3 +136,8 @@ Q. How to store it in a format that can help with retrieval
 I had some confusuion on why we have answeredqstns, unanswered qstns etc. Also was there a best format for tokenization. I asked claude to exlpain this.
 Note: the subject is absolutely bare minimum, with no explaination whatsoever.
 
+## Day 15 (Oct 31)
+
+Happy Haloween. loading the json files (unanswered code and docs)
+Ref: json loading and error handling: https://www.geeksforgeeks.org/python/read-json-file-using-python/
+
