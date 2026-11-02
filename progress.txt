@@ -141,3 +141,11 @@ Note: the subject is absolutely bare minimum, with no explaination whatsoever.
 Happy Haloween. loading the json files (unanswered code and docs)
 Ref: json loading and error handling: https://www.geeksforgeeks.org/python/read-json-file-using-python/
 
+## Day 16 (Nov 2)
+
+Trying to make a vocab file with all the tokens and the id. So started
+with using with and os.makedirs:
+
+Ref: https://www.w3schools.com/python/ref_os_makedirs.asp
+
+may be an iisue: https://runebook.dev/en/docs/python/library/tokenize/tokenizing-input

@@ -7,7 +7,7 @@
 #   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/13 10:43:25 by jkrishna            #+#    #+#            #
-#   Updated: 2026/10/28 11:14:15 by jkrishna           ###   ########.fr      #
+#   Updated: 2026/11/02 11:10:22 by jkrishna           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -64,5 +64,5 @@ def source_processor(max_chunk_size: int) -> None:
     for file in processed_files:
         if file not in temp_list:
             print(file)
-    tokenization(chunk_data_list)
+    return tokenization(chunk_data_list)
 

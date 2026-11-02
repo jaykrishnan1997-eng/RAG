@@ -7,7 +7,7 @@
 #   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/10 13:20:17 by jkrishna            #+#    #+#            #
-#   Updated: 2026/10/31 10:28:21 by jkrishna           ###   ########.fr      #
+#   Updated: 2026/11/02 09:30:03 by jkrishna           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -73,15 +73,13 @@ class Tokenized_data:
     def __init__(
         self,
         token_list,
-        file_path,
-        start_index,
-        end_index
+        node,
     ):
         self.tokens = token_list
         self.source = MinimalSource(
-            file_path=file_path,
-            first_character_index=start_index,
-            last_character_index=end_index,
+            file_path=node.file_path,
+            first_character_index=node.start_index,
+            last_character_index=node.end_index,
         )
 
 

@@ -7,7 +7,7 @@
 #   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/28 10:46:58 by jkrishna            #+#    #+#            #
-#   Updated: 2026/10/30 14:24:09 by jkrishna           ###   ########.fr      #
+#   Updated: 2026/11/02 11:58:31 by jkrishna           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -26,9 +26,7 @@ def tokenization(chunk_node_list):
             # processed_data = unit.file_path, unit.char_start, unit.char_end, tokenizer.encode(unit.text)
             chunk = Tokenized_data(
                     tokenizer.encode(unit.text),
-                    unit.file_path,
-                    unit.start_index,
-                    unit.end_index)
+                    unit)
 
             tokenized_data.append(chunk)
 
@@ -38,4 +36,5 @@ def tokenization(chunk_node_list):
             else:
                 file_object.write(f"{tokenizer.encode(unit.text)} \n")
 
+    return tokenized_data
     # Must make it efficient by normailzation, but not for now.
