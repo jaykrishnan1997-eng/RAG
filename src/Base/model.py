@@ -7,7 +7,7 @@
 #   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/10 13:20:17 by jkrishna            #+#    #+#            #
-#   Updated: 2026/11/02 09:30:03 by jkrishna           ###   ########.fr      #
+#   Updated: 2026/11/03 13:51:49 by jkrishna           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -81,6 +81,11 @@ class Tokenized_data:
             first_character_index=node.start_index,
             last_character_index=node.end_index,
         )
+
+
+class data:
+    def __init__(self, current_index):
+        self.current_index = current_index
 
 
 class UnansweredQuestion(BaseModel):

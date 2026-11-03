@@ -7,7 +7,7 @@
 #   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/28 10:46:58 by jkrishna            #+#    #+#            #
-#   Updated: 2026/11/03 13:38:53 by jkrishna           ###   ########.fr      #
+#   Updated: 2026/11/03 13:47:39 by jkrishna           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -20,16 +20,17 @@ class Encoder:
     def __init__(self, string):
         self.string = string
 
-    @lru_cache(maxsize=None)
-    def token_to_id(str):
         
-        
-    def encode(self, text):
+    def encode(self, text, current_index):
         word_divider = r'\W+'
         
         pattern = r"'s|'t|'re|'ve|'m|'ll|'d| ?\p{L}+| ?\p{N}+| ?[^\s\p{L}\p{N}]+|\s+(?!\S)|\s+"
         result = re.split(pattern, self.text)
-        
+
+        @lru_cache(maxsize=None)
+        def token_to_id(str):
+            index = token_to_id.cache_info(currsize)
+            return index        
         
     def decode
     
