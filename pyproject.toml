@@ -9,8 +9,7 @@ dependencies = [
     "pydantic>=2.11.0",
     "fire",
     "tiktoken",
-    "sentence-transformers",
-    "nltk"
+    "bm25[full]"
 ]
 
 [build-system]
