@@ -7,7 +7,7 @@
 #   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/12 12:24:16 by jkrishna            #+#    #+#            #
-#   Updated: 2026/11/02 11:58:42 by jkrishna           ###   ########.fr      #
+#   Updated: 2026/11/03 09:33:12 by jkrishna           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -40,7 +40,9 @@ def main() -> None:
 
     os.makedirs("data/output", exist_ok=True)
     # breakpoint()
-    print(tokenizer.encode("tokenization").tokens)
+    print(tokenizer.encode("tokenization"))
+    print(tokenizer.decode(5839))
+    print(tokenizer.decode(2022))
     with open("data/output/file.json", "w", encoding="utf-8") as f:
         json.dump(vocab_dict, f, indent=4)
         # f.write(str(vocab_dict))

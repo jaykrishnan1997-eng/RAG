@@ -149,3 +149,11 @@ with using with and os.makedirs:
 Ref: https://www.w3schools.com/python/ref_os_makedirs.asp
 
 may be an iisue: https://runebook.dev/en/docs/python/library/tokenize/tokenizing-input
+
+## Day 17 (Nov 3)
+
+Good sub work tokenization implemented using BertTokenization. 
+That is lower cased. Expect # if unknown token encountered.
+Ref: https://huggingface.co/transformers/v3.5.1/tokenizer_summary.html
+Ref: BM25 : https://www.geeksforgeeks.org/nlp/what-is-bm25-best-matching-25-algorithm/
+

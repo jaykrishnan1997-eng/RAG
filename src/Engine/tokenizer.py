@@ -7,19 +7,19 @@
 #   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/28 10:46:58 by jkrishna            #+#    #+#            #
-#   Updated: 2026/11/02 11:58:31 by jkrishna           ###   ########.fr      #
+#   Updated: 2026/11/03 09:29:42 by jkrishna           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
 from ..Base.model import Tokenized_data, MinimalSource
-from transformers import AutoTokenizer
+from transformers import AutoTokenizer, BertTokenizer
 import tiktoken
 
 
 def tokenization(chunk_node_list):
     file_names = []
     tokenized_data: List[Tokenized_data] = []
-    tokenizer = AutoTokenizer.from_pretrained('Qwen/Qwen-7B', trust_remote_code=True)
+    tokenizer = BertTokenizer.from_pretrained('Qwen/Qwen-7B', trust_remote_code=True)
 
     with open("processed", "w") as file_object:
         for unit in chunk_node_list:
