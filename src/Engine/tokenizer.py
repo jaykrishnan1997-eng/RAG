@@ -4,10 +4,10 @@
 #                                                          :::      ::::::::  #
 #   tokenizer.py                                         :+:      :+:    :+:  #
 #                                                      +:+ +:+         +:+    #
-#   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
+#   By: jay-k <jay-k@student.42.fr>                  +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/28 10:46:58 by jkrishna            #+#    #+#            #
-#   Updated: 2026/11/03 13:47:39 by jkrishna           ###   ########.fr      #
+#   Updated: 2026/11/03 20:37:53 by jay-k              ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -15,26 +15,32 @@ from functools import lru_cache
 from ..Base.model import Tokenized_data, MinimalSource
 from transformers import AutoTokenizer, BertTokenizer
 import tiktoken
+import regex
 
-class Encoder:
-    def __init__(self, string):
-        self.string = string
 
-        
-    def encode(self, text, current_index):
-        word_divider = r'\W+'
-        
-        pattern = r"'s|'t|'re|'ve|'m|'ll|'d| ?\p{L}+| ?\p{N}+| ?[^\s\p{L}\p{N}]+|\s+(?!\S)|\s+"
-        result = re.split(pattern, self.text)
+def tokenize(text: str) -> list[str]:
+    # step1: upper case to lower case
+    text = text.lower()
 
-        @lru_cache(maxsize=None)
-        def token_to_id(str):
-            index = token_to_id.cache_info(currsize)
-            return index        
-        
-    def decode
-    
-    def regex_tokenization
+    pattern1 = regex.compile(r"\p{L}+(?:['’]\p{L}+)*|\p{N}+(?:[.,]\p{N}+)*|[^\s]")
+    word_list = pattern1.findall(text)
+
+    pattern2 = r"\p{L}+?(?:ing|ed|tion|ly|ment)?|\p{N}+|[^\s]"
+    pattern3 = r"'s|'t|'re|'ve|'m|'ll|'d| ?\p{L}+| ?\p{N}+| ?[^\s\p{L}\p{N}]+|\s+(?!\S)|\s+|\w+|ing|zation|ed"
+    for word in word_list:
+        if pattern2 in word:
+            word_list.append(re.split(pattern2, word))
+
+    @lru_cache(maxsize=None)
+    def token_to_id(str):
+        index = token_to_id.cache_info(currsize)
+        return index        
+
+
+def encode
+def decode
+
+def regex_tokenization
 
 
 
