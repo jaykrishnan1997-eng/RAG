@@ -7,7 +7,7 @@
 #   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/12 12:24:16 by jkrishna            #+#    #+#            #
-#   Updated: 2026/11/04 13:45:54 by jkrishna           ###   ########.fr      #
+#   Updated: 2026/11/04 14:02:40 by jkrishna           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -37,17 +37,23 @@ def main() -> None:
     # Chunking and cacheing
     data_list = source_processor(data, args.max_chunk_size)
 
-    for unit in data_list:
-        for token in unit.tokens:
-            vocab_dict[token] = decode(data, token)
+    # for unit in data_list:
+    #     for token in unit.tokens:
+    #         vocab_dict[token] = decode(data, token)
 
     os.makedirs("data/output", exist_ok=True)
     # breakpoint()
     print(encode(data, tokenize(data, "tokenization")))
+    print(decode(data, encode(data, tokenize(data, "tokenization"))))
     # print(tokenizer.decode(5839))
     # print(tokenizer.decode(2022))
     with open("data/output/file.json", "w", encoding="utf-8") as f:
-        json.dump(vocab_dict, f, indent=4)
+        # json.dump(vocab_dict, f, indent=4)
+        json.dump(data.index_list, f, indent=4)
+        # f.write(data.id_to_str)
+
+
+
         # f.write(str(vocab_dict))
     # validating and accesing the input json file
     # rag_questions = input_datatset_loader(args.ip_unans_docs_path)
