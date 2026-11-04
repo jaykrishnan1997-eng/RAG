@@ -4,65 +4,86 @@
 #                                                          :::      ::::::::  #
 #   tokenizer.py                                         :+:      :+:    :+:  #
 #                                                      +:+ +:+         +:+    #
-#   By: jay-k <jay-k@student.42.fr>                  +#+  +:+       +#+       #
+#   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/28 10:46:58 by jkrishna            #+#    #+#            #
-#   Updated: 2026/11/03 20:37:53 by jay-k              ###   ########.fr      #
+#   Updated: 2026/11/04 13:44:39 by jkrishna           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
-from functools import lru_cache
-from ..Base.model import Tokenized_data, MinimalSource
-from transformers import AutoTokenizer, BertTokenizer
-import tiktoken
+from ..Base.model import Tokenized_data, MinimalSource, data
+# from transformers import AutoTokenizer, BertTokenizer
+# import tiktoken
 import regex
 
+# data = data()
 
-def tokenize(text: str) -> list[str]:
+
+def tokenize(data, text: str) -> list[str]:
     # step1: upper case to lower case
     text = text.lower()
-
+    word_list = []
     pattern1 = regex.compile(r"\p{L}+(?:['’]\p{L}+)*|\p{N}+(?:[.,]\p{N}+)*|[^\s]")
     word_list = pattern1.findall(text)
 
-    pattern2 = r"\p{L}+?(?:ing|ed|tion|ly|ment)?|\p{N}+|[^\s]"
-    pattern3 = r"'s|'t|'re|'ve|'m|'ll|'d| ?\p{L}+| ?\p{N}+| ?[^\s\p{L}\p{N}]+|\s+(?!\S)|\s+|\w+|ing|zation|ed"
+    # pattern2 = r'\p{L}+?(?:ing|ed|tion|ly|ment|ization)?|\p{N}+|[^\s]'
+    divider = [
+        "ing", "ed", "tion", "ly", "ment", "ization",
+        "ness", "ity", "ism", "ist", "ance", "ence",
+        "ure", "ary", "ory", "sion", "ation", "hood", "ship",
+        "ous", "ful", "less", "able", "ible", "al",
+        "ic", "ive", "ish", "en",
+        "ify", "ize", "ise", "ate",
+        ]
+    # pattern3 = r"'s|'t|'re|'ve|'m|'ll|'d| ?\p{L}+| ?\p{N}+| ?[^\s\p{L}\p{N}]+|\s+(?!\S)|\s+|\w+|ing|zation|ed"
+
+    if word_list == [] and isinstance(text, str):
+        word_list.append(text)
+
+    result = []
     for word in word_list:
-        if pattern2 in word:
-            word_list.append(re.split(pattern2, word))
+        for suffix in divider:
 
-    @lru_cache(maxsize=None)
-    def token_to_id(str):
-        index = token_to_id.cache_info(currsize)
-        return index        
-
-
-def encode
-def decode
-
-def regex_tokenization
+            if word.endswith(suffix):
+                prefix = word.split(suffix)[0]
+                if len(prefix) >= 3:
+                    result.append(prefix)
+                    result.append(suffix)
+    result = word_list + result
+    return result
 
 
+def encode(data, tokens: str | list[str]):
+    #  given a token or list of token find the corresponding index 
+    if isinstance(tokens, list):
+        return [data.add_token(token) for token in tokens]
+    else:
+        return data.add_token(tokens)
 
-def tokenization(chunk_node_list):
+
+def decode(data, ids: int | list[int]):
+    if isinstance(ids, list):
+        return [data.id_to_str(id) for id in ids]
+    else:
+        return data.id_to_str(ids)
+
+
+def tokenization(data, chunk_node_list):
     file_names = []
-    tokenized_data: List[Tokenized_data] = []
-    tokenizer = BertTokenizer.from_pretrained('Qwen/Qwen-7B', trust_remote_code=True)
+    tokenized_data: list[Tokenized_data] = []
 
     with open("processed", "w") as file_object:
         for unit in chunk_node_list:
 
-            chunk = Tokenized_data(
-                    tokenizer.encode(unit.text),
-                    unit)
+            chunk = Tokenized_data(encode(data, tokenize(data, unit.text)), unit)
 
             tokenized_data.append(chunk)
 
             if unit.file_path not in file_names:
-                file_object.write(f"\n{unit.file_path} \n {tokenizer.encode(unit.text)} \n")
+                file_object.write(f"\n{unit.file_path} \n {encode(data, tokenize(data, unit.text))} \n")
                 file_names.append(unit.file_path)
             else:
-                file_object.write(f"{tokenizer.encode(unit.text)} \n")
+                file_object.write(f"{encode(data, tokenize(data, unit.text))} \n")
 
     return tokenized_data
     # Must make it efficient by normailzation, but not for now.
@@ -100,3 +121,9 @@ def tokenization(chunk_node_list):
 
 #     return tokenized_data
 #     # Must make it efficient by normailzation, but not for now.
+
+
+# if __name__ == "__main__":
+#     # print(tokenize("Balance shall return, world shall live"))
+#     print(encode(tokenize("tokenization")))
+#     print(decode([0,1,2,3,4,5,6,7,8,9]))

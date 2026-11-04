@@ -4,10 +4,10 @@
 #                                                          :::      ::::::::  #
 #   ipdata_processor.py                                  :+:      :+:    :+:  #
 #                                                      +:+ +:+         +:+    #
-#   By: jay-k <jay-k@student.42.fr>                  +#+  +:+       +#+       #
+#   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/13 10:43:25 by jkrishna            #+#    #+#            #
-#   Updated: 2026/11/03 20:37:53 by jay-k              ###   ########.fr      #
+#   Updated: 2026/11/04 11:54:06 by jkrishna           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -20,7 +20,7 @@ from .md_text_chunking import md_txt_processor
 from .python_chunking import python_processor
 from .tokenizer import tokenization
 
-def source_processor(max_chunk_size: int) -> None:
+def source_processor(data, max_chunk_size: int) -> None:
     """This is a inital point that divides the task,
      we do through every single file in raw folder
      and this is where the branching happens (like txt or py etc)"""
@@ -64,5 +64,5 @@ def source_processor(max_chunk_size: int) -> None:
     for file in processed_files:
         if file not in temp_list:
             print(file)
-    return tokenization(chunk_data_list)
+    return tokenization(data, chunk_data_list)
 

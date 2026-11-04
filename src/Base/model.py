@@ -7,7 +7,7 @@
 #   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/10 13:20:17 by jkrishna            #+#    #+#            #
-#   Updated: 2026/11/03 13:51:49 by jkrishna           ###   ########.fr      #
+#   Updated: 2026/11/04 12:16:33 by jkrishna           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -84,8 +84,23 @@ class Tokenized_data:
 
 
 class data:
-    def __init__(self, current_index):
-        self.current_index = current_index
+    def __init__(self):
+        self.index_list = {" ": 0}
+        self.current_index = 0
+
+    def add_token(self, token):
+        if token not in self.index_list:
+            self.current_index += 1
+            self.index_list[token] = self.current_index
+        return self.index_list[token]
+
+    def id_to_str(self, id):
+        if id not in self.index_list.values():
+            return "Unknown_ID"
+        else:
+            for key, value in self.index_list.items():
+                if value == id:
+                    return key
 
 
 class UnansweredQuestion(BaseModel):
