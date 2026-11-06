@@ -7,11 +7,12 @@
 #   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/11/03 10:16:36 by jkrishna            #+#    #+#            #
-#   Updated: 2026/11/06 14:42:41 by jkrishna           ###   ########.fr      #
+#   Updated: 2026/11/06 15:18:02 by jkrishna           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
 # import BM25
+import math
 
 # # corpus = BM25.load("filename", document_column="text")
 # corpus = [
@@ -41,7 +42,7 @@ class BM25_retrieval:
 
         for query in question_nodes:
             query_score.append(
-                [score(document, query) for document in documents])
+                [score(documents, document, query) for document in documents])
 
     def frequency(document, keyword_id):
         occurance = 0
@@ -50,11 +51,27 @@ class BM25_retrieval:
     # print(decode(data, encode(data, tokenize(data, "tokenization"))))
 
     def IDF(documents, keyword_id):
+        n = 0
+        tot_docs = len(documents)
+        flag = 0
         for document in documents:
-            
-    
-    def score(document, query):
+            for node in document.data_nodes
+                if keyword_id in node.tokens:
+                    flag = 1
+            n += flag
+            flag = 0
+        idf = math.log((tot_docs - n + 0.5) / (n + 0.5))
+                    
+    def score(documents, document, query):
         score = 0
         tokenized_query = encode(data, tokenize(data, query.question))
-        for keyword in tokenized_query:
-            score += 
+        
+        doc_len = 
+        avg =
+
+        k1 = 
+        b = 
+        
+        for keyword_id in tokenized_query:
+            score += (IDF(documents, keyword_id) * ((frequency(document, keyword_id) * ( k1 + 1)))/(frequency(document, keyword_id) + k1 * ( 1 - b + (b * (doc_len / avg)))))
+    
