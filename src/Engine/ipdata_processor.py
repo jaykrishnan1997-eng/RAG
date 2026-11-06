@@ -7,7 +7,7 @@
 #   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/13 10:43:25 by jkrishna            #+#    #+#            #
-#   Updated: 2026/11/04 11:54:06 by jkrishna           ###   ########.fr      #
+#   Updated: 2026/11/06 12:56:01 by jkrishna           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -44,6 +44,8 @@ def source_processor(data, max_chunk_size: int) -> None:
                 python_processor(chunk_data_list,
                     file_path, max_chunk_size)
                 processed_files.append(file_path)
+
+    data.documents = processed_files
 
     with open("output.txt", "w") as f:
 

@@ -7,11 +7,11 @@
 #   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/28 10:46:58 by jkrishna            #+#    #+#            #
-#   Updated: 2026/11/04 13:44:39 by jkrishna           ###   ########.fr      #
+#   Updated: 2026/11/06 13:14:49 by jkrishna           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
-from ..Base.model import Tokenized_data, MinimalSource, data
+from ..Base.model import Tokenized_data, MinimalSource, data, Document
 # from transformers import AutoTokenizer, BertTokenizer
 # import tiktoken
 import regex
@@ -87,6 +87,31 @@ def tokenization(data, chunk_node_list):
 
     return tokenized_data
     # Must make it efficient by normailzation, but not for now.
+
+
+def document_sort(document_names, tokenized_data_list):
+
+    documents = []
+    data_nodes = []
+    for doc_name in document_names:
+        for item in tokenized_data_list:
+            if item.source.file_path == doc_name:
+                data_nodes.append(item)
+        documents.append(Document(doc_name, data_nodes))
+        data_nodes = []
+
+    return documents
+
+
+
+
+
+
+
+
+
+
+
 
 
 

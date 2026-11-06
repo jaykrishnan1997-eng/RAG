@@ -7,7 +7,7 @@
 #   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/10 13:20:17 by jkrishna            #+#    #+#            #
-#   Updated: 2026/11/06 12:39:40 by jkrishna           ###   ########.fr      #
+#   Updated: 2026/11/06 13:14:37 by jkrishna           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -37,10 +37,10 @@ def path_dict(path_abbr: str) -> str:
 
 
 class Document:
-    def __init__(self, document, tokenized_data_nodes, length):
-        self.document: str = document
+    def __init__(self, document, tokenized_data_nodes):
+        self.name: str = document
         self.data_nodes: tokenized_data_nodes = tokenized_data_nodes
-        self.length = length
+        # self.length = length
 
 
 class ChunkNode:
@@ -94,6 +94,7 @@ class data:
     def __init__(self):
         self.index_list = {" ": 0}
         self.current_index = 0
+        self.documents = []
 
     def add_token(self, token):
         if token not in self.index_list:

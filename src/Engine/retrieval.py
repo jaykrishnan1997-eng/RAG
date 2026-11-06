@@ -7,7 +7,7 @@
 #   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/11/03 10:16:36 by jkrishna            #+#    #+#            #
-#   Updated: 2026/11/06 12:30:01 by jkrishna           ###   ########.fr      #
+#   Updated: 2026/11/06 14:24:55 by jkrishna           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -31,11 +31,24 @@
 
 
 class BM25_retrieval:
-    def __init__(self, documents, question_nodes):
-        self.tokenized_data_list = tokenized_data_list
+    def __init__(self, data, documents, question_nodes):
+        self.documents = documents
         self.question_nodes = question_nodes
+        # for each query we have list of document scores
+        # Q1 : [D1, D2, D3]; Q2: [D1, D2, D3]
+        query_score: list[list[float]] = []
+        document_score = []
+
+        for query in question_nodes:
+            query_score.append(
+                [score(document, query) for document in documents])
+
     def frequency(document, keyword):
-        
-        
+        occurance = 0
+        keyword_id = 
+    # print(encode(data, tokenize(data, "tokenization")))
+    # print(decode(data, encode(data, tokenize(data, "tokenization"))))
+    def score(document, query):
+        tokenized_query = encode(data, tokenize(data, query.question))
+        for keyword in tokenized_query:
             
-        
