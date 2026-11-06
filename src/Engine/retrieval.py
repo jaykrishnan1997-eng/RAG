@@ -7,7 +7,7 @@
 #   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/11/03 10:16:36 by jkrishna            #+#    #+#            #
-#   Updated: 2026/11/06 14:24:55 by jkrishna           ###   ########.fr      #
+#   Updated: 2026/11/06 14:42:41 by jkrishna           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -43,12 +43,18 @@ class BM25_retrieval:
             query_score.append(
                 [score(document, query) for document in documents])
 
-    def frequency(document, keyword):
+    def frequency(document, keyword_id):
         occurance = 0
         keyword_id = 
     # print(encode(data, tokenize(data, "tokenization")))
     # print(decode(data, encode(data, tokenize(data, "tokenization"))))
+
+    def IDF(documents, keyword_id):
+        for document in documents:
+            
+    
     def score(document, query):
+        score = 0
         tokenized_query = encode(data, tokenize(data, query.question))
         for keyword in tokenized_query:
-            
+            score += 
