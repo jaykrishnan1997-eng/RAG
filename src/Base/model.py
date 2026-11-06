@@ -7,7 +7,7 @@
 #   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/10 13:20:17 by jkrishna            #+#    #+#            #
-#   Updated: 2026/11/04 12:16:33 by jkrishna           ###   ########.fr      #
+#   Updated: 2026/11/06 12:39:40 by jkrishna           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -34,6 +34,13 @@ def path_dict(path_abbr: str) -> str:
         "VECTOR_PATH": "data/vector"
     }
     return path[path_abbr]
+
+
+class Document:
+    def __init__(self, document, tokenized_data_nodes, length):
+        self.document: str = document
+        self.data_nodes: tokenized_data_nodes = tokenized_data_nodes
+        self.length = length
 
 
 class ChunkNode:

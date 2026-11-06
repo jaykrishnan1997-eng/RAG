@@ -7,7 +7,7 @@
 #   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/11/03 10:16:36 by jkrishna            #+#    #+#            #
-#   Updated: 2026/11/04 14:37:54 by jkrishna           ###   ########.fr      #
+#   Updated: 2026/11/06 12:30:01 by jkrishna           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -31,4 +31,11 @@
 
 
 class BM25_retrieval:
-    
+    def __init__(self, documents, question_nodes):
+        self.tokenized_data_list = tokenized_data_list
+        self.question_nodes = question_nodes
+    def frequency(document, keyword):
+        
+        
+            
+        

@@ -167,3 +167,7 @@ Ref : https://github.com/openai/gpt-2/blob/master/src/encoder.py
 Ref: regex: https://www.pythontutorial.net/python-regex/python-regex-split/
 
 first obtain words from sentence then big words are further divided into subwords
+
+## Day 18 (Nov 6)
+Working on Bm25 class
+Note: I am being a bit slow on the work. Need to speed up!
