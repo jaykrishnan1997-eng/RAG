@@ -7,7 +7,7 @@
 #   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/11/03 10:16:36 by jkrishna            #+#    #+#            #
-#   Updated: 2026/11/06 15:18:02 by jkrishna           ###   ########.fr      #
+#   Updated: 2026/11/07 11:41:23 by jkrishna           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -35,6 +35,16 @@ class BM25_retrieval:
     def __init__(self, data, documents, question_nodes):
         self.documents = documents
         self.question_nodes = question_nodes
+        self.document_length = {}
+
+        # length of tokens for every document
+        length = 0
+        for document in documents:
+            for node in document.data_nodes:
+                length += node.token_list
+            document_length[document] = length
+            length = 0
+
         # for each query we have list of document scores
         # Q1 : [D1, D2, D3]; Q2: [D1, D2, D3]
         query_score: list[list[float]] = []
@@ -42,11 +52,18 @@ class BM25_retrieval:
 
         for query in question_nodes:
             query_score.append(
-                [score(documents, document, query) for document in documents])
+                [score(document_length, document, query) for document in documents])
+        return query_score
 
     def frequency(document, keyword_id):
+        # how many times this keyword_id occured in the given document
         occurance = 0
-        keyword_id = 
+        for node in document.data_nodes:
+            for token_id in node.token_list:
+                if token_id == keyword_id:
+                    occurance += 1
+                
+        
     # print(encode(data, tokenize(data, "tokenization")))
     # print(decode(data, encode(data, tokenize(data, "tokenization"))))
 
@@ -55,22 +72,26 @@ class BM25_retrieval:
         tot_docs = len(documents)
         flag = 0
         for document in documents:
-            for node in document.data_nodes
+            for node in document.data_nodes:
                 if keyword_id in node.tokens:
                     flag = 1
             n += flag
             flag = 0
         idf = math.log((tot_docs - n + 0.5) / (n + 0.5))
                     
-    def score(documents, document, query):
+    def score(document_length, document, query):
         score = 0
+        total_length = 0
         tokenized_query = encode(data, tokenize(data, query.question))
+        documents = document_length.keys()
         
-        doc_len = 
-        avg =
+        doc_len = document_length[document]
+        for value in document_length.values():
+            total_length += value 
+        avg = total_length / len(document_length)
 
-        k1 = 
-        b = 
+        k1 = 0.5
+        b = 0.75
         
         for keyword_id in tokenized_query:
             score += (IDF(documents, keyword_id) * ((frequency(document, keyword_id) * ( k1 + 1)))/(frequency(document, keyword_id) + k1 * ( 1 - b + (b * (doc_len / avg)))))

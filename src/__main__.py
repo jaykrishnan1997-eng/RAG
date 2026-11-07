@@ -7,7 +7,7 @@
 #   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/12 12:24:16 by jkrishna            #+#    #+#            #
-#   Updated: 2026/11/06 13:49:48 by jkrishna           ###   ########.fr      #
+#   Updated: 2026/11/07 11:58:05 by jkrishna           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -26,7 +26,7 @@ from .Engine.retrieval import BM25_retrieval
 # from transformers import AutoTokenizer
 
 data = data()
-bm25 = BM25_retrieval()
+
 
 
 def main() -> None:
@@ -47,10 +47,15 @@ def main() -> None:
         json.dump(data.index_list, f, indent=4)
 
     # creating and collecting the query_nodes
-    question_nodes = input_datatset_loader(args.ip_unans_docs_path)
+    # currently i am only loading the docs not the python files
+    print(args.dataset_path)
+    question_nodes = input_datatset_loader(args.dataset_path)
+    print(question_nodes)
 
+    
     # Collecting the documents and info on documents
-    bm25(data, documents, question_nodes)
+    # bm25 = BM25_retrieval((data, documents, question_nodes))
+    # print(bm25)
 
 
     # Embedding ?
