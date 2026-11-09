@@ -7,7 +7,7 @@
 #   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/28 10:46:58 by jkrishna            #+#    #+#            #
-#   Updated: 2026/11/09 10:00:31 by jkrishna           ###   ########.fr      #
+#   Updated: 2026/11/09 14:18:55 by jkrishna           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -37,8 +37,13 @@ def tokenize(data, text: str) -> list[str]:
         ]
     # pattern3 = r"'s|'t|'re|'ve|'m|'ll|'d| ?\p{L}+| ?\p{N}+| ?[^\s\p{L}\p{N}]+|\s+(?!\S)|\s+|\w+|ing|zation|ed"
 
+    noice_words = [
+        "a", "an", "the", "is", "are", "were", "was", "an", "be",
+        "been", "and", "or", "but", "of", "at", "by", "from", "with"
+    ]
     if word_list == [] and isinstance(text, str):
-        word_list.append(text)
+        if text not in noice_words:
+            word_list.append(text)
 
     result = []
     for word in word_list:
