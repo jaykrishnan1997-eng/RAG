@@ -176,3 +176,5 @@ Note: I am being a bit slow on the work. Need to speed up!
 Bm25 was implemented however was very slow because i was using recalculation again and again. i did ask help from ai to point out option to optimise BM25
 
 Ref: Counter: https://www.geeksforgeeks.org/python/counters-in-python-set-1/
+
+Changing from BM25 per document to Bm25 per node or chunk in the document

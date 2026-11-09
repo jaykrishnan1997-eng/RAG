@@ -7,7 +7,7 @@
 #   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/11/03 10:16:36 by jkrishna            #+#    #+#            #
-#   Updated: 2026/11/09 12:51:39 by jkrishna           ###   ########.fr      #
+#   Updated: 2026/11/09 14:08:34 by jkrishna           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -39,44 +39,42 @@ class BM25_retrieval:
         self.documents = documents
         self.question_nodes = question_nodes
 
-        self.document_length = {}
-        self.term_frequency = {}
+        self.node_stats = {}
         self.document_frequency = Counter()
-
-        self.query_score = []
 
         self.k1 = 0.5
         self.b = 0.75
-
+        total_length = 0
+        total_nodes = 0
         # compute document stats
         for document in documents:
-
-            # collect all token_id from doc
-            tokens = []
-
             for node in document.data_nodes:
-                tokens.extend(node.tokens)
 
-            # Document length
-            self.document_length[document] = len(tokens)
+                tokens = node.tokens
+                tf = Counter(tokens)
+                node_length = len(tokens)
 
-            # term frequency for this document
-            tf = Counter(tokens)
-            self.term_frequency[document] = tf
+                self.node_stats[id(node)] = {
+                    "length": node_length,
+                    "tf": tf
+                }
 
-            # document frequency: count each token once per document
-            for keyword_id in tf:
-                self.document_frequency[keyword_id] += 1
+                # document frequency: count each token once per chunk
+                for token_id in tf:
+                    self.document_frequency[token_id] += 1
 
-        # Calculate av doc length
-        total_length = sum(self.document_length.values())
+                # Calculate av doc length
+                total_length += node_length
+                total_nodes += 1
 
-        if self.documents:
-            self.avgl = total_length / len(self.documents)
+        if total_nodes:
+            self.avgl = total_length / total_nodes
         else:
             self.avgl = 0
 
         # Score every query
+        self.query_score = []
+
         for query in question_nodes:
 
             # Tokenise and encode each query once
@@ -85,40 +83,50 @@ class BM25_retrieval:
             if not isinstance(encoded_query, list):
                 encoded_query = [encoded_query]
 
-            scores = [self.score(document, encoded_query) for document in documents]
+            scores = []
+
+            for document in self.documents:
+                for node in document.data_nodes:
+
+                    node_score = self.score(node, encoded_query)
+
+                    if node_score > 0:
+                        scores.append((node_score, node))
+
+            scores.sort(key=lambda item: item[0], reverse=True)
 
             self.query_score.append(scores)
 
-    def frequency(self, document, keyword_id):
-        # how many times this keyword_id occured in the given document
-        return self.term_frequency[document].get(keyword_id, 0)
-
     def IDF(self, keyword_id):
-        n = 0
-        tot_docs = len(self.documents)
+        tot_docs = len(self.node_stats)
 
         n = self.document_frequency.get(keyword_id, 0)
         idf = math.log(1 + (tot_docs - n + 0.5) / (n + 0.5))
         return idf
 
-    def score(self, document, tokenized_query):
-
+    def score(self, node, tokenized_query):
         score = 0
+        stats = self.node_stats[id(node)]
 
-        doc_len = self.document_length[document]
-        tf_dict = self.term_frequency[document]
+        node_length = stats["length"]
+        tf_dict = stats["tf"]
 
         if self.avgl != 0:
-            length_ratio = doc_len / self.avgl
+            length_ratio = node_length / self.avgl
         else:
             length_ratio = 0
 
+        idf_values = {
+            keyword_id: self.IDF(keyword_id)
+            for keyword_id in set(tokenized_query)
+        }
         for keyword_id in tokenized_query:
             tf = tf_dict.get(keyword_id, 0)
 
             if tf == 0:
                 continue
-            idf = self.IDF(keyword_id)
+
+            idf = idf_values[keyword_id]
 
             score += (idf * ((tf * (self.k1 + 1)))/(tf + self.k1 * (1 - self.b + (self.b * length_ratio))))
         return score

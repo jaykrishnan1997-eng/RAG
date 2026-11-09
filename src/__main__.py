@@ -7,7 +7,7 @@
 #   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/12 12:24:16 by jkrishna            #+#    #+#            #
-#   Updated: 2026/11/09 10:04:26 by jkrishna           ###   ########.fr      #
+#   Updated: 2026/11/09 14:10:14 by jkrishna           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -59,7 +59,10 @@ def main() -> None:
 
     # Collecting the documents and info on documents
     bm25 = BM25_retrieval(data, documents, question_nodes)
-    print(bm25)
+    result = bm25.query_score[0]
+
+    for score, node in result[:5]:
+        print(score, node)
 
 
     # Embedding ?
