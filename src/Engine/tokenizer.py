@@ -7,7 +7,7 @@
 #   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/28 10:46:58 by jkrishna            #+#    #+#            #
-#   Updated: 2026/11/06 13:14:49 by jkrishna           ###   ########.fr      #
+#   Updated: 2026/11/09 09:09:57 by jkrishna           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -54,7 +54,7 @@ def tokenize(data, text: str) -> list[str]:
 
 
 def encode(data, tokens: str | list[str]):
-    #  given a token or list of token find the corresponding index 
+    #  given a token or list of token find the corresponding index
     if isinstance(tokens, list):
         return [data.add_token(token) for token in tokens]
     else:

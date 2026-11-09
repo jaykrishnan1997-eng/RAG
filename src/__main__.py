@@ -7,7 +7,7 @@
 #   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/12 12:24:16 by jkrishna            #+#    #+#            #
-#   Updated: 2026/11/07 11:58:05 by jkrishna           ###   ########.fr      #
+#   Updated: 2026/11/09 08:42:40 by jkrishna           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -48,14 +48,13 @@ def main() -> None:
 
     # creating and collecting the query_nodes
     # currently i am only loading the docs not the python files
-    print(args.dataset_path)
+
     question_nodes = input_datatset_loader(args.dataset_path)
-    print(question_nodes)
 
     
     # Collecting the documents and info on documents
-    # bm25 = BM25_retrieval((data, documents, question_nodes))
-    # print(bm25)
+    bm25 = BM25_retrieval(data, documents, question_nodes)
+    print(bm25)
 
 
     # Embedding ?
