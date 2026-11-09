@@ -171,3 +171,8 @@ first obtain words from sentence then big words are further divided into subword
 ## Day 18 (Nov 6)
 Working on Bm25 class
 Note: I am being a bit slow on the work. Need to speed up!
+
+## Day 19 (Nov 9)
+Bm25 was implemented however was very slow because i was using recalculation again and again. i did ask help from ai to point out option to optimise BM25
+
+Ref: Counter: https://www.geeksforgeeks.org/python/counters-in-python-set-1/
