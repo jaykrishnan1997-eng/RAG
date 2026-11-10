@@ -7,7 +7,7 @@
 #   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/12 13:59:36 by jkrishna            #+#    #+#            #
-#   Updated: 2026/11/10 09:54:05 by jkrishna           ###   ########.fr      #
+#   Updated: 2026/11/10 13:07:58 by jkrishna           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -27,7 +27,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--k", default=5)
     parser.add_argument(
-        "--dataset_path", default=path_dict("ip_unans_code_path"))
+        "--dataset_path", default=path_dict("ip_unans_docs_path"))
     parser.add_argument(
         "--save_directory", default=path_dict("OUTPUT_PATH"))
     parser.add_argument(
@@ -54,4 +54,3 @@ def input_datatset_loader(file_path):
         )
         question_objects.append(object)
     return question_objects
-

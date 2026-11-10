@@ -7,7 +7,7 @@
 #   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/11/03 10:16:36 by jkrishna            #+#    #+#            #
-#   Updated: 2026/11/10 09:22:49 by jkrishna           ###   ########.fr      #
+#   Updated: 2026/11/10 12:54:42 by jkrishna           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -26,8 +26,8 @@ class BM25_retrieval:
         self.node_stats = {}
         self.document_frequency = Counter()
 
-        self.k1 = 0.5
-        self.b = 0.75
+        self.k1 = 1.2
+        self.b = 0.4
         total_length = 0
         total_nodes = 0
         # compute document stats
@@ -62,7 +62,7 @@ class BM25_retrieval:
         for query in question_nodes:
 
             # Tokenise and encode each query once
-            encoded_query = encode(data, tokenize(data, query.question))
+            encoded_query = encode(data, list(dict.fromkeys(tokenize(data, query.question))))
 
             if not isinstance(encoded_query, list):
                 encoded_query = [encoded_query]

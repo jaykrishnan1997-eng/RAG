@@ -7,7 +7,7 @@
 #   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/28 10:46:58 by jkrishna            #+#    #+#            #
-#   Updated: 2026/11/10 09:34:08 by jkrishna           ###   ########.fr      #
+#   Updated: 2026/11/10 12:49:12 by jkrishna           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -20,10 +20,14 @@ import regex
 
 
 def tokenize(data, text: str) -> list[str]:
-    # step1: upper case to lower case
+
+    # split camelCase / PascalCase, then lower case
+    text = regex.sub(r"(?<=[a-z0-9])(?=[A-Z])", " ", text)
+    text = regex.sub(r"(?<=[A-Z])(?=[A-Z][a-z])", " ", text)
     text = text.lower()
+
     word_list = []
-    pattern1 = regex.compile(r"\p{L}+(?:['’]\p{L}+)*|\p{N}+(?:[.,]\p{N}+)*|[^\s]")
+    pattern1 = regex.compile(r"\p{L}+|\p{N}+(?:[.,]\p{N}+)*|[^\s]")
     word_list = pattern1.findall(text)
 
     # pattern2 = r'\p{L}+?(?:ing|ed|tion|ly|ment|ization)?|\p{N}+|[^\s]'
@@ -50,13 +54,32 @@ def tokenize(data, text: str) -> list[str]:
         for suffix in divider:
 
             if word.endswith(suffix):
-                prefix = word.split(suffix)[0]
-                if len(prefix) >= 3:
-                    result.append(prefix)
-                    result.append(suffix)
+                stem = word[:-len(suffix)]
+                if len(stem) >= 3:
+                    result.append(stem)
+                # prefix = word.split(suffix)[0]
+                # if len(prefix) >= 3:
+                #     result.append(prefix)
+                #     result.append(suffix)
+    STOP = set(noice_words) | {
+        "what", "which", "when", "does", "do", "how", "in", "to", "for",
+        "on", "it", "its", "as", "this", "that", "if", "when", "default",
+        "value", "vllm",
+    }
     result = word_list + result
-    return result
+    return [t for t in result
+            if t and t[0].isalnum() and t not in STOP
+            and (len(t) > 1 or t.isdigit())]
 
+
+# +    STOP = set(noice_words) | {
+# +        "what", "which", "when", "does", "do", "how", "in", "to", "for",
+# +        "on", "it", "its", "as", "this", "that", "if", "when", "default",
+# +        "value", "vllm",
+# +    }
+#      result = word_list + result
+# -    return result
+# +    return [t for t in result if (t[0].isalnum()) and t not in STOP]
 
 def encode(data, tokens: str | list[str]):
     #  given a token or list of token find the corresponding index
@@ -109,54 +132,3 @@ def document_sort(document_names, tokenized_data_list):
         data_nodes = []
 
     return documents
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# r"'s|'t|'re|'ve|'m|'ll|'d| ?\p{L}+| ?\p{N}+| ?[^\s\p{L}\p{N}]+|\s+(?!\S)|\s+"
-
-
-# def tokenization(chunk_node_list):
-#     file_names = []
-#     tokenized_data: List[Tokenized_data] = []
-#     tokenizer = BertTokenizer.from_pretrained('Qwen/Qwen-7B', trust_remote_code=True)
-
-#     with open("processed", "w") as file_object:
-#         for unit in chunk_node_list:
-#             # processed_data = unit.file_path, unit.char_start, unit.char_end, tokenizer.encode(unit.text)
-#             chunk = Tokenized_data(
-#                     tokenizer.encode(unit.text),
-#                     unit)
-
-#             tokenized_data.append(chunk)
-
-#             if unit.file_path not in file_names:
-#                 file_object.write(f"\n{unit.file_path} \n {tokenizer.encode(unit.text)} \n")
-#                 file_names.append(unit.file_path)
-#             else:
-#                 file_object.write(f"{tokenizer.encode(unit.text)} \n")
-
-#     return tokenized_data
-#     # Must make it efficient by normailzation, but not for now.
-
-
-# if __name__ == "__main__":
-#     # print(tokenize("Balance shall return, world shall live"))
-#     print(encode(tokenize("tokenization")))
-#     print(decode([0,1,2,3,4,5,6,7,8,9]))

@@ -7,7 +7,7 @@
 #   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/12 12:24:16 by jkrishna            #+#    #+#            #
-#   Updated: 2026/11/10 10:30:50 by jkrishna           ###   ########.fr      #
+#   Updated: 2026/11/10 13:11:41 by jkrishna           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -62,14 +62,60 @@ def main() -> None:
 
     for k in range(0, 5):
         result = bm25.query_score[k]
-        for score, node in result[:1]:
-            # print(score, node)
-            print(node.source.file_path)
-            print(node.source.first_character_index)
-            print(node.source.last_character_index)
-            print("\n")
+        print(f"--- question {k} ---")
 
+        for rank, (score, node) in enumerate(result[:10]):
+            print(rank, round(score, 3), node.source.file_path,
+                node.source.first_character_index,
+                node.source.last_character_index)
+    
+    # # :
+    # expected = [
+    #     ("vllm/model_executor/layers/fused_moe/fused_batched_moe.py", 28416, 28975),
+    #     ("vllm/attention/ops/triton_flash_attention.py", 13507, 13600),
+    #     ("vllm/model_executor/layers/sampler.py", 27480, 28492),
+    #     ("vllm/entrypoints/llm.py", 64076, 64088),
+    #     ("vllm/worker/model_runner.py", 64028, 64925),
+    # ]
+    # for k, (path, s, e) in enumerate(expected):
+    #     for rank, (score, node) in enumerate(bm25.query_score[k]):
+    #         src = node.source
+    #         if (src.file_path.endswith(path)
+    #                 and src.first_character_index <= e
+    #                 and src.last_character_index >= s):
+    #             print(k, "found at rank", rank)
+    #             break
+    #     else:
+    #         print(k, "not found at all")
 
+    # print("TOKENIZE V3")
+    # q = "What's the default value of trust_remote_code in vLLM's LLM class constructor?"
+    # print(tokenize(data, q))
+
+    # path, s, e = "vllm/entrypoints/llm.py", 64076, 64088
+    # for rank, (score, node) in enumerate(bm25.query_score[3]):
+    #     src = node.source
+    #     if (src.file_path.endswith(path)
+    #             and src.first_character_index <= e
+    #             and src.last_character_index >= s):
+    #         print("rank", rank, src.first_character_index, src.last_character_index)
+    #         print(repr(node.source_text if hasattr(node, "source_text") else ""))
+    #         break
+
+    # with open("data/raw/vllm-0.10.1/vllm/entrypoints/llm.py", encoding="utf-8") as f:
+    #     print(repr(f.read()[s:e + 1]))
+
+    # raw = open("data/raw/vllm-0.10.1/vllm/entrypoints/llm.py", "rb").read()
+    # print(repr(raw[64076:64089].decode("utf-8", errors="replace")))
+    # print(raw.count(b"trust_remote_code"))
+    # print(len(raw) - len(raw.decode("utf-8")))  # > 0 means non-ASCII shifts offsets
+
+    # txt = raw.decode("utf-8")
+    # i = txt.find("trust_remote_code: bool")
+    # print(i, repr(txt[i:i+60]))
+    # #  END
+
+    
     # Embedding ?
     # Retrieval
     # Generation using Qwen

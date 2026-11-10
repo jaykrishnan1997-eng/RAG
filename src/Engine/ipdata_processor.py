@@ -7,13 +7,12 @@
 #   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/13 10:43:25 by jkrishna            #+#    #+#            #
-#   Updated: 2026/11/10 10:46:26 by jkrishna           ###   ########.fr      #
+#   Updated: 2026/11/10 11:50:53 by jkrishna           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
 import os
 
-from typing import List
 from ..Base.model import path_dict, ChunkNode
 # from .chunking import python_file_processor, md_txt_file_processor
 from .md_text_chunking import md_txt_processor
@@ -48,10 +47,14 @@ def source_processor(data, max_chunk_size: int) -> None:
 
     data.documents = processed_files
 
-    with open("output.txt", "w") as f:
+    with open("output.txt", "w", encoding="utf-8") as f:
 
         for i, obj in enumerate(chunk_data_list):
             f.write(f" \n\n ================================== \n\n [{i}]: {obj.file_path} \n {obj.text}, {obj.char_count}, {obj.start_index}, {obj.end_index}")
+
+            if obj.file_path not in temp_list:
+                temp_list.append(obj.file_path)
+
             if obj.char_count > max_chunk_size:
                 print("########invalid_chunk######")
                 print("File:", obj.file_path)
@@ -59,13 +62,13 @@ def source_processor(data, max_chunk_size: int) -> None:
                 print("Start:", obj.start_index)
                 print("End:", obj.end_index)
                 continue
-            if obj.file_path not in temp_list:
-                temp_list.append(obj.file_path)
-
     missing_files = set(processed_files) - set(temp_list)
 
     print("files without chunks:", len(missing_files))
 
+    chunk_data_list = [
+        c for c in chunk_data_list if c.char_count <= max_chunk_size
+    ]
     # for file in sorted(missing_files):
     #     print(file)
     # with open("filenames.txt", "w") as fn:
