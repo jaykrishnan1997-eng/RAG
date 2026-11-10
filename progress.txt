@@ -178,3 +178,13 @@ Bm25 was implemented however was very slow because i was using recalculation aga
 Ref: Counter: https://www.geeksforgeeks.org/python/counters-in-python-set-1/
 
 Changing from BM25 per document to Bm25 per node or chunk in the document
+
+## Day 20 (Nov 10)
+
+Had to update python chunking to include camel cases, remove extra noices, proper character indexing.
+AI was used to help find potential bug in the implementation. This is after self debugging, ofcourse.
+
+Now must implement Recall.
+Note: still retrieved score is bad (2/5), must make it better, also proper BM25 tuning.
+
+Try playing with the parameters a bit to get better retrieval.
