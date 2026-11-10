@@ -7,7 +7,7 @@
 #   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/15 09:34:07 by jkrishna            #+#    #+#            #
-#   Updated: 2026/10/28 09:48:48 by jkrishna           ###   ########.fr      #
+#   Updated: 2026/11/10 09:42:02 by jkrishna           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -28,7 +28,7 @@ def line_char_dict(content_line):
     return line_dict
 
 
-def recursive_splitter(tree, temp_list, file_path, max_char, line_dict):
+def recursive_splitter(tree, temp_list, file_path, max_char, content):
     node_list = tree.body if hasattr(tree, 'body') else [tree]
     for node in node_list:
         code_line = ast.unparse(node)
@@ -57,31 +57,6 @@ def python_flush(temp_list, merged_list):
         temp_list[0].start_index, temp_list[-1].end_index))
     temp_list = []
     return merged_list
-
-
-# def merger(chunk_list, max_char):
-#     merged_list = []
-#     temp_list = []
-#     total_char_count = 0
-
-#     for element in chunk_list:
-
-#         # overflow catpure
-#         if (total_char_count + len(element.text)) < max_char:
-#             total_char_count += len(element.text)
-#             temp_list.append(element)
-#         elif (len(element.text) > max_char):
-#             split(temp_list, element.text, element.file_path, max_char, element.start_index, element.end_index)
-#             python_flush(temp_list, merged_list)
-#             total_char_count = 0
-#         else:
-#             python_flush(temp_list, merged_list)
-#             temp_list = [element]
-#             total_char_count = len(element.text)
-
-#     if temp_list != []:
-#         python_flush(temp_list, merged_list)
-#     return (merged_list)
 
 
 def merger(chunk_list, max_char):

@@ -7,7 +7,7 @@
 #   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/13 10:43:25 by jkrishna            #+#    #+#            #
-#   Updated: 2026/11/06 12:56:01 by jkrishna           ###   ########.fr      #
+#   Updated: 2026/11/10 09:23:36 by jkrishna           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -19,6 +19,7 @@ from ..Base.model import path_dict, ChunkNode
 from .md_text_chunking import md_txt_processor
 from .python_chunking import python_processor
 from .tokenizer import tokenization
+
 
 def source_processor(data, max_chunk_size: int) -> None:
     """This is a inital point that divides the task,

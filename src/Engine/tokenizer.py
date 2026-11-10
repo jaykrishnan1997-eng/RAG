@@ -7,7 +7,7 @@
 #   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/28 10:46:58 by jkrishna            #+#    #+#            #
-#   Updated: 2026/11/09 14:18:55 by jkrishna           ###   ########.fr      #
+#   Updated: 2026/11/10 09:34:08 by jkrishna           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -44,7 +44,7 @@ def tokenize(data, text: str) -> list[str]:
     if word_list == [] and isinstance(text, str):
         if text not in noice_words:
             word_list.append(text)
-
+        # word_list.append(text)
     result = []
     for word in word_list:
         for suffix in divider:
