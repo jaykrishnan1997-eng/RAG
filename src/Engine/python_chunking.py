@@ -7,7 +7,7 @@
 #   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/15 09:34:07 by jkrishna            #+#    #+#            #
-#   Updated: 2026/11/10 09:42:02 by jkrishna           ###   ########.fr      #
+#   Updated: 2026/11/10 10:55:49 by jkrishna           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -15,6 +15,23 @@ import ast
 import sys
 from ..Base.model import ChunkNode, push
 from .md_text_chunking import split
+
+
+def get_node_offsets(node, content_lines):
+    start_line = content_lines[node.lineno - 1]
+    end_line = content_lines[node.end_lineno - 1]
+
+    start_index = (
+        sum(len(line) for line in content_lines[:node.lineno - 1])
+        + len(start_line.encode("utf-8")[:node.col_offset].decode("utf-8"))
+    )
+
+    end_index = (
+        sum(len(line) for line in content_lines[:node.end_lineno - 1])
+        + len(end_line.encode("utf-8")[:node.end_col_offset].decode("utf-8"))
+        - 1
+    )
+    return start_index, end_index
 
 
 def line_char_dict(content_line):
@@ -30,16 +47,25 @@ def line_char_dict(content_line):
 
 def recursive_splitter(tree, temp_list, file_path, max_char, content):
     node_list = tree.body if hasattr(tree, 'body') else [tree]
+
     for node in node_list:
-        code_line = ast.unparse(node)
+        code_line = ast.get_source_segment(content, node)
+
         if len(code_line) > max_char and hasattr(node, 'body'):
             sub_tree = ast.Module(body=node.body, type_ignore=[])
             recursive_splitter(sub_tree, temp_list, file_path, max_char, line_dict)
         else:
             # Leaf node that's too long - emit as-it-is
-            temp_list.append(push(code_line,
-                file_path, line_dict[node.lineno][0],
-                line_dict[node.end_lineno][1]))
+            start_index, end_index = get_node_offsets(node, content_lines)
+            original_segment = content[start_index:end_index + 1]
+
+            if original_segment != code_line:
+                print("OFFSET MISMATCH!")
+                print("AST segment:", repr(code_line))
+                print("Source segment:", repr(original_segment))
+                print("Start:", start_index, "End:", end_index)
+            temp_list.append(
+                push(code_line, file_path, start_index, end_index))
     return (temp_list)
 
 
@@ -102,11 +128,10 @@ def python_processor(
     and then access it for chunking. Input: filepath, Output:
     list of first_character_index and last_character_index."""
 
-    content_lines = []
-    with open(file_path, 'r', encoding='utf-8') as file_object:
-        content_lines = file_object.readlines()
     with open(file_path, 'r', encoding='utf-8') as file_object:
         content = file_object.read()
+
+    content_lines = content.splitlines(keepends=True)
 
     if len(content) <= max_char:
         chunk_data_list.append(push(content, file_path, 0, len(content) - 1))
@@ -114,10 +139,10 @@ def python_processor(
 
     # breakpoint()
     tree = ast.parse(content, type_comments=True)
-    line_dict = line_char_dict(content_lines)
+
     try:
         broken_chunk_data_list = recursive_splitter(
-            tree, [], file_path, max_char, line_dict)
+            tree, [], file_path, max_char, content)
     except Exception as e:
         print(f"{e}")
         sys.exit(1)

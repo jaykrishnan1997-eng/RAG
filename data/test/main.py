@@ -55,12 +55,12 @@ tree = ast.parse(code)
 
 
 
-line_dict = {}
-content_copy = code
-for i, line in enumerate(code_lines):
-    content_copy = content_copy[len(line):]
-    line_dict[i] = code.index(content_copy)
-print(line_dict)
+# line_dict = {}
+# content_copy = code
+# for i, line in enumerate(code_lines):
+#     content_copy = content_copy[len(line):]
+#     line_dict[i] = code.index(content_copy)
+# print(line_dict)
 
 
 
