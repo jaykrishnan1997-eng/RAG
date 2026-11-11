@@ -4,10 +4,10 @@
 #                                                          :::      ::::::::  #
 #   __main__.py                                          :+:      :+:    :+:  #
 #                                                      +:+ +:+         +:+    #
-#   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
+#   By: jay-k <jay-k@student.42.fr>                  +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/12 12:24:16 by jkrishna            #+#    #+#            #
-#   Updated: 2026/11/10 13:11:41 by jkrishna           ###   ########.fr      #
+#   Updated: 2026/11/11 11:34:09 by jay-k              ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -60,7 +60,7 @@ def main() -> None:
     # Collecting the documents and info on documents
     bm25 = BM25_retrieval(data, documents, question_nodes)
 
-    for k in range(0, 5):
+    for k in range(0, 1):
         result = bm25.query_score[k]
         print(f"--- question {k} ---")
 
@@ -68,6 +68,7 @@ def main() -> None:
             print(rank, round(score, 3), node.source.file_path,
                 node.source.first_character_index,
                 node.source.last_character_index)
+            print(node.node.text)
     
     # # :
     # expected = [

@@ -4,10 +4,10 @@
 #                                                          :::      ::::::::  #
 #   model.py                                             :+:      :+:    :+:  #
 #                                                      +:+ +:+         +:+    #
-#   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
+#   By: jay-k <jay-k@student.42.fr>                  +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/10 13:20:17 by jkrishna            #+#    #+#            #
-#   Updated: 2026/11/06 13:14:37 by jkrishna           ###   ########.fr      #
+#   Updated: 2026/11/11 18:58:41 by jay-k              ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -83,6 +83,7 @@ class Tokenized_data:
         node,
     ):
         self.tokens = token_list
+        self.text = node.text
         self.source = MinimalSource(
             file_path=node.file_path,
             first_character_index=node.start_index,
