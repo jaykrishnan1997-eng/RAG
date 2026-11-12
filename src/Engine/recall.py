@@ -7,13 +7,13 @@
 #   By: jay-k <jay-k@student.42.fr>                  +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/11/10 13:44:49 by jkrishna            #+#    #+#            #
-#   Updated: 2026/11/11 18:58:41 by jay-k              ###   ########.fr      #
+#   Updated: 2026/11/12 13:46:13 by jay-k              ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
 
 class Recall_at_k:
-    def __init__(self, documents, ):
+    def __init__(self, documents, bm25, ):
     def recall(self, bm25, expected, k):
         success = 0
         for q, (path, s, e) in enumerate(expected):

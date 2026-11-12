@@ -7,7 +7,7 @@
 #   By: jay-k <jay-k@student.42.fr>                  +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/12 12:24:16 by jkrishna            #+#    #+#            #
-#   Updated: 2026/11/11 11:34:09 by jay-k              ###   ########.fr      #
+#   Updated: 2026/11/12 13:12:26 by jay-k              ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -47,7 +47,7 @@ def main() -> None:
         json.dump(data.index_list, f, indent=4)
 
     # creating and collecting the query_nodes
-    # currently i am only loading the docs not the python files
+    # loading the docs and the python files
 
     question_nodes = input_datatset_loader(args.dataset_path)
 
@@ -68,7 +68,7 @@ def main() -> None:
             print(rank, round(score, 3), node.source.file_path,
                 node.source.first_character_index,
                 node.source.last_character_index)
-            print(node.node.text)
+            # print(node.text)
     
     # # :
     # expected = [

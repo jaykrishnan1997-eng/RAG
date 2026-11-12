@@ -7,7 +7,7 @@
 #   By: jay-k <jay-k@student.42.fr>                  +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/10 13:20:17 by jkrishna            #+#    #+#            #
-#   Updated: 2026/11/11 18:58:41 by jay-k              ###   ########.fr      #
+#   Updated: 2026/11/12 10:44:35 by jay-k              ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -23,6 +23,8 @@ def path_dict(path_abbr: str) -> str:
         "data/datasets/AnsweredQuestions/dataset_code_public.json",
         "ip_ans_docs_path":
         "data/datasets/AnsweredQuestions/dataset_docs_public.json",
+        "ip_unans_path":
+        "data/datasets/UnansweredQuestions",
         "ip_unans_code_path":
         "data/datasets/UnansweredQuestions/dataset_code_public.json",
         "ip_unans_docs_path":
