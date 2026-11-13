@@ -7,7 +7,7 @@
 #   By: jay-k <jay-k@student.42.fr>                  +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/12 12:24:16 by jkrishna            #+#    #+#            #
-#   Updated: 2026/11/13 18:11:13 by jay-k              ###   ########.fr      #
+#   Updated: 2026/11/13 18:12:19 by jay-k              ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -54,9 +54,9 @@ def main() -> None:
     question_stat = Question_stat()
     answer_stat = Question_stat()
 
-    question_nodes = input_datatset_loader(args.dataset_path, question_stat)
+    question_nodes = input_datatset_loader(args.dataset_path, question_stat).rag_questions
     print(q_stat.stat)
-    given_answer_nodes = answer_loader(args.answer_path, answer_path)
+    given_answer_nodes = answer_loader(args.answer_path, answer_path).rag_questions
     # # trial starts
 
     # print(encode(data, tokenize(data, "tokenization is a great thing")))
