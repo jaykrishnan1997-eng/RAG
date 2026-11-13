@@ -7,7 +7,7 @@
 #   By: jay-k <jay-k@student.42.fr>                  +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/12 13:59:36 by jkrishna            #+#    #+#            #
-#   Updated: 2026/11/13 18:09:37 by jay-k              ###   ########.fr      #
+#   Updated: 2026/11/13 18:54:26 by jay-k              ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -16,9 +16,7 @@ import json
 import argparse
 from os import walk
 from .model import (
-    path_dict, UnansweredQuestion, RagDataset,
-    MinimalSource, MinimalSearchResults, AnsweredQuestion,
-    Givenanswers)
+    path_dict, UnansweredQuestion, RagDataset, MinimalSource, MinimalSearchResults, AnsweredQuestion, Givenanswers)
 
 
 

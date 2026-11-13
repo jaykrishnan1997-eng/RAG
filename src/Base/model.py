@@ -7,7 +7,7 @@
 #   By: jay-k <jay-k@student.42.fr>                  +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/10 13:20:17 by jkrishna            #+#    #+#            #
-#   Updated: 2026/11/13 18:11:13 by jay-k              ###   ########.fr      #
+#   Updated: 2026/11/13 18:58:31 by jay-k              ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -130,11 +130,12 @@ class UnansweredQuestion(BaseModel):
         default_factory=lambda: str(uuid.uuid4()))
     question: str
 
-class Givenanswers():
-    question_id,
-    question,
+
+class Givenanswers:
+    question_id
+    question
     sources: List[MinimalSource]
-    answer: str
+
 
 class AnsweredQuestion(UnansweredQuestion):
     sources: List[MinimalSource]
