@@ -7,7 +7,7 @@
 #   By: jay-k <jay-k@student.42.fr>                  +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/12 12:24:16 by jkrishna            #+#    #+#            #
-#   Updated: 2026/11/12 13:12:26 by jay-k              ###   ########.fr      #
+#   Updated: 2026/11/12 14:33:19 by jay-k              ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -19,7 +19,7 @@ import json
 import traceback
 from .Base.parser import parse_args, input_datatset_loader
 from .Engine.ipdata_processor import source_processor
-from .Base.model import data, Document
+from .Base.model import data, Document, Question_stat
 from .Engine.tokenizer import tokenize, encode, decode, document_sort
 from .Engine.retrieval import BM25_retrieval
 
@@ -49,26 +49,29 @@ def main() -> None:
     # creating and collecting the query_nodes
     # loading the docs and the python files
 
-    question_nodes = input_datatset_loader(args.dataset_path)
-
+    q_stat = Question_stat()
+    question_nodes = input_datatset_loader(args.dataset_path, q_stat)
+    print(q_stat.stat)
     # # trial starts
 
     # print(encode(data, tokenize(data, "tokenization is a great thing")))
     # print(decode(data, encode(data, tokenize(data, "tokenization is a great thing"))))
     # # trial ends
 
-    # Collecting the documents and info on documents
-    bm25 = BM25_retrieval(data, documents, question_nodes)
+    # Embedding
+    # Retrieval: using bm25 get the node_score and node
+    # bm25 returns scores and 
+    # bm25 = BM25_retrieval(data, documents, question_nodes)
 
-    for k in range(0, 1):
-        result = bm25.query_score[k]
-        print(f"--- question {k} ---")
+    # for k in range(0, 1):
+    #     result = bm25.query_score[k]
+    #     print(f"--- question {k} ---")
 
-        for rank, (score, node) in enumerate(result[:10]):
-            print(rank, round(score, 3), node.source.file_path,
-                node.source.first_character_index,
-                node.source.last_character_index)
-            # print(node.text)
+    #     for rank, (score, node) in enumerate(result[:10]):
+    #         print(rank, round(score, 3), node.source.file_path,
+    #             node.source.first_character_index,
+    #             node.source.last_character_index)
+    #         # print(node.text)
     
     # # :
     # expected = [
@@ -117,8 +120,7 @@ def main() -> None:
     # #  END
 
     
-    # Embedding ?
-    # Retrieval
+
     # Generation using Qwen
     # fire.Fire("hello")
 

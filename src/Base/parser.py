@@ -7,7 +7,7 @@
 #   By: jay-k <jay-k@student.42.fr>                  +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/12 13:59:36 by jkrishna            #+#    #+#            #
-#   Updated: 2026/11/12 13:45:45 by jay-k              ###   ########.fr      #
+#   Updated: 2026/11/12 14:31:45 by jay-k              ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -58,10 +58,11 @@ def json_loader(file_path):
     return question_objects
 
 
-def input_datatset_loader(file_path):
+def input_datatset_loader(file_path, q_stat):
 
     if file_path.endswith('.json'):
         question_objects = json_loader(file_path)
+        q_stat.stat[file_path] = len(question_objects)
     elif os.path.isdir(file_path):
         question_objects = []
         res = []
@@ -69,8 +70,10 @@ def input_datatset_loader(file_path):
             for file in file_names:
                 if file.endswith('.json'):
                     res.append(os.path.join(root, file))
-        for file in res:
-            question_objects.extend(json_loader(file))
+        for file1 in res:
+            temp_questions = json_loader(file1)
+            question_objects.extend(temp_questions)
+            q_stat.stat[file1] = len(temp_questions)
     else:
         raise Exception('Unsupportable files provided')
     return question_objects

@@ -7,7 +7,7 @@
 #   By: jay-k <jay-k@student.42.fr>                  +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/10 13:20:17 by jkrishna            #+#    #+#            #
-#   Updated: 2026/11/12 10:44:35 by jay-k              ###   ########.fr      #
+#   Updated: 2026/11/12 14:24:48 by jay-k              ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -112,6 +112,11 @@ class data:
             for key, value in self.index_list.items():
                 if value == id:
                     return key
+
+
+class Question_stat:
+    # file_path name: number of objects
+    stat = {}
 
 
 class UnansweredQuestion(BaseModel):
