@@ -7,7 +7,7 @@
 #   By: jay-k <jay-k@student.42.fr>                  +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/10 13:20:17 by jkrishna            #+#    #+#            #
-#   Updated: 2026/11/12 14:24:48 by jay-k              ###   ########.fr      #
+#   Updated: 2026/11/13 18:11:13 by jay-k              ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -19,16 +19,22 @@ from typing import List
 def path_dict(path_abbr: str) -> str:
     path = {
         "DATA_PATH": "data/raw/vllm-0.10.1",
-        "ip_ans_code_path":
-        "data/datasets/AnsweredQuestions/dataset_code_public.json",
-        "ip_ans_docs_path":
-        "data/datasets/AnsweredQuestions/dataset_docs_public.json",
+
+
         "ip_unans_path":
         "data/datasets/UnansweredQuestions",
         "ip_unans_code_path":
         "data/datasets/UnansweredQuestions/dataset_code_public.json",
         "ip_unans_docs_path":
         "data/datasets/UnansweredQuestions/dataset_docs_public.json",
+
+        "ip_ans_path":
+        "data/datasets/AnsweredQuestions",
+        "ip_ans_code_path":
+        "data/datasets/AnsweredQuestions/dataset_code_public.json",
+        "ip_ans_docs_path":
+        "data/datasets/AnsweredQuestions/dataset_docs_public.json",
+
         "STUDENT_SEARCH_RESULTS_PATH":
         ("data/output/search_results/UnansweredQuestions"
             "/dataset_docs_public.json"),
@@ -124,6 +130,11 @@ class UnansweredQuestion(BaseModel):
         default_factory=lambda: str(uuid.uuid4()))
     question: str
 
+class Givenanswers():
+    question_id,
+    question,
+    sources: List[MinimalSource]
+    answer: str
 
 class AnsweredQuestion(UnansweredQuestion):
     sources: List[MinimalSource]
