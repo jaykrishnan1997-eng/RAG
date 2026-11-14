@@ -7,7 +7,7 @@
 #   By: jay-k <jay-k@student.42.fr>                  +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/12 12:24:16 by jkrishna            #+#    #+#            #
-#   Updated: 2026/11/14 14:59:41 by jay-k              ###   ########.fr      #
+#   Updated: 2026/11/14 21:12:14 by jay-k              ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -15,139 +15,85 @@ import os
 import sys
 import fire
 import json
-# import tiktoken
 import traceback
-from .Base.parser import parse_args, input_datatset_loader, answer_loader
+from .Base.parser import input_datatset_loader
 from .Engine.ipdata_processor import source_processor
-from .Base.model import data, Document, Question_stat
+from .Base.model import (
+    data, Question_stat, path_dict,
+    MinimalSearchResults, StudentSearchResults,
+)
 from .Engine.tokenizer import tokenize, encode, decode, document_sort
 from .Engine.retrieval import BM25_retrieval
 
 
-
 data = data()
+
 
 class RagCLI:
     """RAG pipeline commands."""
 
+    def _build(self, max_chunk_size: int):
+        tokenized = source_processor(data, max_chunk_size)
+        return document_sort(data.documents, tokenized)
+
     def index(self, max_chunk_size: int = 2000) -> None:
         "Build the index under data/processes/."
+        self._build(max_chunk_size)
 
-    def search(self, query:str, k: int = 10) -> None:
-        """Print the top-k sources for one query."""
-    
+        # writing an output with the vocab dict
+        os.makedirs("data/processed", exist_ok=True)
+        with open("data/processed/index_file.json", "w",
+                  encoding="utf-8") as f:
+            # json.dump(vocab_dict, f, indent=4)
+            json.dump(data.index_list, f, indent=4)
+        print("Ingestion complete! Indices saved under 'data/processed/'")
+
     def search_dataset(
         self,
         dataset_path: str,
         k: int = 10,
-        save_directory:
-    )
-def main() -> None:
+        save_directory: str = path_dict("OUTPUT_PATH"),
+        max_chunk_size: int = 2000,
+    ) -> None:
+        """Search a whole dataset and write a StudentSearchResults JSON."""
+        if k <= 0:
+            print("Error: k must be greater than 0")
+            return
+        documents = self._build(max_chunk_size)
+        questions = input_datatset_loader(
+            dataset_path, Question_stat()).rag_questions
+        bm25 = BM25_retrieval(data, documents, questions)
 
-    # parsing
-    args = parse_args()
+        results = []
+        for q, scored in zip(questions, bm25.query_score):
+            results.append(MinimalSearchResults(
+                question_id=q.question_id,
+                question=q.question,
+                retrieved_sources=[n.source for _, n in scored[:k]],
+            ))
+        out = StudentSearchResults(search_results=results, k=k)
 
-    # input data processing from vlllm # Chunking and cacheing
-    tokenized_data_list = source_processor(data, args.max_chunk_size)
-
-    # soring the documents, return a document object
-    documents = document_sort(data.documents, tokenized_data_list)
-
-    # writing an output with the vocab dict
-    os.makedirs("data/output", exist_ok=True)
-    with open("data/output/file.json", "w", encoding="utf-8") as f:
-        # json.dump(vocab_dict, f, indent=4)
-        json.dump(data.index_list, f, indent=4)
-
-    # creating and collecting the query_nodes
-    # loading the docs and the python files
-    # Both the question nodes and answer nodes are loaded for recall and comparison
-
-
-    question_stat = Question_stat()
-    answer_stat = Question_stat()
-
-    question_nodes = input_datatset_loader(args.dataset_path, question_stat).rag_questions
-    print(question_stat.stat)
-    given_answer_nodes = answer_loader(args.answer_path, answer_stat).rag_questions
-    print(answer_stat.stat)
-    # # trial starts
-
-    # print(encode(data, tokenize(data, "tokenization is a great thing")))
-    # print(decode(data, encode(data, tokenize(data, "tokenization is a great thing"))))
-    # # trial ends
-
-    # Retrieval: using bm25 get the node_score and node
-    # bm25 returns scores and
+        os.makedirs(save_directory, exist_ok=True)
+        out_path = os.path.join(save_directory,
+                                os.path.basename(dataset_path))
+        with open(out_path, "w", encoding="utf-8") as f:
+            f.write(out.model_dump_json(indent=2))
+        print(f"Saved student_search_results to {out_path}")
 
 
-    # bm25 = BM25_retrieval(data, documents, question_nodes)
+    # def search(self, query:str=, k: int = 10) -> None:
+    #     """Print the top-k sources for one query."""
+    #     question_stat = Question_stat()
+    #     answer_stat = Question_stat()
 
-    # for k in range(0, 1):
-    #     result = bm25.query_score[k]
-    #     print(f"--- question {k} ---")
-
-    #     for rank, (score, node) in enumerate(result[:10]):
-    #         print(rank, round(score, 3), node.source.file_path,
-    #             node.source.first_character_index,
-    #             node.source.last_character_index)
-    #         # print(node.text)
-    
-    # # :
-    # expected = [
-    #     ("vllm/model_executor/layers/fused_moe/fused_batched_moe.py", 28416, 28975),
-    #     ("vllm/attention/ops/triton_flash_attention.py", 13507, 13600),
-    #     ("vllm/model_executor/layers/sampler.py", 27480, 28492),
-    #     ("vllm/entrypoints/llm.py", 64076, 64088),
-    #     ("vllm/worker/model_runner.py", 64028, 64925),
-    # ]
-    # for k, (path, s, e) in enumerate(expected):
-    #     for rank, (score, node) in enumerate(bm25.query_score[k]):
-    #         src = node.source
-    #         if (src.file_path.endswith(path)
-    #                 and src.first_character_index <= e
-    #                 and src.last_character_index >= s):
-    #             print(k, "found at rank", rank)
-    #             break
-    #     else:
-    #         print(k, "not found at all")
-
-    # print("TOKENIZE V3")
-    # q = "What's the default value of trust_remote_code in vLLM's LLM class constructor?"
-    # print(tokenize(data, q))
-
-    # path, s, e = "vllm/entrypoints/llm.py", 64076, 64088
-    # for rank, (score, node) in enumerate(bm25.query_score[3]):
-    #     src = node.source
-    #     if (src.file_path.endswith(path)
-    #             and src.first_character_index <= e
-    #             and src.last_character_index >= s):
-    #         print("rank", rank, src.first_character_index, src.last_character_index)
-    #         print(repr(node.source_text if hasattr(node, "source_text") else ""))
-    #         break
-
-    # with open("data/raw/vllm-0.10.1/vllm/entrypoints/llm.py", encoding="utf-8") as f:
-    #     print(repr(f.read()[s:e + 1]))
-
-    # raw = open("data/raw/vllm-0.10.1/vllm/entrypoints/llm.py", "rb").read()
-    # print(repr(raw[64076:64089].decode("utf-8", errors="replace")))
-    # print(raw.count(b"trust_remote_code"))
-    # print(len(raw) - len(raw.decode("utf-8")))  # > 0 means non-ASCII shifts offsets
-
-    # txt = raw.decode("utf-8")
-    # i = txt.find("trust_remote_code: bool")
-    # print(i, repr(txt[i:i+60]))
-    # #  END
-
-    
-
-    # Generation using Qwen
-    # fire.Fire("hello")
-
+    #     question_nodes = input_datatset_loader(args.dataset_path, question_stat).rag_questions
+    #     print(question_stat.stat)
+    #     given_answer_nodes = answer_loader(args.answer_path, answer_stat).rag_questions
+    #     print(answer_stat.stat)
 
 if __name__ == "__main__":
     try:
-        main()
+        fire.Fire(RagCLI)
     except ValueError as e:
         print(f"Error: {e}", file=sys.stderr)
         sys.exit(1)

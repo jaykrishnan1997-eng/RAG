@@ -34,10 +34,10 @@ install:
 	@echo "Run: source $(VENV)/bin/activate";
 
 run: install
-	$(UV) run $(PYTHON) -m src
+	$(UV) run $(PYTHON) -m src index
 
 debug: install
-	$(UV) run $(PYTHON) -m pdb -m src
+	$(UV) run $(PYTHON) -m pdb -m src index
 
 clean:
 	find . -type d -name "__pycache__" -exec rm -rf {} +
@@ -55,7 +55,7 @@ purge: fclean
 
 lint: install
 	$(UV) run flake8 . --exclude=.venv,venv,raw
-	$(UV) run mypy . \
+	$(UV) run mypy src \
 		--warn-return-any \
 		--warn-unused-ignores \
 		--ignore-missing-imports \
@@ -63,5 +63,5 @@ lint: install
 		--check-untyped-defs
 
 lint-strict: install
-	$(UV) run flake8 . --exclude=.venv,venv,raw
+	$(UV) run flake8 . --exclude=.venv,venv,data
 	$(UV) run mypy . --strict
