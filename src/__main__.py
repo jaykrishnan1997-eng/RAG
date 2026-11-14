@@ -7,7 +7,7 @@
 #   By: jay-k <jay-k@student.42.fr>                  +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/12 12:24:16 by jkrishna            #+#    #+#            #
-#   Updated: 2026/11/13 18:44:27 by jay-k              ###   ########.fr      #
+#   Updated: 2026/11/14 14:59:41 by jay-k              ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -27,8 +27,21 @@ from .Engine.retrieval import BM25_retrieval
 
 data = data()
 
+class RagCLI:
+    """RAG pipeline commands."""
 
+    def index(self, max_chunk_size: int = 2000) -> None:
+        "Build the index under data/processes/."
 
+    def search(self, query:str, k: int = 10) -> None:
+        """Print the top-k sources for one query."""
+    
+    def search_dataset(
+        self,
+        dataset_path: str,
+        k: int = 10,
+        save_directory:
+    )
 def main() -> None:
 
     # parsing
@@ -56,8 +69,8 @@ def main() -> None:
 
     question_nodes = input_datatset_loader(args.dataset_path, question_stat).rag_questions
     print(question_stat.stat)
-    given_answer_nodes = answer_loader(args.answer_path, answer_path).rag_questions
-    print(answer_loader.stat)
+    given_answer_nodes = answer_loader(args.answer_path, answer_stat).rag_questions
+    print(answer_stat.stat)
     # # trial starts
 
     # print(encode(data, tokenize(data, "tokenization is a great thing")))

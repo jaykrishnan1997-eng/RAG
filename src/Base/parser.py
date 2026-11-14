@@ -7,7 +7,7 @@
 #   By: jay-k <jay-k@student.42.fr>                  +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/12 13:59:36 by jkrishna            #+#    #+#            #
-#   Updated: 2026/11/13 18:54:26 by jay-k              ###   ########.fr      #
+#   Updated: 2026/11/14 10:32:08 by jay-k              ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -57,7 +57,7 @@ def json_loader(file_path):
 
     for unit in question_list:
         object = UnansweredQuestion(
-            queation_id=unit["question_id"],
+            question_id=unit["question_id"],
             question=unit["question"],
         )
         question_objects.append(object)
@@ -82,9 +82,8 @@ def input_datatset_loader(file_path, q_stat):
             q_stat.stat[file1] = len(temp_questions)
     else:
         raise Exception('Unsupportable files provided')
-    result = RagDataset()
-    result.rag_questions = question_objects
-    return question_objects
+
+    return RagDataset(rag_questions=question_objects)
 
 #  Given Answer loader
 
@@ -103,13 +102,13 @@ def ans_json_loader(file_path):
     for unit in answer_list:
         sources_list = []
         for s in unit["sources"]:
-            sources_list.append[MinimalSource(
+            sources_list.append(MinimalSource(
                 file_path=s["file_path"],
-                first_character_index=s["first_character_path"],
+                first_character_index=s["first_character_index"],
                 last_character_index=s["last_character_index"]
-            )]
+            ))
         object = Givenanswers(
-            queation_id=unit["question_id"],
+            question_id=unit["question_id"],
             question=unit["question"],
             answer=unit["answer"],
             sources=sources_list,
@@ -136,6 +135,5 @@ def answer_loader(file_path, answer_stat):
             answer_stat.stat[file1] = len(temp_answers)
     else:
         raise Exception('Unsupportable files provided')
-    result = RagDataset()
-    result.rag_questions = answer_objects
-    return result
+
+    return RagDataset(rag_questions=answer_objects)

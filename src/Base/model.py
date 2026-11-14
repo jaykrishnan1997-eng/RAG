@@ -7,7 +7,7 @@
 #   By: jay-k <jay-k@student.42.fr>                  +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/10 13:20:17 by jkrishna            #+#    #+#            #
-#   Updated: 2026/11/13 18:58:31 by jay-k              ###   ########.fr      #
+#   Updated: 2026/11/14 11:54:08 by jay-k              ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -121,8 +121,9 @@ class data:
 
 
 class Question_stat:
-    # file_path name: number of objects
-    stat = {}
+    def __init__(self):
+        # file_path name: number of objects
+        self.stat = {}
 
 
 class UnansweredQuestion(BaseModel):
@@ -131,9 +132,10 @@ class UnansweredQuestion(BaseModel):
     question: str
 
 
-class Givenanswers:
-    question_id
-    question
+class Givenanswers(BaseModel):
+    question_id: str
+    question: str
+    answer: str
     sources: List[MinimalSource]
 
 
@@ -143,7 +145,7 @@ class AnsweredQuestion(UnansweredQuestion):
 
 
 class RagDataset(BaseModel):
-    rag_questions: List[AnsweredQuestion | UnansweredQuestion]
+    rag_questions: List[AnsweredQuestion | UnansweredQuestion | Givenanswers]
 
 
 class MinimalSearchResults(BaseModel):
