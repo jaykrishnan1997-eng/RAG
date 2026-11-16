@@ -4,10 +4,10 @@
 #                                                          :::      ::::::::  #
 #   __main__.py                                          :+:      :+:    :+:  #
 #                                                      +:+ +:+         +:+    #
-#   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
+#   By: jay-k <jay-k@student.42.fr>                  +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/12 12:24:16 by jkrishna            #+#    #+#            #
-#   Updated: 2026/11/16 11:47:13 by jkrishna           ###   ########.fr      #
+#   Updated: 2026/11/16 20:35:26 by jay-k              ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -26,7 +26,7 @@ from .Base.model import (
 )
 from .Engine.tokenizer import tokenize, encode, decode, document_sort
 from .Engine.retrieval import BM25_retrieval
-
+from transformers import AutoModelForCasualLM, Autotokenizer
 
 data = data()
 
@@ -127,32 +127,55 @@ class RagCLI:
             print(f"{src.file_path} "
                   f"[{src.first_character_index}:{src.last_character_index}]")
 
-        def answer():
-            query = str(query).strip()
-            if not query:
-                print("Error: query must not be empty")
-                return
-            if k <= 0:
-                print("Error: k must be greater than 0")
-                return
-            try:
-                documents = self._load()
-            except FileNotFoundError:
-                print("Error: no index found, run the index command first")
-                return
+    def answer(self, query: str, k: int = 5) -> None:
+        MODEL = "Qwen/Qwen3-0.6B"
 
-            questions = [UnansweredQuestion(question=query)]
-            bm25 = BM25_retrieval(data, documents, questions)
-            results = bm25.query_score[0][:k]
-            if not results:
-                print("No results found")
-                return
+        tokenizer = AutoTokenizer.from_pretrained(MODEL)
+        model = AutoModelForCausalLM.from_pretrained(
+            MODEL, torch_dtype="auto")
 
-            for _, node in results:
-                src = node.source
-                print(f"{src.file_path} "
-                    f"[{src.first_character_index}:{src.last_character_index}]")
+        query = str(query).strip()
+        if not query:
+            print("Error: query must not be empty")
+            return
+        if k <= 0:
+            print("Error: k must be greater than 0")
+            return
+        try:
+            documents = self._load()
+        except FileNotFoundError:
+            print("Error: no index found, run the index command first")
+            return
+
+        questions = [UnansweredQuestion(question=query)]
+        bm25 = BM25_retrieval(data, documents, questions)
+        results = bm25.query_score[0][:k]
+        if not results:
+            print("No results found")
+            return
+        context = ""
+        for _, node in results:
+            src = node.text
+            context += src + "\n"
+
+        messages = [
+            {"role": "system", "content": "Answer using only the context. "
+             "If the answer is not in the context, say so."},
+            {"role": "user", "content": f"Context:\n{context}\n\nQuestion: {query}"},
+        ]
         
+        text = tokenizer.apply_chat_template(
+            messages,
+            tokenize=False,
+            add_generation_prompt=True,
+            enable_thinking=False,
+        )
+        inputs = tokenizer([text], return_tensors="pt").to(model.device)
+        out = model.generate(**inputs, max_new_tokens=200, do_sample=False)
+        ansewer = tokenizer.decode(
+            out[0][unputs.input_ids.size(-1):], skip_special_tokens=True
+        ).strip()
+        print(answer)
 
 
 Load the index and retrieve the top k, same as search.
