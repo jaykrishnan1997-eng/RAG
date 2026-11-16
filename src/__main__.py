@@ -7,7 +7,7 @@
 #   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/12 12:24:16 by jkrishna            #+#    #+#            #
-#   Updated: 2026/11/16 10:57:52 by jkrishna           ###   ########.fr      #
+#   Updated: 2026/11/16 11:47:13 by jkrishna           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -127,8 +127,42 @@ class RagCLI:
             print(f"{src.file_path} "
                   f"[{src.first_character_index}:{src.last_character_index}]")
 
-        def answer
+        def answer():
+            query = str(query).strip()
+            if not query:
+                print("Error: query must not be empty")
+                return
+            if k <= 0:
+                print("Error: k must be greater than 0")
+                return
+            try:
+                documents = self._load()
+            except FileNotFoundError:
+                print("Error: no index found, run the index command first")
+                return
 
+            questions = [UnansweredQuestion(question=query)]
+            bm25 = BM25_retrieval(data, documents, questions)
+            results = bm25.query_score[0][:k]
+            if not results:
+                print("No results found")
+                return
+
+            for _, node in results:
+                src = node.source
+                print(f"{src.file_path} "
+                    f"[{src.first_character_index}:{src.last_character_index}]")
+        
+
+
+Load the index and retrieve the top k, same as search.
+Build a prompt from the chunk texts (node.text), trimmed so the total context stays under about 2000 characters per chunk and a sensible total.
+Load Qwen/Qwen3-0.6B once, apply its chat template, and generate with greedy decoding and a cap on new tokens.
+Print the answer.
+
+One Qwen3 detail: it has a “thinking” mode that emits a <think>...</think> block before the answer. Turn it off with enable_thinking=False in apply_chat_template, or strip the block from the output. Otherwise your answers will start with reasoning text.
+
+Want to write answer yourself and paste it for review, or go through the prompt wording first?
 if __name__ == "__main__":
     try:
         fire.Fire(RagCLI)
