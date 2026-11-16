@@ -7,7 +7,7 @@
 #   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/17 10:11:42 by jkrishna            #+#    #+#            #
-#   Updated: 2026/10/28 09:11:25 by jkrishna           ###   ########.fr      #
+#   Updated: 2026/11/16 09:56:40 by jkrishna           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -26,10 +26,13 @@ def split(
     while code_lines != "":
 
         lines = code_lines[:max_char]
-        code_lines = code_lines[(max_char - overlap):]
-        end_index = start_index + max_char
+        end_index = start_index + len(lines) - 1
+
         chunk_data_list.append(
                     push(lines, file_path, start_index, end_index))
+        if len(code_lines) <= max_char:
+            break
+        code_lines = code_lines[(max_char - overlap):]
         start_index += (max_char - overlap)
     return chunk_data_list
 

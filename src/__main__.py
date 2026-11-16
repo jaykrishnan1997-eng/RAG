@@ -7,7 +7,7 @@
 #   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/12 12:24:16 by jkrishna            #+#    #+#            #
-#   Updated: 2026/11/16 09:36:37 by jkrishna           ###   ########.fr      #
+#   Updated: 2026/11/16 10:57:52 by jkrishna           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -22,6 +22,7 @@ from .Engine.ipdata_processor import source_processor
 from .Base.model import (
     data, Question_stat, path_dict,
     MinimalSearchResults, StudentSearchResults,
+    UnansweredQuestion
 )
 from .Engine.tokenizer import tokenize, encode, decode, document_sort
 from .Engine.retrieval import BM25_retrieval
@@ -99,16 +100,34 @@ class RagCLI:
             f.write(out.model_dump_json(indent=2))
         print(f"Saved student_search_results to {out_path}")
 
+    def search(self, query: str, k: int = 10) -> None:
+        """Print the top-k sources for one query."""
+        query = str(query).strip()
+        if not query:
+            print("Error: query must not be empty")
+            return
+        if k <= 0:
+            print("Error: k must be greater than 0")
+            return
+        try:
+            documents = self._load()
+        except FileNotFoundError:
+            print("Error: no index found, run the index command first")
+            return
 
-    # def search(self, query:str=, k: int = 10) -> None:
-    #     """Print the top-k sources for one query."""
-    #     question_stat = Question_stat()
-    #     answer_stat = Question_stat()
+        questions = [UnansweredQuestion(question=query)]
+        bm25 = BM25_retrieval(data, documents, questions)
+        results = bm25.query_score[0][:k]
+        if not results:
+            print("No results found")
+            return
 
-    #     question_nodes = input_datatset_loader(args.dataset_path, question_stat).rag_questions
-    #     print(question_stat.stat)
-    #     given_answer_nodes = answer_loader(args.answer_path, answer_stat).rag_questions
-    #     print(answer_stat.stat)
+        for _, node in results:
+            src = node.source
+            print(f"{src.file_path} "
+                  f"[{src.first_character_index}:{src.last_character_index}]")
+
+        def answer
 
 if __name__ == "__main__":
     try:
@@ -121,5 +140,3 @@ if __name__ == "__main__":
         sys.exit(1)
 
 
-    # print(encode(data, tokenize(data, "tokenization")))
-    # print(decode(data, encode(data, tokenize(data, "tokenization"))))
