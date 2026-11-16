@@ -4,10 +4,10 @@
 #                                                          :::      ::::::::  #
 #   __main__.py                                          :+:      :+:    :+:  #
 #                                                      +:+ +:+         +:+    #
-#   By: jay-k <jay-k@student.42.fr>                  +#+  +:+       +#+       #
+#   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/12 12:24:16 by jkrishna            #+#    #+#            #
-#   Updated: 2026/11/14 21:12:14 by jay-k              ###   ########.fr      #
+#   Updated: 2026/11/16 09:36:37 by jkrishna           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -15,6 +15,7 @@ import os
 import sys
 import fire
 import json
+import pickle
 import traceback
 from .Base.parser import input_datatset_loader
 from .Engine.ipdata_processor import source_processor
@@ -36,9 +37,17 @@ class RagCLI:
         tokenized = source_processor(data, max_chunk_size)
         return document_sort(data.documents, tokenized)
 
+    def _load(self):
+        path = "data/processed/index.pk1"
+        with open(path, "rb") as f:
+            saved = pickle.load(f)
+        data.index_list = saved["index_list"]
+        data.current_index = saved["current_index"]
+        return saved["documents"]
+
     def index(self, max_chunk_size: int = 2000) -> None:
         "Build the index under data/processes/."
-        self._build(max_chunk_size)
+        documents = self._build(max_chunk_size)
 
         # writing an output with the vocab dict
         os.makedirs("data/processed", exist_ok=True)
@@ -46,6 +55,13 @@ class RagCLI:
                   encoding="utf-8") as f:
             # json.dump(vocab_dict, f, indent=4)
             json.dump(data.index_list, f, indent=4)
+
+        with open("data/processed/index.pk1", "wb") as f:
+            pickle.dump({
+                "index_list": data.index_list,
+                "current_index": data.current_index,
+                "documents": documents,
+            }, f)
         print("Ingestion complete! Indices saved under 'data/processed/'")
 
     def search_dataset(
@@ -53,13 +69,16 @@ class RagCLI:
         dataset_path: str,
         k: int = 10,
         save_directory: str = path_dict("OUTPUT_PATH"),
-        max_chunk_size: int = 2000,
     ) -> None:
         """Search a whole dataset and write a StudentSearchResults JSON."""
         if k <= 0:
             print("Error: k must be greater than 0")
             return
-        documents = self._build(max_chunk_size)
+        try:
+            documents = self._load()
+        except FileNotFoundError:
+            print("Error: no index found, run the index command first")
+            return
         questions = input_datatset_loader(
             dataset_path, Question_stat()).rag_questions
         bm25 = BM25_retrieval(data, documents, questions)

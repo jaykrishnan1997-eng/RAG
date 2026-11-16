@@ -195,3 +195,6 @@ loaded given answers also, introducing fire. To make CLI better.
 Fire was researched before, but implementation was learned using claude
 
 Goal: using qwen to generate the answers. Need atleast a skeletal structure for today
+
+## Day 25 (Nov 16)
+
