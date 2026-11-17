@@ -4,29 +4,29 @@
 #                                                          :::      ::::::::  #
 #   recall.py                                            :+:      :+:    :+:  #
 #                                                      +:+ +:+         +:+    #
-#   By: jay-k <jay-k@student.42.fr>                  +#+  +:+       +#+       #
+#   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/11/10 13:44:49 by jkrishna            #+#    #+#            #
-#   Updated: 2026/11/12 13:46:13 by jay-k              ###   ########.fr      #
+#   Updated: 2026/11/17 13:41:15 by jkrishna           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
 
-class Recall_at_k:
-    def __init__(self, documents, bm25, ):
-    def recall(self, bm25, expected, k):
-        success = 0
-        for q, (path, s, e) in enumerate(expected):
-            for score, node in bm25.query_score[q][:k]:
-                src = node.source
-                if (
-                    src.file_path.endswith(path)
-                    and src.first_character_index <= e
-                    and src.last_character_index >= s
-                ):
-                    success += 1
-                    break
-        return success / len(expected)
+# class Recall_at_k:
+#     def __init__(self, documents, bm25, ):
+#     def recall(self, bm25, expected, k):
+#         success = 0
+#         for q, (path, s, e) in enumerate(expected):
+#             for score, node in bm25.query_score[q][:k]:
+#                 src = node.source
+#                 if (
+#                     src.file_path.endswith(path)
+#                     and src.first_character_index <= e
+#                     and src.last_character_index >= s
+#                 ):
+#                     success += 1
+#                     break
+#         return success / len(expected)
 
-    for k in (1, 5, 10):
-        print(k, Recall_at_k.recall(bm25, expected, k))
+#     for k in (1, 5, 10):
+#         print(k, Recall_at_k.recall(bm25, expected, k))

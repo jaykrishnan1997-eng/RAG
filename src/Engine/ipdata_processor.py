@@ -4,10 +4,10 @@
 #                                                          :::      ::::::::  #
 #   ipdata_processor.py                                  :+:      :+:    :+:  #
 #                                                      +:+ +:+         +:+    #
-#   By: jay-k <jay-k@student.42.fr>                  +#+  +:+       +#+       #
+#   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/13 10:43:25 by jkrishna            #+#    #+#            #
-#   Updated: 2026/11/15 14:30:06 by jay-k              ###   ########.fr      #
+#   Updated: 2026/11/17 13:19:27 by jkrishna           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -28,8 +28,7 @@ def source_processor(data, max_chunk_size: int) -> None:
     chunk_data_list: list[ChunkNode] = []
     processed_files: list[str] = []
     temp_list = []
-    for dirpath, dirnames, filenames in os.walk(path_dict("DATA_PATH")
-    ):
+    for dirpath, dirnames, filenames in os.walk(path_dict("DATA_PATH")):
         # ingest needed files
         for file in filenames:
 

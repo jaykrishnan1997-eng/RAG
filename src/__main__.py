@@ -7,7 +7,7 @@
 #   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/12 12:24:16 by jkrishna            #+#    #+#            #
-#   Updated: 2026/11/17 11:42:09 by jkrishna           ###   ########.fr      #
+#   Updated: 2026/11/17 14:08:47 by jkrishna           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -38,6 +38,14 @@ def _grounded(answer: str, context: str) -> bool:
     ctx = context.lower()
     hits = sum(w in ctx for w in words)
     return hits / len(words) >= 0.5
+
+
+def _validateJSON(file):
+    try:
+        json.loads(file)
+    except ValueError as e:
+        return False
+    return True
 
 
 class RagCLI:
@@ -199,18 +207,15 @@ class RagCLI:
         print(answer)
 
     def answer_dataset(
+        self,
         student_search_results_path: str = path_dict("ip_unans_path"),
-        save_directorystr: str = path_dict("OUTPUT_PATH")
+        save_directorystr: str = path_dict("OUTPUT_PATH"),
+        k: int = 5
     ):
         from transformers import AutoModelForCausalLM, AutoTokenizer
-
-        StudentSearchResults.model_validate_json
+        questions = []
 
         MIN_SCORE = 12.0
-        query = str(query).strip()
-        if not query:
-            print("Error: query must not be empty")
-            return
         if k <= 0:
             print("Error: k must be greater than 0")
             return
@@ -220,7 +225,27 @@ class RagCLI:
             print("Error: no index found, run the index command first")
             return
 
-        questions = [UnansweredQuestion(question=query)]
+        if (os.path.isfile(student_search_results_path)
+            and student_search_results_path.endswith(".json")):
+            if not _validateJSON(student_search_results_path):
+                print("Invalid JSON file")
+                return
+        elif os.path.isdir(student_search_results_path):
+            for dirpath, dirnames, filenames in os.walk(path_dict("DATA_PATH")):
+                # ingest needed files
+                for file in filenames:
+
+                    if (file.endswith(".json") and _validateJSON(file)):
+                        file_path = os.path.join(dirpath, file)
+                        questions.extend(input_dataset_loader(
+                            file_path, Question_stat()).rag_questions)
+                    else:
+                        print("Invlaid files present")
+                        return
+
+        if questions == []:
+            print("No question objects found")
+
         bm25 = BM25_retrieval(data, documents, questions)
         results = bm25.query_score[0][:k]
         # print("top score:", results[0][0] if results else None) # temporary
@@ -228,6 +253,15 @@ class RagCLI:
             print("I cannot find the answer in the provided sources.")
             return
         context = ""
+        # context for each questions must be seperated and passed on and answer must be retrieved and stored
+
+
+
+
+
+
+
+        
         for i, (_, node) in enumerate(results, 1):
             context += (f"[Source {i}: {node.source.file_path}]\n"
                         f"{node.text}\n\n")
