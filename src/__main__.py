@@ -4,14 +4,15 @@
 #                                                          :::      ::::::::  #
 #   __main__.py                                          :+:      :+:    :+:  #
 #                                                      +:+ +:+         +:+    #
-#   By: jay-k <jay-k@student.42.fr>                  +#+  +:+       +#+       #
+#   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/12 12:24:16 by jkrishna            #+#    #+#            #
-#   Updated: 2026/11/16 20:35:26 by jay-k              ###   ########.fr      #
+#   Updated: 2026/11/17 11:42:09 by jkrishna           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
 import os
+import re
 import sys
 import fire
 import json
@@ -26,9 +27,17 @@ from .Base.model import (
 )
 from .Engine.tokenizer import tokenize, encode, decode, document_sort
 from .Engine.retrieval import BM25_retrieval
-from transformers import AutoModelForCasualLM, Autotokenizer
 
 data = data()
+
+
+def _grounded(answer: str, context: str) -> bool:
+    words = set(re.findall(r"[a-z0-9_]{4,}", answer.lower()))
+    if not words:
+        return False
+    ctx = context.lower()
+    hits = sum(w in ctx for w in words)
+    return hits / len(words) >= 0.5
 
 
 class RagCLI:
@@ -128,12 +137,8 @@ class RagCLI:
                   f"[{src.first_character_index}:{src.last_character_index}]")
 
     def answer(self, query: str, k: int = 5) -> None:
-        MODEL = "Qwen/Qwen3-0.6B"
-
-        tokenizer = AutoTokenizer.from_pretrained(MODEL)
-        model = AutoModelForCausalLM.from_pretrained(
-            MODEL, torch_dtype="auto")
-
+        from transformers import AutoModelForCausalLM, AutoTokenizer
+        MIN_SCORE = 12.0
         query = str(query).strip()
         if not query:
             print("Error: query must not be empty")
@@ -150,20 +155,34 @@ class RagCLI:
         questions = [UnansweredQuestion(question=query)]
         bm25 = BM25_retrieval(data, documents, questions)
         results = bm25.query_score[0][:k]
-        if not results:
-            print("No results found")
+        # print("top score:", results[0][0] if results else None) # temporary
+        if not results or results[0][0] < MIN_SCORE:
+            print("I cannot find the answer in the provided sources.")
             return
         context = ""
-        for _, node in results:
-            src = node.text
-            context += src + "\n"
+        for i, (_, node) in enumerate(results, 1):
+            context += (f"[Source {i}: {node.source.file_path}]\n"
+                        f"{node.text}\n\n")
+
+        MODEL = "Qwen/Qwen3-0.6B"
+
+        tokenizer = AutoTokenizer.from_pretrained(MODEL)
+        model = AutoModelForCausalLM.from_pretrained(
+            MODEL, torch_dtype="auto")
 
         messages = [
-            {"role": "system", "content": "Answer using only the context. "
-             "If the answer is not in the context, say so."},
-            {"role": "user", "content": f"Context:\n{context}\n\nQuestion: {query}"},
+            {"role": "system", "content": (
+                "You answer questions about the vLLM codebase using ONLY the "
+                "provided context. Never use outside knowledge. If the context "
+                "does not contain the answer, reply exactly: "
+                "\"I cannot find the answer in the provided sources.\""
+            )},
+            {"role": "user", "content": (
+                f"Context:\n{context}\n\nQuestion: {query}\n\n"
+                "Answer ONLY from the context above."
+            )},
         ]
-        
+
         text = tokenizer.apply_chat_template(
             messages,
             tokenize=False,
@@ -172,20 +191,82 @@ class RagCLI:
         )
         inputs = tokenizer([text], return_tensors="pt").to(model.device)
         out = model.generate(**inputs, max_new_tokens=200, do_sample=False)
-        ansewer = tokenizer.decode(
-            out[0][unputs.input_ids.size(-1):], skip_special_tokens=True
+        answer = tokenizer.decode(
+            out[0][inputs.input_ids.size(-1):], skip_special_tokens=True
         ).strip()
+        if not _grounded(answer, context):
+            answer = "I cannot find the answer in the provided sources."
+        print(answer)
+
+    def answer_dataset(
+        student_search_results_path: str = path_dict("ip_unans_path"),
+        save_directorystr: str = path_dict("OUTPUT_PATH")
+    ):
+        from transformers import AutoModelForCausalLM, AutoTokenizer
+
+        StudentSearchResults.model_validate_json
+
+        MIN_SCORE = 12.0
+        query = str(query).strip()
+        if not query:
+            print("Error: query must not be empty")
+            return
+        if k <= 0:
+            print("Error: k must be greater than 0")
+            return
+        try:
+            documents = self._load()
+        except FileNotFoundError:
+            print("Error: no index found, run the index command first")
+            return
+
+        questions = [UnansweredQuestion(question=query)]
+        bm25 = BM25_retrieval(data, documents, questions)
+        results = bm25.query_score[0][:k]
+        # print("top score:", results[0][0] if results else None) # temporary
+        if not results or results[0][0] < MIN_SCORE:
+            print("I cannot find the answer in the provided sources.")
+            return
+        context = ""
+        for i, (_, node) in enumerate(results, 1):
+            context += (f"[Source {i}: {node.source.file_path}]\n"
+                        f"{node.text}\n\n")
+
+        MODEL = "Qwen/Qwen3-0.6B"
+
+        tokenizer = AutoTokenizer.from_pretrained(MODEL)
+        model = AutoModelForCausalLM.from_pretrained(
+            MODEL, torch_dtype="auto")
+
+        messages = [
+            {"role": "system", "content": (
+                "You answer questions about the vLLM codebase using ONLY the "
+                "provided context. Never use outside knowledge. If the context "
+                "does not contain the answer, reply exactly: "
+                "\"I cannot find the answer in the provided sources.\""
+            )},
+            {"role": "user", "content": (
+                f"Context:\n{context}\n\nQuestion: {query}\n\n"
+                "Answer ONLY from the context above."
+            )},
+        ]
+
+        text = tokenizer.apply_chat_template(
+            messages,
+            tokenize=False,
+            add_generation_prompt=True,
+            enable_thinking=False,
+        )
+        inputs = tokenizer([text], return_tensors="pt").to(model.device)
+        out = model.generate(**inputs, max_new_tokens=200, do_sample=False)
+        answer = tokenizer.decode(
+            out[0][inputs.input_ids.size(-1):], skip_special_tokens=True
+        ).strip()
+        if not _grounded(answer, context):
+            answer = "I cannot find the answer in the provided sources."
         print(answer)
 
 
-Load the index and retrieve the top k, same as search.
-Build a prompt from the chunk texts (node.text), trimmed so the total context stays under about 2000 characters per chunk and a sensible total.
-Load Qwen/Qwen3-0.6B once, apply its chat template, and generate with greedy decoding and a cap on new tokens.
-Print the answer.
-
-One Qwen3 detail: it has a “thinking” mode that emits a <think>...</think> block before the answer. Turn it off with enable_thinking=False in apply_chat_template, or strip the block from the output. Otherwise your answers will start with reasoning text.
-
-Want to write answer yourself and paste it for review, or go through the prompt wording first?
 if __name__ == "__main__":
     try:
         fire.Fire(RagCLI)
@@ -195,5 +276,3 @@ if __name__ == "__main__":
     except Exception:
         traceback.print_exc()
         sys.exit(1)
-
-

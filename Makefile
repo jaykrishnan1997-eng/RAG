@@ -33,8 +33,9 @@ install:
 	@echo "Virtual environment ready: $(VENV)"
 	@echo "Run: source $(VENV)/bin/activate";
 
+ARGS ?= index
 run: install
-	$(UV) run $(PYTHON) -m src index
+	$(UV) run $(PYTHON) -m src $(ARGS)
 
 debug: install
 	$(UV) run $(PYTHON) -m pdb -m src index

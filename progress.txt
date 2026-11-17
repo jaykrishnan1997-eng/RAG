@@ -217,3 +217,8 @@ working on search and answer generation using qwen
 
 Ref: https://qwen.readthedocs.io/en/latest/getting_started/quickstart.html
 
+## Day 26 (Nov 17)
+
+make run ARGS='answer "What is open AI?" --k 5'
+search works. updating the message so only context based answers are generated
+Since i am using goinfre i can only use make.
