@@ -7,7 +7,7 @@
 #   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/12 12:24:16 by jkrishna            #+#    #+#            #
-#   Updated: 2026/11/18 11:28:27 by jkrishna           ###   ########.fr      #
+#   Updated: 2026/11/18 13:08:08 by jkrishna           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -29,6 +29,10 @@ from .Base.model import (
 from .Engine.tokenizer import tokenize, encode, decode, document_sort
 from .Engine.retrieval import BM25_retrieval
 from tqdm import tqdm
+
+CACHE = os.path.join(os.path.dirname(os.path.dirname(
+    os.path.abspath(__file__))), ".hf-cache")
+
 data = data()
 
 
@@ -44,7 +48,7 @@ def _grounded(answer: str, context: str) -> bool:
 def _validateJSON(file):
     try:
         json.loads(file)
-    except ValueError as e:
+    except ValueError:
         return False
     return True
 
@@ -175,9 +179,13 @@ class RagCLI:
 
         MODEL = "Qwen/Qwen3-0.6B"
 
-        tokenizer = AutoTokenizer.from_pretrained(MODEL)
-        model = AutoModelForCausalLM.from_pretrained(
-            MODEL, torch_dtype="auto")
+        try:
+            tokenizer = AutoTokenizer.from_pretrained(MODEL, cache_dir=CACHE)
+            model = AutoModelForCausalLM.from_pretrained(
+                MODEL, torch_dtype="auto", cache_dir=CACHE)
+        except OSError as e:
+            print(f"Error: cannot load {MODEL} (disk space or network?): {e}")
+            return
 
         messages = [
             {"role": "system", "content": (
@@ -226,9 +234,13 @@ class RagCLI:
         from transformers import AutoModelForCausalLM, AutoTokenizer
 
         MODEL = "Qwen/Qwen3-0.6B"
-        tokenizer = AutoTokenizer.from_pretrained(MODEL)
-        model = AutoModelForCausalLM.from_pretrained(
-            MODEL, torch_dtype="auto")
+        try:
+            tokenizer = AutoTokenizer.from_pretrained(MODEL, cache_dir=CACHE)
+            model = AutoModelForCausalLM.from_pretrained(
+                MODEL, torch_dtype="auto", cache_dir=CACHE)
+        except OSError as e:
+            print(f"Error: cannot load {MODEL} (disk space or network?): {e}")
+            return
 
         cache: dict[str, str] = {}
         answers = []
@@ -246,7 +258,7 @@ class RagCLI:
                     src.first_character_index:src.last_character_index + 1]
                 context += f"[Source {i}: {src.file_path}]\n{text}\n\n"
 
-            context = context[:6000]
+            context = context[:4000]
 
             messages = [
                 {"role": "system", "content": (
@@ -266,7 +278,7 @@ class RagCLI:
             )
             inputs = tokenizer([prompt], return_tensors="pt").to(model.device)
             out_ids = model.generate(
-                **inputs, max_new_tokens=200, do_sample=False)
+                **inputs, max_new_tokens=120, do_sample=False)
             reply = tokenizer.decode(
                 out_ids[0][inputs.input_ids.size(-1):],
                 skip_special_tokens=True,
@@ -281,15 +293,15 @@ class RagCLI:
                 answer=reply,
             ))
 
-            out = StudentSearchResultsAndAnswer(
-                search_results=answers, k=search.k)
-            os.makedirs(save_directory, exist_ok=True)
-            out_path = os.path.join(
-                save_directory,
-                os.path.basename(student_search_results_path))
-            with open(out_path, "w", encoding="utf-8") as f:
-                f.write(out.model_dump_json(indent=2))
-            print(f"Saved student_search_results_and_answer to {out_path}")
+            # out = StudentSearchResultsAndAnswer(
+            #     search_results=answers, k=search.k)
+            # os.makedirs(save_directory, exist_ok=True)
+            # out_path = os.path.join(
+            #     save_directory,
+            #     os.path.basename(student_search_results_path))
+            # with open(out_path, "w", encoding="utf-8") as f:
+            #     f.write(out.model_dump_json(indent=2))
+            # print(f"Saved student_search_results_and_answer to {out_path}")
 
 
 if __name__ == "__main__":
