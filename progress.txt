@@ -224,3 +224,10 @@ search works. updating the message so only context based answers are generated
 Since i am using goinfre i can only use make.
 
 Ref: validate json: https://pynative.com/python-json-validation/
+
+## Day 27 (Nov 18)
+
+Ref: https://pydantic.dev/docs/validation/dev/concepts/json/
+model validation better method for evaluate_student_search_results
+
+Ref: tdqm for loading bar: https://tqdm.github.io/

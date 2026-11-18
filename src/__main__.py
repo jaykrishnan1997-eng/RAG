@@ -7,7 +7,7 @@
 #   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/12 12:24:16 by jkrishna            #+#    #+#            #
-#   Updated: 2026/11/17 14:08:47 by jkrishna           ###   ########.fr      #
+#   Updated: 2026/11/18 11:28:27 by jkrishna           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -23,11 +23,12 @@ from .Engine.ipdata_processor import source_processor
 from .Base.model import (
     data, Question_stat, path_dict,
     MinimalSearchResults, StudentSearchResults,
-    UnansweredQuestion
+    UnansweredQuestion, MinimalAnswer,
+    StudentSearchResultsAndAnswer,
 )
 from .Engine.tokenizer import tokenize, encode, decode, document_sort
 from .Engine.retrieval import BM25_retrieval
-
+from tqdm import tqdm
 data = data()
 
 
@@ -208,97 +209,87 @@ class RagCLI:
 
     def answer_dataset(
         self,
-        student_search_results_path: str = path_dict("ip_unans_path"),
-        save_directorystr: str = path_dict("OUTPUT_PATH"),
-        k: int = 5
+        student_search_results_path: str,
+        save_directory: str = path_dict("OUTPUT_PATH"),
     ):
-        from transformers import AutoModelForCausalLM, AutoTokenizer
-        questions = []
-
-        MIN_SCORE = 12.0
-        if k <= 0:
-            print("Error: k must be greater than 0")
-            return
+        """Generate answers for a StuydentSearchResults JSON."""
         try:
-            documents = self._load()
+            with open(student_search_results_path, encoding="utf-8") as f:
+                search = StudentSearchResults.model_validate_json(f.read())
         except FileNotFoundError:
-            print("Error: no index found, run the index command first")
+            print(f"Error: {student_search_results_path} not found")
+            return
+        except ValueError as e:
+            print(f"Error: invalid search results file: {e}")
             return
 
-        if (os.path.isfile(student_search_results_path)
-            and student_search_results_path.endswith(".json")):
-            if not _validateJSON(student_search_results_path):
-                print("Invalid JSON file")
-                return
-        elif os.path.isdir(student_search_results_path):
-            for dirpath, dirnames, filenames in os.walk(path_dict("DATA_PATH")):
-                # ingest needed files
-                for file in filenames:
-
-                    if (file.endswith(".json") and _validateJSON(file)):
-                        file_path = os.path.join(dirpath, file)
-                        questions.extend(input_dataset_loader(
-                            file_path, Question_stat()).rag_questions)
-                    else:
-                        print("Invlaid files present")
-                        return
-
-        if questions == []:
-            print("No question objects found")
-
-        bm25 = BM25_retrieval(data, documents, questions)
-        results = bm25.query_score[0][:k]
-        # print("top score:", results[0][0] if results else None) # temporary
-        if not results or results[0][0] < MIN_SCORE:
-            print("I cannot find the answer in the provided sources.")
-            return
-        context = ""
-        # context for each questions must be seperated and passed on and answer must be retrieved and stored
-
-
-
-
-
-
-
-        
-        for i, (_, node) in enumerate(results, 1):
-            context += (f"[Source {i}: {node.source.file_path}]\n"
-                        f"{node.text}\n\n")
+        from transformers import AutoModelForCausalLM, AutoTokenizer
 
         MODEL = "Qwen/Qwen3-0.6B"
-
         tokenizer = AutoTokenizer.from_pretrained(MODEL)
         model = AutoModelForCausalLM.from_pretrained(
             MODEL, torch_dtype="auto")
 
-        messages = [
-            {"role": "system", "content": (
-                "You answer questions about the vLLM codebase using ONLY the "
-                "provided context. Never use outside knowledge. If the context "
-                "does not contain the answer, reply exactly: "
-                "\"I cannot find the answer in the provided sources.\""
-            )},
-            {"role": "user", "content": (
-                f"Context:\n{context}\n\nQuestion: {query}\n\n"
-                "Answer ONLY from the context above."
-            )},
-        ]
+        cache: dict[str, str] = {}
+        answers = []
 
-        text = tokenizer.apply_chat_template(
-            messages,
-            tokenize=False,
-            add_generation_prompt=True,
-            enable_thinking=False,
-        )
-        inputs = tokenizer([text], return_tensors="pt").to(model.device)
-        out = model.generate(**inputs, max_new_tokens=200, do_sample=False)
-        answer = tokenizer.decode(
-            out[0][inputs.input_ids.size(-1):], skip_special_tokens=True
-        ).strip()
-        if not _grounded(answer, context):
-            answer = "I cannot find the answer in the provided sources."
-        print(answer)
+        for item in tqdm(search.search_results, desc="Answering"):
+            context = ""
+            for i, src in enumerate(item.retrieved_sources, 1):
+                if src.file_path not in cache:
+                    try:
+                        with open(src.file_path, encoding="utf-8") as f:
+                            cache[src.file_path] = f.read()
+                    except OSError:
+                        cache[src.file_path] = ""
+                text = cache[src.file_path][
+                    src.first_character_index:src.last_character_index + 1]
+                context += f"[Source {i}: {src.file_path}]\n{text}\n\n"
+
+            context = context[:6000]
+
+            messages = [
+                {"role": "system", "content": (
+                    "You answer questions about the vLLM codebase using ONLY "
+                    "the provided context. Never use outside knowledge. If "
+                    "the context does not contain the answer, reply exactly: "
+                    "\"I cannot find the answer in the provided sources.\""
+                )},
+                {"role": "user", "content": (
+                    f"Context:\n{context}\n\nQuestion: {item.question}\n\n"
+                    "Answer ONLY from the context above."
+                )},
+            ]
+            prompt = tokenizer.apply_chat_template(
+                messages, tokenize=False, add_generation_prompt=True,
+                enable_thinking=False,
+            )
+            inputs = tokenizer([prompt], return_tensors="pt").to(model.device)
+            out_ids = model.generate(
+                **inputs, max_new_tokens=200, do_sample=False)
+            reply = tokenizer.decode(
+                out_ids[0][inputs.input_ids.size(-1):],
+                skip_special_tokens=True,
+            ).strip()
+            if not _grounded(reply, context):
+                reply = "I cannot find the answer in the provided sources."
+
+            answers.append(MinimalAnswer(
+                question_id=item.question_id,
+                question=item.question,
+                retrieved_sources=item.retrieved_sources,
+                answer=reply,
+            ))
+
+            out = StudentSearchResultsAndAnswer(
+                search_results=answers, k=search.k)
+            os.makedirs(save_directory, exist_ok=True)
+            out_path = os.path.join(
+                save_directory,
+                os.path.basename(student_search_results_path))
+            with open(out_path, "w", encoding="utf-8") as f:
+                f.write(out.model_dump_json(indent=2))
+            print(f"Saved student_search_results_and_answer to {out_path}")
 
 
 if __name__ == "__main__":

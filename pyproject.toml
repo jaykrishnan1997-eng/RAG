@@ -10,7 +10,8 @@ dependencies = [
     "fire",
     "regex",
     "transformers",
-    "torch"
+    "torch",
+    "tdqm"
 ]
 
 [build-system]
