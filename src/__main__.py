@@ -4,10 +4,10 @@
 #                                                          :::      ::::::::  #
 #   __main__.py                                          :+:      :+:    :+:  #
 #                                                      +:+ +:+         +:+    #
-#   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
+#   By: jay-k <jay-k@student.42.fr>                  +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/12 12:24:16 by jkrishna            #+#    #+#            #
-#   Updated: 2026/11/18 13:08:08 by jkrishna           ###   ########.fr      #
+#   Updated: 2026/11/19 17:29:58 by jay-k              ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -45,12 +45,12 @@ def _grounded(answer: str, context: str) -> bool:
     return hits / len(words) >= 0.5
 
 
-def _validateJSON(file):
-    try:
-        json.loads(file)
-    except ValueError:
-        return False
-    return True
+# def _validateJSON(file):
+#     try:
+#         json.loads(file)
+#     except ValueError:
+#         return False
+#     return True
 
 
 class RagCLI:
@@ -151,7 +151,7 @@ class RagCLI:
 
     def answer(self, query: str, k: int = 5) -> None:
         from transformers import AutoModelForCausalLM, AutoTokenizer
-        MIN_SCORE = 12.0
+        # MIN_SCORE = 12.0
         query = str(query).strip()
         if not query:
             print("Error: query must not be empty")
@@ -169,8 +169,10 @@ class RagCLI:
         bm25 = BM25_retrieval(data, documents, questions)
         results = bm25.query_score[0][:k]
         # print("top score:", results[0][0] if results else None) # temporary
-        if not results or results[0][0] < MIN_SCORE:
-            print("I cannot find the answer in the provided sources.")
+        # if not results or results[0][0] < MIN_SCORE:
+        #     print("I cannot find the answer in the provided sources.")
+        if not results:
+            print("No results found")
             return
         context = ""
         for i, (_, node) in enumerate(results, 1):
@@ -293,15 +295,15 @@ class RagCLI:
                 answer=reply,
             ))
 
-            # out = StudentSearchResultsAndAnswer(
-            #     search_results=answers, k=search.k)
-            # os.makedirs(save_directory, exist_ok=True)
-            # out_path = os.path.join(
-            #     save_directory,
-            #     os.path.basename(student_search_results_path))
-            # with open(out_path, "w", encoding="utf-8") as f:
-            #     f.write(out.model_dump_json(indent=2))
-            # print(f"Saved student_search_results_and_answer to {out_path}")
+        out = StudentSearchResultsAndAnswer(
+            search_results=answers, k=search.k)
+        os.makedirs(save_directory, exist_ok=True)
+        out_path = os.path.join(
+            save_directory,
+            os.path.basename(student_search_results_path))
+        with open(out_path, "w", encoding="utf-8") as f:
+            f.write(out.model_dump_json(indent=2))
+        print(f"Saved student_search_results_and_answer to {out_path}")
 
 
 if __name__ == "__main__":
