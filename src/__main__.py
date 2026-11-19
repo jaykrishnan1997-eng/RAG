@@ -7,7 +7,7 @@
 #   By: jay-k <jay-k@student.42.fr>                  +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/12 12:24:16 by jkrishna            #+#    #+#            #
-#   Updated: 2026/11/19 17:29:58 by jay-k              ###   ########.fr      #
+#   Updated: 2026/11/19 18:08:31 by jay-k              ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -222,7 +222,7 @@ class RagCLI:
         student_search_results_path: str,
         save_directory: str = path_dict("OUTPUT_PATH"),
     ):
-        """Generate answers for a StuydentSearchResults JSON."""
+        """Generate answers for a StudentSearchResults JSON."""
         try:
             with open(student_search_results_path, encoding="utf-8") as f:
                 search = StudentSearchResults.model_validate_json(f.read())
