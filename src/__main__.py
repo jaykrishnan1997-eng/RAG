@@ -4,10 +4,10 @@
 #                                                          :::      ::::::::  #
 #   __main__.py                                          :+:      :+:    :+:  #
 #                                                      +:+ +:+         +:+    #
-#   By: jay-k <jay-k@student.42.fr>                  +#+  +:+       +#+       #
+#   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/12 12:24:16 by jkrishna            #+#    #+#            #
-#   Updated: 2026/11/19 18:08:31 by jay-k              ###   ########.fr      #
+#   Updated: 2026/11/20 11:38:30 by jkrishna           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -26,7 +26,7 @@ from .Base.model import (
     UnansweredQuestion, MinimalAnswer,
     StudentSearchResultsAndAnswer,
 )
-from .Engine.tokenizer import tokenize, encode, decode, document_sort
+from .Engine.tokenizer import document_sort
 from .Engine.retrieval import BM25_retrieval
 from tqdm import tqdm
 
@@ -192,8 +192,8 @@ class RagCLI:
         messages = [
             {"role": "system", "content": (
                 "You answer questions about the vLLM codebase using ONLY the "
-                "provided context. Never use outside knowledge. If the context "
-                "does not contain the answer, reply exactly: "
+                "provided context. Never use outside knowledge. If the "
+                "context does not contain the answer, reply exactly: "
                 "\"I cannot find the answer in the provided sources.\""
             )},
             {"role": "user", "content": (
@@ -304,6 +304,36 @@ class RagCLI:
         with open(out_path, "w", encoding="utf-8") as f:
             f.write(out.model_dump_json(indent=2))
         print(f"Saved student_search_results_and_answer to {out_path}")
+
+    def evaluate(
+        self,
+        student_search_results_path,
+        dataset_path,
+    ):
+        try:
+            with open(student_search_results_path, encoding="utf-8") as j:
+                result = StudentSearchResults.model_validate_json(j.read())
+            with open(dataset_path, encoding="utf-8") as k:
+                ground_truth = StudentSearchResults.model_validate_json(k.read())
+        except FileNotFoundError as e:
+            print(f"Error: file not found: {e}")
+            return
+        except ValueError as e:
+            print(f"Error: invalid search results file: {e}")
+            return
+
+        for obj in result:
+            if obj.
+
+# Load the student results (StudentSearchResults) and the ground-truth file (via answer_loader, so you get the sources per question).
+# For each question, match by question_id.
+# For each correct source, check whether any of your top-k results is in the same file and has IoU >= 0.05 with its range.
+# Recall for that question = found sources / total sources. Average over questions.
+# Print recall@1, 3, 5, 10, matching the moulinette’s format.
+
+# IoU for two ranges on one file: overlap = max(0, min(e1, e2) - max(s1, s2) + 1), union = (e1 - s1 + 1) + (e2 - s2 + 1) - overlap, IoU = overlap / union.
+
+# Handle missing files and malformed JSON with a message, like your other commands. A nice side effect: you can compare its numbers with the moulinette’s (0.83 and 0.606), which confirms your IoU logic is right.
 
 
 if __name__ == "__main__":
