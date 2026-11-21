@@ -7,7 +7,7 @@
 #   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/11/10 13:44:49 by jkrishna            #+#    #+#            #
-#   Updated: 2026/11/20 12:06:38 by jkrishna           ###   ########.fr      #
+#   Updated: 2026/11/21 13:12:08 by jkrishna           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -45,23 +45,37 @@ def iou(result_unit, ground_truth_unit):
         return (0)
 
 
-def recall(result, ground_truth, k):
-    success = 0
-    for q, (path, s, e) in enumerate(ground_truth):
-        for score, node in bm2.query_score[q][:k]:
-            src = node.source
-            if (
-                src.file_path.endswith(path)
-                and src.first_character_index <= e
-                and src.last_character_index >= s
-            ):
-                success += 1
-                break
-    return success / len(ground_truth)
+def recall(results, ground_truth, k, threshold=0.05):
+    success = 0.0
+    for qid, gt_sources in ground_truth.items():
+        if not gt_sources:
+            continue
+        top = results.get(qid, [])[:k]
+        found = 0
+        for unit in gt_sources:
+            if any(r.file_path == unit.file_path and iou(r, gt) >= threshold
+                   for r in top):
+                found += 1
+        success += found / len(gt_sources)
+    return success / len(ground_truth) if truth else 0.0
 
-for k in (1, 5, 10):
-    print(k, Recall_at_k.recall(bm25, expected, k))
+# for k in (1, 5, 10):
+#     print(k, Recall_at_k.recall(bm25, expected, k))
 
+# def recall(results, truth, k, threshold=0.05):
+#     """Mean recall@k. results/truth map question_id -> list of sources."""
+#     total = 0.0
+#     for qid, gt_sources in truth.items():
+#         if not gt_sources:
+#             continue
+#         top = results.get(qid, [])[:k]
+#         found = 0
+#         for gt in gt_sources:
+#             if any(r.file_path == gt.file_path and iou(r, gt) >= threshold
+#                    for r in top):
+#                 found += 1
+#         total += found / len(gt_sources)
+#     return total / len(truth) if truth else 0.0
 # Load the student results (StudentSearchResults) and the ground-truth file (via answer_loader, so you get the sources per question).
 # For each question, match by question_id.
 # For each correct source, check whether any of your top-k results is in the same file and has IoU >= 0.05 with its range.

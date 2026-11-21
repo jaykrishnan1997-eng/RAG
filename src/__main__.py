@@ -7,7 +7,7 @@
 #   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/12 12:24:16 by jkrishna            #+#    #+#            #
-#   Updated: 2026/11/20 11:38:30 by jkrishna           ###   ########.fr      #
+#   Updated: 2026/11/21 13:11:25 by jkrishna           ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -18,7 +18,7 @@ import fire
 import json
 import pickle
 import traceback
-from .Base.parser import input_datatset_loader
+from .Base.parser import input_datatset_loader, answer_loader
 from .Engine.ipdata_processor import source_processor
 from .Base.model import (
     data, Question_stat, path_dict,
@@ -26,6 +26,7 @@ from .Base.model import (
     UnansweredQuestion, MinimalAnswer,
     StudentSearchResultsAndAnswer,
 )
+from .Base.recall import iou, recall
 from .Engine.tokenizer import document_sort
 from .Engine.retrieval import BM25_retrieval
 from tqdm import tqdm
@@ -307,14 +308,12 @@ class RagCLI:
 
     def evaluate(
         self,
-        student_search_results_path,
-        dataset_path,
+        student_search_results_path: str,
+        dataset_path: str,
     ):
         try:
             with open(student_search_results_path, encoding="utf-8") as j:
                 result = StudentSearchResults.model_validate_json(j.read())
-            with open(dataset_path, encoding="utf-8") as k:
-                ground_truth = StudentSearchResults.model_validate_json(k.read())
         except FileNotFoundError as e:
             print(f"Error: file not found: {e}")
             return
@@ -322,18 +321,18 @@ class RagCLI:
             print(f"Error: invalid search results file: {e}")
             return
 
-        for obj in result:
-            if obj.
+        try:
+            truth_questions = answer_loader(
+                dataset_path, Question_stat()).rag_questions
+        except (OSError, ValueError, KeyError, TypeError) as e:
+            print(f"Error: cannot load ground truth: {e}")
+            return
 
-# Load the student results (StudentSearchResults) and the ground-truth file (via answer_loader, so you get the sources per question).
-# For each question, match by question_id.
-# For each correct source, check whether any of your top-k results is in the same file and has IoU >= 0.05 with its range.
-# Recall for that question = found sources / total sources. Average over questions.
-# Print recall@1, 3, 5, 10, matching the moulinette’s format.
-
-# IoU for two ranges on one file: overlap = max(0, min(e1, e2) - max(s1, s2) + 1), union = (e1 - s1 + 1) + (e2 - s2 + 1) - overlap, IoU = overlap / union.
-
-# Handle missing files and malformed JSON with a message, like your other commands. A nice side effect: you can compare its numbers with the moulinette’s (0.83 and 0.606), which confirms your IoU logic is right.
+        results = {r.question_id: r.retrieved_sources
+                   for r in result.search_results}
+        truth = {q.question_id: q.sources for q in truth_questions}
+        for k in (1, 3, 5, 10):
+            print(f"Recall@{k}: {recall(results, truth, k):.3f}")
 
 
 if __name__ == "__main__":
