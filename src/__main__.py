@@ -4,10 +4,10 @@
 #                                                          :::      ::::::::  #
 #   __main__.py                                          :+:      :+:    :+:  #
 #                                                      +:+ +:+         +:+    #
-#   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
+#   By: jay-k <jay-k@student.42.fr>                  +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/12 12:24:16 by jkrishna            #+#    #+#            #
-#   Updated: 2026/11/21 13:11:25 by jkrishna           ###   ########.fr      #
+#   Updated: 2026/11/23 20:36:48 by jay-k              ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -26,7 +26,7 @@ from .Base.model import (
     UnansweredQuestion, MinimalAnswer,
     StudentSearchResultsAndAnswer,
 )
-from .Base.recall import iou, recall
+from .Engine.recall import recall
 from .Engine.tokenizer import document_sort
 from .Engine.retrieval import BM25_retrieval
 from tqdm import tqdm
@@ -35,6 +35,7 @@ CACHE = os.path.join(os.path.dirname(os.path.dirname(
     os.path.abspath(__file__))), ".hf-cache")
 
 data = data()
+REFUSAL = "I cannot find the answer in the provided sources."
 
 
 def _grounded(answer: str, context: str) -> bool:
@@ -45,6 +46,31 @@ def _grounded(answer: str, context: str) -> bool:
     hits = sum(w in ctx for w in words)
     return hits / len(words) >= 0.5
 
+
+def _generate(tokenizer, model, context: str, question: str) -> str:
+    messages = [
+        {"role": "system", "content": (
+            "You answer questions about the vLLM codebase using ONLY the "
+            "provided context. Never use outside knowledge. If the "
+            "context does not contain the answer, reply exactly: "
+            f"\"{REFUSAL}\""
+        )},
+        {"role": "user", "content": (
+            f"Context:\n{context}\n\nQuestion: {question}\n\n"
+            "Answer ONLY from the context above."
+        )},
+    ]
+    prompt = tokenizer.apply_chat_template(
+        messages, tokenize=False, add_generation_prompt=True,
+        enable_thinking=False)
+    inputs = tokenizer([prompt], return_tensors="pt").to(model.device)
+    out = model.generate(**inputs, max_new_tokens=120, do_sample=False)
+    reply = tokenizer.decode(
+        out[0][inputs.input_ids.size(-1):], skip_special_tokens=True
+    ).strip()
+    if reply.startswith("I cannot find") or not _grounded(reply, context):
+        return REFUSAL
+    return reply
 
 # def _validateJSON(file):
 #     try:
@@ -70,7 +96,7 @@ class RagCLI:
         return saved["documents"]
 
     def index(self, max_chunk_size: int = 2000) -> None:
-        "Build the index under data/processes/."
+        "Build the index under data/processed/."
         documents = self._build(max_chunk_size)
 
         # writing an output with the vocab dict
@@ -185,38 +211,13 @@ class RagCLI:
         try:
             tokenizer = AutoTokenizer.from_pretrained(MODEL, cache_dir=CACHE)
             model = AutoModelForCausalLM.from_pretrained(
-                MODEL, torch_dtype="auto", cache_dir=CACHE)
+                MODEL, dtype="float32", cache_dir=CACHE)
         except OSError as e:
             print(f"Error: cannot load {MODEL} (disk space or network?): {e}")
             return
 
-        messages = [
-            {"role": "system", "content": (
-                "You answer questions about the vLLM codebase using ONLY the "
-                "provided context. Never use outside knowledge. If the "
-                "context does not contain the answer, reply exactly: "
-                "\"I cannot find the answer in the provided sources.\""
-            )},
-            {"role": "user", "content": (
-                f"Context:\n{context}\n\nQuestion: {query}\n\n"
-                "Answer ONLY from the context above."
-            )},
-        ]
-
-        text = tokenizer.apply_chat_template(
-            messages,
-            tokenize=False,
-            add_generation_prompt=True,
-            enable_thinking=False,
-        )
-        inputs = tokenizer([text], return_tensors="pt").to(model.device)
-        out = model.generate(**inputs, max_new_tokens=200, do_sample=False)
-        answer = tokenizer.decode(
-            out[0][inputs.input_ids.size(-1):], skip_special_tokens=True
-        ).strip()
-        if not _grounded(answer, context):
-            answer = "I cannot find the answer in the provided sources."
-        print(answer)
+        reply = _generate(tokenizer, model, context, query)
+        print(reply)
 
     def answer_dataset(
         self,
@@ -237,10 +238,11 @@ class RagCLI:
         from transformers import AutoModelForCausalLM, AutoTokenizer
 
         MODEL = "Qwen/Qwen3-0.6B"
+        # import torch
         try:
             tokenizer = AutoTokenizer.from_pretrained(MODEL, cache_dir=CACHE)
             model = AutoModelForCausalLM.from_pretrained(
-                MODEL, torch_dtype="auto", cache_dir=CACHE)
+                MODEL, dtype="float32", cache_dir=CACHE)
         except OSError as e:
             print(f"Error: cannot load {MODEL} (disk space or network?): {e}")
             return
@@ -248,6 +250,10 @@ class RagCLI:
         cache: dict[str, str] = {}
         answers = []
 
+        # import torch
+        # print(torch.get_num_threads())
+        # torch.set_num_threads(os.cpu_count() or 1)
+        # print(torch.get_num_threads())
         for item in tqdm(search.search_results, desc="Answering"):
             context = ""
             for i, src in enumerate(item.retrieved_sources, 1):
@@ -263,32 +269,7 @@ class RagCLI:
 
             context = context[:4000]
 
-            messages = [
-                {"role": "system", "content": (
-                    "You answer questions about the vLLM codebase using ONLY "
-                    "the provided context. Never use outside knowledge. If "
-                    "the context does not contain the answer, reply exactly: "
-                    "\"I cannot find the answer in the provided sources.\""
-                )},
-                {"role": "user", "content": (
-                    f"Context:\n{context}\n\nQuestion: {item.question}\n\n"
-                    "Answer ONLY from the context above."
-                )},
-            ]
-            prompt = tokenizer.apply_chat_template(
-                messages, tokenize=False, add_generation_prompt=True,
-                enable_thinking=False,
-            )
-            inputs = tokenizer([prompt], return_tensors="pt").to(model.device)
-            out_ids = model.generate(
-                **inputs, max_new_tokens=120, do_sample=False)
-            reply = tokenizer.decode(
-                out_ids[0][inputs.input_ids.size(-1):],
-                skip_special_tokens=True,
-            ).strip()
-            if not _grounded(reply, context):
-                reply = "I cannot find the answer in the provided sources."
-
+            reply = _generate(tokenizer, model, context, item.question)
             answers.append(MinimalAnswer(
                 question_id=item.question_id,
                 question=item.question,

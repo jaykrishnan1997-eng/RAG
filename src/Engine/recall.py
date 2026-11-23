@@ -4,10 +4,10 @@
 #                                                          :::      ::::::::  #
 #   recall.py                                            :+:      :+:    :+:  #
 #                                                      +:+ +:+         +:+    #
-#   By: jkrishna <jkrishna@student.42.fr>            +#+  +:+       +#+       #
+#   By: jay-k <jay-k@student.42.fr>                  +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/11/10 13:44:49 by jkrishna            #+#    #+#            #
-#   Updated: 2026/11/21 13:12:08 by jkrishna           ###   ########.fr      #
+#   Updated: 2026/11/23 09:48:42 by jay-k              ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -53,11 +53,11 @@ def recall(results, ground_truth, k, threshold=0.05):
         top = results.get(qid, [])[:k]
         found = 0
         for unit in gt_sources:
-            if any(r.file_path == unit.file_path and iou(r, gt) >= threshold
+            if any(r.file_path == unit.file_path and iou(r, unit) >= threshold
                    for r in top):
                 found += 1
         success += found / len(gt_sources)
-    return success / len(ground_truth) if truth else 0.0
+    return success / len(ground_truth) if ground_truth else 0.0
 
 # for k in (1, 5, 10):
 #     print(k, Recall_at_k.recall(bm25, expected, k))
