@@ -7,7 +7,7 @@
 #   By: jay-k <jay-k@student.42.fr>                  +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/12 12:24:16 by jkrishna            #+#    #+#            #
-#   Updated: 2026/11/23 20:36:48 by jay-k              ###   ########.fr      #
+#   Updated: 2026/11/24 12:12:04 by jay-k              ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -17,7 +17,7 @@ import sys
 import fire
 import json
 import pickle
-import traceback
+
 from .Base.parser import input_datatset_loader, answer_loader
 from .Engine.ipdata_processor import source_processor
 from .Base.model import (
@@ -88,7 +88,7 @@ class RagCLI:
         return document_sort(data.documents, tokenized)
 
     def _load(self):
-        path = "data/processed/index.pk1"
+        path = "data/processed/index.pkl"
         with open(path, "rb") as f:
             saved = pickle.load(f)
         data.index_list = saved["index_list"]
@@ -106,7 +106,7 @@ class RagCLI:
             # json.dump(vocab_dict, f, indent=4)
             json.dump(data.index_list, f, indent=4)
 
-        with open("data/processed/index.pk1", "wb") as f:
+        with open("data/processed/index.pkl", "wb") as f:
             pickle.dump({
                 "index_list": data.index_list,
                 "current_index": data.current_index,
@@ -129,8 +129,16 @@ class RagCLI:
         except FileNotFoundError:
             print("Error: no index found, run the index command first")
             return
-        questions = input_datatset_loader(
-            dataset_path, Question_stat()).rag_questions
+
+        try:
+            questions = input_datatset_loader(
+                dataset_path, Question_stat()).rag_questions
+            if not questions:
+                print("Error: no question loaded, nothing to search")
+                return
+        except (OSError, ValueError, KeyError, TypeError) as e:
+            print(f"Error: cannot load dataset: {e}")
+            return
         bm25 = BM25_retrieval(data, documents, questions)
 
         results = []
@@ -207,7 +215,7 @@ class RagCLI:
                         f"{node.text}\n\n")
 
         MODEL = "Qwen/Qwen3-0.6B"
-
+        context = context[:4000]
         try:
             tokenizer = AutoTokenizer.from_pretrained(MODEL, cache_dir=CACHE)
             model = AutoModelForCausalLM.from_pretrained(
@@ -305,6 +313,10 @@ class RagCLI:
         try:
             truth_questions = answer_loader(
                 dataset_path, Question_stat()).rag_questions
+            if not truth_questions:
+                print("Errr: no ground truth questions loaded")
+                return
+
         except (OSError, ValueError, KeyError, TypeError) as e:
             print(f"Error: cannot load ground truth: {e}")
             return
@@ -322,6 +334,6 @@ if __name__ == "__main__":
     except ValueError as e:
         print(f"Error: {e}", file=sys.stderr)
         sys.exit(1)
-    except Exception:
-        traceback.print_exc()
+    except Exception as e:
+        print(f"Error: {e}", file=sys.stderr)
         sys.exit(1)

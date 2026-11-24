@@ -11,7 +11,7 @@ dependencies = [
     "regex",
     "transformers",
     "torch",
-    "tdqm"
+    "tqdm"
 ]
 
 [build-system]

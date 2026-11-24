@@ -7,7 +7,7 @@
 #   By: jay-k <jay-k@student.42.fr>                  +#+  +:+       +#+       #
 #                                                  +#+#+#+#+#+   +#+          #
 #   Created: 2026/10/12 13:59:36 by jkrishna            #+#    #+#            #
-#   Updated: 2026/11/14 19:39:51 by jay-k              ###   ########.fr      #
+#   Updated: 2026/11/24 10:31:02 by jay-k              ###   ########.fr      #
 #                                                                             #
 # ########################################################################### #
 
@@ -51,8 +51,10 @@ def json_loader(file_path):
             data = json.load(file)
     except FileNotFoundError:
         print(f"Error: {file_path} file was not found")
+        return []
     except json.JSONDecodeError:
         print(f"Error: Invalid JSON format in the file {file_path}")
+        return []
     question_objects = []
     question_list = data["rag_questions"]
 
@@ -95,8 +97,10 @@ def ans_json_loader(file_path):
             data = json.load(file)
     except FileNotFoundError:
         print(f"Error: {file_path} file was not found")
+        return []
     except json.JSONDecodeError:
         print(f"Error: Invalid JSON format in the file {file_path}")
+        return []
     answer_objects = []
     answer_list = data["rag_questions"]
 
