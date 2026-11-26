@@ -35,10 +35,10 @@ install:
 
 ARGS ?= index
 run: install
-	$(UV) run $(PYTHON) -m src $(ARGS)
+	$(UV) run --active $(PYTHON) -m src $(ARGS)
 
 debug: install
-	$(UV) run $(PYTHON) -m pdb -m src index
+	$(UV) run --active $(PYTHON) -m pdb -m src index
 
 clean:
 	find . -type d -name "__pycache__" -exec rm -rf {} +
@@ -55,8 +55,8 @@ purge: fclean
 	rm -rf "$(HF_HOME)"
 
 lint: install
-	$(UV) run flake8 . --exclude=.venv,venv,raw
-	$(UV) run mypy src \
+	$(UV) run --active flake8 . --exclude=.venv,venv,raw
+	$(UV) run --active mypy src \
 		--warn-return-any \
 		--warn-unused-ignores \
 		--ignore-missing-imports \
@@ -64,5 +64,5 @@ lint: install
 		--check-untyped-defs
 
 lint-strict: install
-	$(UV) run flake8 . --exclude=.venv,venv,data
-	$(UV) run mypy . --strict
+	$(UV) run --active flake8 . --exclude=.venv,venv,data
+	$(UV) run --active mypy . --strict
