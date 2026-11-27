@@ -35,17 +35,17 @@ install:
 
 ARGS ?= index
 run: install
-	$(UV) run --active $(PYTHON) -m src $(ARGS)
+	$(UV) run $(PYTHON) -m src $(ARGS)
 
 debug: install
-	$(UV) run --active $(PYTHON) -m pdb -m src index
+	$(UV) run $(PYTHON) -m pdb -m src index
 
 clean:
 	find . -type d -name "__pycache__" -exec rm -rf {} +
 	find . -type d -name ".mypy_cache" -exec rm -rf {} +
 	find . -type d -name ".pytest_cache" -exec rm -rf {} +
 	find . -name "*.pyc" -delete
-	rm -rf data/output
+# 	rm -rf data/output
 
 fclean: clean
 	rm -rf $(VENV)
@@ -55,8 +55,8 @@ purge: fclean
 	rm -rf "$(HF_HOME)"
 
 lint: install
-	$(UV) run --active flake8 . --exclude=.venv,venv,raw
-	$(UV) run --active mypy src \
+	$(UV) run flake8 . --exclude=.venv,venv,data,.hf-cache,small.py
+	$(UV) run mypy src \
 		--warn-return-any \
 		--warn-unused-ignores \
 		--ignore-missing-imports \
@@ -64,5 +64,5 @@ lint: install
 		--check-untyped-defs
 
 lint-strict: install
-	$(UV) run --active flake8 . --exclude=.venv,venv,data
-	$(UV) run --active mypy . --strict
+	$(UV) run flake8 . --exclude=.venv,venv,data,.hf-cache,small.py
+	$(UV) run mypy src --strict
